@@ -12,9 +12,29 @@
     </a>
 
     <flux:navbar class="-mb-px max-lg:hidden">
-        <flux:navbar.item icon="layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')">
-            Dashboard
+        <flux:navbar.item icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')">
+            Monitor Mobil
         </flux:navbar.item>
+        <flux:navbar.item icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')">
+            Monitor Rapat
+        </flux:navbar.item>
+        <flux:navbar.item icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')">
+            Digital Library
+        </flux:navbar.item>
+        <flux:navbar.item icon="arrow-up-tray" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')">
+            Peminjaman
+        </flux:navbar.item>
+        <flux:navbar.item icon="arrow-down-tray" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')">
+            Pengembalian
+        </flux:navbar.item>
+        <flux:navbar.item icon="currency-dollar" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
+            Rupa-rupa
+        </flux:navbar.item>
+        @can('access dashboard')
+            <flux:navbar.item icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')">
+                Kesiapan Mobil
+            </flux:navbar.item>
+        @endcan
     </flux:navbar>
 
     <flux:spacer/>
@@ -110,7 +130,7 @@
 
                 <flux:menu.separator/>
 
-                @if (config('teams.enabled'))
+                <!-- @if (config('teams.enabled'))
                     <flux:menu.radio.group>
                         <flux:menu.item href="{{ route('teams.index') }}" icon="users">
                             {{ __('teams.title') }}
@@ -118,7 +138,7 @@
                     </flux:menu.radio.group>
 
                     <flux:menu.separator/>
-                @endif
+                @endif -->
 
                 <flux:menu.radio.group>
                     <flux:menu.item href="/settings/profile" icon="cog">
@@ -146,15 +166,37 @@
     <a href="{{ route('dashboard') }}" class="ml-1 flex items-center space-x-2">
         <x-app-logo class="size-8" href="#"></x-app-logo>
     </a>
-    @auth
-        <flux:navlist variant="outline">
-            <flux:navlist.group heading="Platform">
-                <flux:navlist.item icon="layout-grid" href="{{ route('dashboard') }}" :current="request()->routeIs('dashboard')">
-                    Dashboard
+    <flux:navlist variant="outline">
+        <flux:navlist.group heading="Kendaraan">
+            <flux:navlist.item icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')">
+                Monitor Mobil
+            </flux:navlist.item>
+            <flux:navlist.item icon="arrow-up-tray" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')">
+                Peminjaman
+            </flux:navlist.item>
+            <flux:navlist.item icon="arrow-down-tray" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')">
+                Pengembalian
+            </flux:navlist.item>
+            <flux:navlist.item icon="currency-dollar" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
+                Rupa-rupa
+            </flux:navlist.item>
+            @can('access dashboard')
+                <flux:navlist.item icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')">
+                    Kesiapan Mobil
                 </flux:navlist.item>
-            </flux:navlist.group>
-        </flux:navlist>
-    @endauth
+            @endcan
+        </flux:navlist.group>
+        <flux:navlist.group heading="Meeting">
+            <flux:navlist.item icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')">
+                Monitor Rapat
+            </flux:navlist.item>
+        </flux:navlist.group>
+        <flux:navlist.group heading="Digital Library">
+            <flux:navlist.item icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')">
+                Digital Library
+            </flux:navlist.item>
+        </flux:navlist.group>
+    </flux:navlist>
 
     <flux:spacer/>
 

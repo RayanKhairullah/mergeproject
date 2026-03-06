@@ -4,9 +4,9 @@
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')"/>
     <form wire:submit.prevent="login" class="flex flex-col gap-6">
-        <!-- Email Address -->
-        <flux:input wire:model="email" :label="__('global.email_address')" type="email" name="email" required
-                    autocomplete="email" placeholder="email@example.com"/>
+        <!-- Username or Email -->
+        <flux:input wire:model="login" :label="__('global.username_or_email')" type="text" name="login" required
+                    autocomplete="username" placeholder="username atau email@example.com"/>
         <!-- Password -->
         <flux:input wire:model="password" :label="__('global.password')"
                     :type="$this->passwordVisible ? 'text' : 'password'" name="password" required

@@ -68,7 +68,7 @@ class CreateUser extends Component
             'roles' => Role::all(),
             'locales' => [
                 'en' => 'English',
-                'da' => 'Danish',
+                'id' => 'Indonesian',
             ],
         ]);
     }

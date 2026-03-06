@@ -15,8 +15,8 @@ use Livewire\Component;
 #[Layout('components.layouts.auth')]
 class Login extends Component
 {
-    #[Validate('required|string|email')]
-    public string $email = '';
+    #[Validate('required|string')]
+    public string $login = '';
 
     #[Validate('required|string')]
     public string $password = '';
@@ -34,11 +34,14 @@ class Login extends Component
 
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        // Determine if login is email or username
+        $fieldType = filter_var($this->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if (! Auth::attempt([$fieldType => $this->login, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'login' => __('auth.failed'),
             ]);
         }
 
@@ -59,7 +62,23 @@ class Login extends Component
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+        // Role-based redirect
+        $redirectRoute = $this->getRedirectRoute($user);
+        $this->redirectIntended(default: $redirectRoute, navigate: true);
+    }
+
+    /**
+     * Get redirect route based on user role
+     */
+    protected function getRedirectRoute($user): string
+    {
+        // Check if user has admin-related roles
+        if ($user->hasAnyRole(['super-admin', 'admin', 'sdm'])) {
+            return route('admin.index', absolute: false);
+        }
+
+        // Default to dashboard for regular users
+        return route('dashboard', absolute: false);
     }
 
     /**
@@ -88,6 +107,6 @@ class Login extends Component
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->login).'|'.request()->ip());
     }
 }

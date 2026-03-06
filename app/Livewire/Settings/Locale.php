@@ -34,7 +34,7 @@ class Locale extends Component
         return view('livewire.settings.locale', [
             'locales' => [
                 'en' => 'English',
-                'da' => 'Danish',
+                'id' => 'Indonesian',
             ],
         ]);
     }

@@ -13,9 +13,119 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $role = Role::query()->updateOrCreate(['name' => 'Super Admin']);
-        $permissions = Permission::all()->pluck('name')->toArray();
-        $role->givePermissionTo($permissions);
+        // ========================================
+        // 1. SUPER ADMIN - Full Access
+        // ========================================
+        $superAdminRole = Role::query()->updateOrCreate(['name' => 'super-admin']);
+        $allPermissions = Permission::all()->pluck('name')->toArray();
+        $superAdminRole->syncPermissions($allPermissions);
 
+        // ========================================
+        // 2. ADMIN - All except User/Role/Permission Management
+        // ========================================
+        $adminRole = Role::query()->updateOrCreate(['name' => 'admin']);
+        $adminPermissions = [
+            'access dashboard',
+
+            // Vehicle management
+            'view vehicles', 'create vehicles', 'update vehicles', 'delete vehicles',
+
+            // Loan management
+            'view loans', 'create loans', 'update loans', 'delete loans',
+
+            // Inspection management
+            'view inspections', 'create inspections', 'update inspections', 'delete inspections',
+
+            // Expense management
+            'view expenses', 'create expenses', 'update expenses', 'delete expenses',
+
+            // Meeting management (with approval)
+            'view meetings', 'create meetings', 'update meetings', 'delete meetings', 'approve meetings',
+
+            // Banquet management (with approval)
+            'view banquets', 'create banquets', 'update banquets', 'delete banquets', 'approve banquets',
+
+            // Room management
+            'view rooms', 'create rooms', 'update rooms', 'delete rooms',
+
+            // Dining venue management
+            'view dining_venues', 'create dining_venues', 'update dining_venues', 'delete dining_venues',
+
+            // Book management
+            'view books', 'create books', 'update books', 'delete books',
+
+            // Category management
+            'view categories', 'create categories', 'update categories', 'delete categories',
+        ];
+        $adminRole->syncPermissions($adminPermissions);
+
+        // ========================================
+        // 3. SDM - Meeting & Banquet Management with Approval
+        // ========================================
+        $sdmRole = Role::query()->updateOrCreate(['name' => 'sdm']);
+        $sdmPermissions = [
+            'access dashboard',
+
+            // Meeting management (with approval)
+            'view meetings', 'create meetings', 'update meetings', 'delete meetings', 'approve meetings',
+
+            // Banquet management (with approval)
+            'view banquets', 'create banquets', 'update banquets', 'delete banquets', 'approve banquets',
+
+            // Room management
+            'view rooms', 'create rooms', 'update rooms', 'delete rooms',
+
+            // Dining venue management
+            'view dining_venues', 'create dining_venues', 'update dining_venues', 'delete dining_venues',
+        ];
+        $sdmRole->syncPermissions($sdmPermissions);
+
+        // ========================================
+        // 4. USER - Meeting & Banquet Management WITHOUT Approval
+        // ========================================
+        $userRole = Role::query()->updateOrCreate(['name' => 'user']);
+        $userPermissions = [
+            // Meeting management (NO approval, can only edit/delete if not approved)
+            'view meetings', 'create meetings', 'update meetings', 'delete meetings',
+
+            // Banquet management (NO approval, can only edit/delete if not approved)
+            'view banquets', 'create banquets', 'update banquets', 'delete banquets',
+
+            // Room management
+            'view rooms', 'create rooms', 'update rooms', 'delete rooms',
+
+            // Dining venue management
+            'view dining_venues', 'create dining_venues', 'update dining_venues', 'delete dining_venues',
+        ];
+        $userRole->syncPermissions($userPermissions);
+
+        // ========================================
+        // Create Sample Users
+        // ========================================
+        $this->createUserWithRole('superadmin@example.com', 'Super Admin', 'super-admin');
+        $this->createUserWithRole('admin@example.com', 'Admin User', 'admin');
+        $this->createUserWithRole('sdm@example.com', 'Manager SDM', 'sdm');
+        $this->createUserWithRole('user@example.com', 'Regular User', 'user');
+        $this->createUserWithRole('hsse@example.com', 'Staff HSSE', 'user');
+        $this->createUserWithRole('operasi@example.com', 'Staff Operasi', 'user');
+        $this->createUserWithRole('komersial@example.com', 'Staff Komersial', 'user');
+    }
+
+    private function createUserWithRole(string $email, string $name, string $roleName): void
+    {
+        // Extract username from email (part before @)
+        $username = explode('@', $email)[0];
+
+        $user = \App\Models\User::query()->updateOrCreate(
+            ['email' => $email],
+            [
+                'name' => $name,
+                'username' => $username,
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        $user->syncRoles([$roleName]);
     }
 }

@@ -7,8 +7,9 @@ Route::middleware('guest')->group(function (): void {
     Route::get('login', \App\Livewire\Auth\Login::class)
         ->name('login');
 
-    Route::get('register', \App\Livewire\Auth\Register::class)
-        ->name('register');
+    // Registration disabled
+    // Route::get('register', \App\Livewire\Auth\Register::class)
+    //     ->name('register');
 
     Route::get('auth/{provider}/redirect', [App\Http\Controllers\Auth\SocialLoginController::class, 'redirect'])->name('social.redirect');
 

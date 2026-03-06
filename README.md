@@ -1,11 +1,5 @@
 # Tallstarter - A Laravel Livewire Starter Kit
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/mortenebak/tallstarter.svg?style=flat-square)](https://packagist.org/packages/mortenebak/tallstarter)
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-![GitHub last commit](https://img.shields.io/github/last-commit/mortenebak/tallstarter)
-![GitHub Sponsors](https://img.shields.io/github/sponsors/mortenebak)
-<a href="https://herd.laravel.com/new?starter-kit=mortenebak/tallstarter"><img src="https://img.shields.io/badge/Install%20with%20Herd-f55247?logo=laravel&logoColor=white"></a>
-
 This Starter kit contains my starting point when developing a new Laravel project. Its based on the official Livewire Starter kit, and includes the following features:
 - ✅ **User Management**, 
 - ✅ **Role Management**,
@@ -51,10 +45,8 @@ I'm considering adding the following features, depending on my clients' most com
 
 # Installation
 
-![alt text](docs/bash-install.png "Installation using the CLI")
-
 ```bash
-laravel new my-project --using=mortenebak/tallstarter
+git clone 
 ```
 
 You could also just use this repository as a starting point for your own project by clicking use template. If installing manually, these are the steps to install:
@@ -107,79 +99,3 @@ return [
     // ...
 ];
 ```
-
-# Features
-
-## Two-Factor Authentication
-
-This starter kit includes built-in support for Two-Factor Authentication (2FA) using TOTP (Time-based One-Time Passwords), compatible with apps like Google Authenticator, Authy, and 1Password.
-
-Key features:
-- QR code generation for easy setup
-- Recovery codes for account recovery
-- Seamless integration with the authentication flow
-- User-friendly interface
-
-For detailed information, see [Two-Factor Authentication Documentation](docs/TWO_FACTOR_AUTHENTICATION.md).
-
-## Teams
-
-This starter kit includes comprehensive teams functionality that allows users to create, manage, and collaborate within teams. Teams can be enabled or disabled via configuration, making it suitable for both single-user and multi-team applications.
-
-Key features:
-- Team creation and management
-- Role-based access (Admin/Member)
-- Email invitations with secure tokens
-- Team switching
-- Member and role management
-- Configurable feature (enable/disable via config)
-
-For detailed information, see [Teams Documentation](docs/TEAMS.md).
-## Social Login
-
-This starter kit includes support for social authentication using Laravel Socialite. Users can sign in or register using their Google, Facebook, or Twitter/X accounts.
-
-Key features:
-- OAuth 2.0 support for Google and Facebook
-- OAuth 1.0a support for Twitter/X
-- Automatic account creation for new social login users
-- Random password generation for social accounts
-- Email verification automatically set
-
-For detailed setup instructions, see [Social Login Documentation](docs/SOCIAL_LOGIN.md).
-
-# Developing
-
-## Check for code style issues
-
-```bash
-composer review
-```
-
-This command will run, in order:
-
--   Laravel/Pint
--   PHPStan
--   Rector (dry-run)
--   PestPHP
-
-Ensuring that your code is up to standard and tested.
-
-# Contributing
-
-Feel free to contribute to this project by submitting a pull request. Here's a great resource on how to [contribute to open source projects](https://github.com/firstcontributions/first-contributions?tab=readme-ov-file).
-
-# Credits
-
-I'd like to thank all the people who have contributed to the packages used in this project.
-Especially [Spatie](https://spatie.be) for their great packages, Livewire and Alpinejs for their awesome framework and the Laravel community for their great work. And of course [Laravel](https://laravel.com) for their awesome framework, and their [Livewire Starter Kit](https://github.com/laravel/livewire-starter-kit), which this kit is based on.
-
-### Contributors
-Take a look at the [contributors](https://github.com/mortenebak/tallstarter/graphs/contributors) who have helped make this project better. Many thanks!
-
-# Donate
-
-If you like this project, please consider [donating to support it](https://github.com/sponsors/mortenebak).
-
-Thanks to:
-- [Grazulex](https://github.com/Grazulex)

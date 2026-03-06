@@ -24,6 +24,7 @@ return [
     'log_into_your_account' => 'Log into your account',
     'log_into_your_account_text' => 'Enter your email and password below to log in',
     'email_address' => 'Email address',
+    'username_or_email' => 'Username or Email',
     'password' => 'Password',
     'forgot_password' => 'Forgot password',
     'remember_me' => 'Remember me',

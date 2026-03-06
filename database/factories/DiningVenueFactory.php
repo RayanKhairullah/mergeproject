@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class DiningVenueFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->randomElement([
+                'Grand Ballroom',
+                'Garden Terrace',
+                'Executive Dining Hall',
+                'VIP Lounge',
+                'Banquet Hall A',
+                'Banquet Hall B',
+            ]),
+        ];
+    }
+}

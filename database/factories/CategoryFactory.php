@@ -1,0 +1,44 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
+ */
+class CategoryFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->unique()->randomElement([
+                'Technology',
+                'Science',
+                'Business',
+                'History',
+                'Literature',
+                'Mathematics',
+                'Physics',
+                'Chemistry',
+                'Biology',
+                'Engineering',
+                'Medicine',
+                'Psychology',
+                'Philosophy',
+                'Art',
+                'Music',
+                'Sports',
+                'Travel',
+                'Cooking',
+                'Health',
+                'Education',
+            ]),
+        ];
+    }
+}

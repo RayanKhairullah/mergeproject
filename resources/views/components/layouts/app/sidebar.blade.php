@@ -21,11 +21,7 @@
         <flux:navlist.group heading="Platform" class="grid">
             <flux:navlist.item icon="home" :href="route('admin.index')" :current="request()->routeIs('admin.index')">Dashboard</flux:navlist.item>
         </flux:navlist.group>
-        {{--        <flux:navlist.group heading="Monetization" class="grid">--}}
-        {{--            <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Overview</flux:navlist.item>--}}
-        {{--            <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Subscriptions</flux:navlist.item>--}}
-        {{--            <flux:navlist.item icon="arrow-right" :href="route('dashboard')" :current="request()->routeIs('dashboard')">Invoices</flux:navlist.item>--}}
-        {{--        </flux:navlist.group>--}}
+
         @canany(['view users', 'view roles', 'view permissions'])
             <flux:navlist.group heading="Users" class="grid">
                 @can('view users')
@@ -45,6 +41,52 @@
                 @endcan
             </flux:navlist.group>
         @endcanany
+
+        {{-- Master Data Section --}}
+        <flux:navlist.group heading="Master Data" class="grid">
+            <flux:navlist.item icon="truck" :href="route('admin.vehicles.index')" :current="request()->routeIs('admin.vehicles.*')">
+                Kendaraan
+            </flux:navlist.item>
+            <flux:navlist.item icon="building-office" :href="route('admin.rooms.index')" :current="request()->routeIs('admin.rooms.*')">
+                Ruang Rapat
+            </flux:navlist.item>
+            <flux:navlist.item icon="building-storefront" :href="route('admin.dining-venues.index')" :current="request()->routeIs('admin.dining-venues.*')">
+                Venue Makan
+            </flux:navlist.item>
+            <flux:navlist.item icon="book-open" :href="route('admin.categories.index')" :current="request()->routeIs('admin.categories.*')">
+                Kategori Buku
+            </flux:navlist.item>
+        </flux:navlist.group>
+
+        {{-- Digital Library Section --}}
+        <flux:navlist.group heading="Digital Library" class="grid">
+            <flux:navlist.item icon="book-open" :href="route('admin.books.index')" :current="request()->routeIs('admin.books.*')">
+                Kelola Buku
+            </flux:navlist.item>
+        </flux:navlist.group>
+
+        {{-- Vehicle Management Section --}}
+        <flux:navlist.group heading="Laporan Kendaraan" class="grid">
+            <flux:navlist.item icon="truck" :href="route('admin.loans.index')" :current="request()->routeIs('admin.loans.*')">
+                Peminjaman
+            </flux:navlist.item>
+            <flux:navlist.item icon="clipboard-document-check" :href="route('admin.inspections.index')" :current="request()->routeIs('admin.inspections.*')">
+                Kesiapan Kendaraan
+            </flux:navlist.item>
+            <flux:navlist.item icon="currency-dollar" :href="route('admin.expenses.index')" :current="request()->routeIs('admin.expenses.*')">
+                Rupa-rupa
+            </flux:navlist.item>
+        </flux:navlist.group>
+
+        {{-- Meeting & Banquet Management Section --}}
+        <flux:navlist.group heading="Meeting & Banquet" class="grid">
+            <flux:navlist.item icon="calendar" :href="route('admin.meetings.index')" :current="request()->routeIs('admin.meetings.*')">
+                Meeting
+            </flux:navlist.item>
+            <flux:navlist.item icon="cake" :href="route('admin.banquets.index')" :current="request()->routeIs('admin.banquets.*')">
+                Banquet
+            </flux:navlist.item>
+        </flux:navlist.group>
     </flux:navlist>
 
     <flux:spacer/>
@@ -69,13 +111,6 @@
     @endif
 
     <flux:navlist variant="outline">
-        {{--                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">--}}
-        {{--                    Repository--}}
-        {{--                </flux:navlist.item>--}}
-
-        {{--                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">--}}
-        {{--                    Documentation--}}
-        {{--                </flux:navlist.item>--}}
     </flux:navlist>
 
     @auth
@@ -108,14 +143,6 @@
                 </flux:menu.radio.group>
 
                 <flux:menu.separator/>
-
-                @if (config('teams.enabled'))
-                    <flux:menu.radio.group>
-                        <flux:menu.item href="{{ route('teams.index') }}" icon="users">{{ __('teams.title') }}</flux:menu.item>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator/>
-                @endif
 
                 <flux:menu.radio.group>
                     <flux:menu.item href="/settings/profile" icon="cog">{{ __('global.settings') }}</flux:menu.item>
@@ -169,16 +196,6 @@
 
                 <flux:menu.separator/>
 
-                @if (config('teams.enabled'))
-                    <flux:menu.radio.group>
-                        <flux:menu.item href="{{ route('teams.index') }}" icon="users">
-                            {{ __('teams.title') }}
-                        </flux:menu.item>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator/>
-                @endif
-
                 <flux:menu.radio.group>
                     <flux:menu.item href="/settings/profile" icon="cog">
                         {{ __('global.settings') }}
@@ -198,7 +215,9 @@
     @endauth
 </flux:header>
 
-{{ $slot }}
+<flux:main>
+    {{ $slot }}
+</flux:main>
 
 @fluxScripts
 <x-livewire-alert::scripts />

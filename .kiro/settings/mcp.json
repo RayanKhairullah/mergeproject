@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "laravel-boost": {
+      "command": "php",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ],
+      "autoApprove": [
+        "database-schema",
+        "tinker",
+        "database-query",
+        "application-info",
+        "list-routes",
+        "get-absolute-url",
+        "last-error",
+        "list-artisan-commands",
+        "browser-logs",
+        "get-config"
+      ],
+      "disabled": false
+    },
+    "Context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-1c198462-4e58-41f7-8e8a-c9ff7ea26e3b"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
