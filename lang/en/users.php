@@ -3,9 +3,6 @@
 return [
     'title' => 'Users',
     'title_description' => 'Manage users in the application',
-    'impersonate' => 'Impersonate',
-    'you_are_impersonating' => 'You are impersonating',
-    'stop_impersonating' => 'Stop Impersonating',
     'all_roles' => 'All roles',
     'locale' => 'Language',
     'locale_description' => 'Select your preferred language',

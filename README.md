@@ -6,7 +6,6 @@ This Starter kit contains my starting point when developing a new Laravel projec
 - ✅ **Permissions Management**,
 - ✅ **Two-Factor Authentication (2FA)**
 - ✅ **Teams** - Collaborative team management (configurable)
-- ✅ **Social Login** (Google, Facebook, Twitter/X)
 - ✅ **Localization** options
 - ✅ Separate **Dashboard for Super Admins**
 - ✅ Updated for Laravel 12.0 **and** Livewire 3.0

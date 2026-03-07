@@ -20,6 +20,7 @@ state([
 mount(function ($banquetId) {
     $this->banquetId = $banquetId;
     $banquet = \App\Models\Banquet::findOrFail($banquetId);
+    $this->authorize('update banquets', $banquet);
     
     $this->title = $banquet->title;
     $this->description = $banquet->description;
@@ -80,6 +81,8 @@ $createVenue = function () {
 };
 
 $update = function () {
+    $banquet = \App\Models\Banquet::findOrFail($this->banquetId);
+    $this->authorize('update banquets', $banquet);
     $this->validate([
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
@@ -117,7 +120,7 @@ $toggleCreateGuestType = fn() => $this->showCreateGuestType = !$this->showCreate
 $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 ?>
 
-<flux:modal name="edit-banquet-{{ $banquetId }}" class="min-w-[600px] max-w-4xl">
+<flux:modal name="edit-banquet-{{ $banquetId }}" class="w-full max-w-4xl">
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">Edit Banquet</flux:heading>

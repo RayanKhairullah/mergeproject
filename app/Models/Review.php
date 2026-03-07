@@ -18,15 +18,28 @@ class Review extends Model
         'user_id',
         'book_id',
         'anonymous_name',
+        'anonymous_session_key',
         'rating',
         'comment',
+        'edited_at',
     ];
 
     protected $casts = [
         'rating' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'edited_at' => 'datetime',
     ];
+
+    public function canBeEdited(): bool
+    {
+        return $this->created_at->diffInMinutes(now()) < 10;
+    }
+
+    public function isEdited(): bool
+    {
+        return !is_null($this->edited_at);
+    }
 
     public function user(): BelongsTo
     {

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -12,6 +13,12 @@ beforeEach(function () {
     Role::firstOrCreate(['name' => 'sdm']);
     Role::firstOrCreate(['name' => 'hsse']);
     Role::firstOrCreate(['name' => 'komersial']);
+
+    // Ensure dashboard permissions exist for tests
+    Permission::firstOrCreate(['name' => 'access dashboard']);
+    Permission::firstOrCreate(['name' => 'view users']);
+    Permission::firstOrCreate(['name' => 'view roles']);
+    Permission::firstOrCreate(['name' => 'view permissions']);
 });
 
 test('super admin user sees sidebar layout', function () {
@@ -24,6 +31,9 @@ test('super admin user sees sidebar layout', function () {
     $response->assertSuccessful();
     // Check for sidebar-specific elements
     $response->assertSee('flux:sidebar');
+
+    // Language + theme controls should be present in the sidebar
+    $response->assertSee('Light Mode');
 });
 
 test('super admin user can see users menu group', function () {
@@ -106,21 +116,4 @@ test('mobile menu works for navbar layout', function () {
     $response->assertSee('mobile-menu');
 });
 
-test('impersonation notice appears in both layouts', function () {
-    $superAdmin = User::factory()->create();
-    $superAdmin->assignRole('super-admin');
 
-    $standardUser = User::factory()->create();
-    $standardUser->assignRole('operasi');
-
-    // Test sidebar layout (super-admin)
-    session(['admin_user_id' => $superAdmin->id]);
-    $response = $this->actingAs($standardUser)->get('/admin');
-    $response->assertSuccessful();
-    $response->assertSee(__('users.you_are_impersonating'));
-
-    // Test navbar layout (standard user)
-    $response = $this->actingAs($standardUser)->get('/admin');
-    $response->assertSuccessful();
-    $response->assertSee(__('users.you_are_impersonating'));
-});

@@ -1,30 +1,31 @@
 <div class="p-6 sm:p-8">
     {{-- Header --}}
-    <div class="mb-6">
-        <h1 class="text-3xl font-bold tracking-tighter text-gray-950 dark:text-white mb-2">
-            Laporan Peminjaman
-        </h1>
-        <p class="text-base text-zinc-600 dark:text-zinc-400">
-            Data dan riwayat peminjaman kendaraan operasional
-        </p>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white">
+                Laporan Peminjaman
+            </h1>
+            <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-1">
+                Data dan riwayat peminjaman kendaraan operasional
+            </p>
+        </div>
     </div>
 
-    {{-- Filters --}}
-    <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div class="lg:col-span-2">
+    <div class="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+        <div class="sm:col-span-2 lg:col-span-2">
             <flux:input 
                 wire:model.live.debounce.300ms="search" 
                 placeholder="Cari kendaraan atau peminjam..." 
                 icon="magnifying-glass"
             />
         </div>
-        <flux:select wire:model.live="vehicleFilter">
+        <flux:select wire:model.live="vehicleFilter" placeholder="Semua Kendaraan">
             <flux:select.option value="">Semua Kendaraan</flux:select.option>
             @foreach($vehicles as $vehicle)
                 <flux:select.option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }}</flux:select.option>
             @endforeach
         </flux:select>
-        <flux:select wire:model.live="statusFilter">
+        <flux:select wire:model.live="statusFilter" placeholder="Semua Status">
             <flux:select.option value="">Semua Status</flux:select.option>
             <flux:select.option value="active">Sedang Dipinjam</flux:select.option>
             <flux:select.option value="returned">Sudah Dikembalikan</flux:select.option>
@@ -32,20 +33,19 @@
         <flux:input 
             wire:model.live="dateFilter" 
             type="date"
-            placeholder="Filter Tanggal"
         />
     </div>
 
-    <div class="mb-4 flex justify-between items-center">
-        <div class="flex gap-2">
-            <flux:button wire:click="downloadExcel" variant="outline" icon="arrow-down-tray">
+    <div class="mb-4 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
+        <div class="flex flex-col sm:flex-row gap-2">
+            <flux:button wire:click="downloadExcel" variant="outline" icon="arrow-down-tray" class="w-full sm:w-auto">
                 Download XLSX
             </flux:button>
-            <flux:button wire:click="downloadPdf" variant="outline" icon="arrow-down-tray">
+            <flux:button wire:click="downloadPdf" variant="outline" icon="arrow-down-tray" class="w-full sm:w-auto">
                 Download PDF
             </flux:button>
         </div>
-        <flux:button href="{{ route('vehicles.loan') }}" variant="primary" icon="plus">
+        <flux:button href="{{ route('vehicles.loan') }}" variant="primary" icon="plus" class="w-full sm:w-auto">
             Input Laporan Baru
         </flux:button>
     </div>
@@ -54,23 +54,23 @@
             <table class="w-full">
                 <thead class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Kendaraan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Waktu</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">KM</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Kondisi</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Catatan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Foto Kilometer</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Nama Peminjam</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Dibuat</th>
+                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">Kendaraan</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">Waktu</th>
+                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">KM</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">Status</th>
+                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Catatan</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Foto</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Peminjam</th>
+                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Dibuat</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
                     @forelse($loans as $loan)
                         <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-900/50">
-                            <td class="px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100">
-                                {{ $loan->id }}
+                            <td class="hidden sm:table-cell px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 italic">
+                                #{{ $loan->id }}
                             </td>
                             <td class="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                                 {{ $loan->vehicle->license_plate }}
@@ -83,10 +83,10 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
-                                <div>Awal: {{ number_format($loan->start_mileage) }}</div>
+                            <td class="hidden md:table-cell px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
+                                <div><span class="text-[10px] font-bold text-zinc-400 uppercase">Awal:</span> {{ number_format($loan->start_mileage) }}</div>
                                 @if($loan->end_mileage)
-                                    <div>Akhir: {{ number_format($loan->end_mileage) }}</div>
+                                    <div><span class="text-[10px] font-bold text-zinc-400 uppercase">Akhir:</span> {{ number_format($loan->end_mileage) }}</div>
                                 @endif
                             </td>
                             <td class="px-4 py-3">
@@ -96,7 +96,7 @@
                                     <flux:badge color="yellow" size="sm">Dipinjam</flux:badge>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
+                            <td class="hidden lg:table-cell px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
                                 <div class="max-w-xs truncate">{{ $loan->purpose }}</div>
                             </td>
                             <td class="px-4 py-3">
@@ -111,31 +111,31 @@
                             <td class="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
                                 {{ $loan->user->name }}
                             </td>
-                            <td class="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
-                                {{ $loan->created_at->format('d/m/Y') }}
+                            <td class="hidden sm:table-cell px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
+                                {{ $loan->created_at->format('d/m/y') }}
                             </td>
-                            <td class="px-4 py-3">
-                                <div class="flex gap-2">
+                            <td class="px-4 py-3 text-right">
+                                <div class="flex gap-2 justify-end">
                                     <flux:modal.trigger name="loan-detail-{{ $loan->id }}">
                                         <flux:button size="sm" variant="ghost" icon="eye">
-                                            Detail
+                                            <span class="hidden md:inline">Detail</span>
                                         </flux:button>
                                     </flux:modal.trigger>
                                     <flux:button 
                                         wire:click="delete({{ $loan->id }})" 
-                                        wire:confirm="Apakah Anda yakin ingin menghapus laporan ini?"
+                                        wire:confirm="Apakah Anda yakin ingin menghapus loan ini?"
                                         size="sm" 
                                         variant="danger" 
                                         icon="trash"
                                     >
-                                        Hapus
+                                        <span class="hidden md:inline">Hapus</span>
                                     </flux:button>
                                 </div>
                             </td>
                         </tr>
 
                         {{-- Modal Detail --}}
-                        <flux:modal name="loan-detail-{{ $loan->id }}" class="min-w-[90vw] md:min-w-[600px] space-y-6">
+                        <flux:modal name="loan-detail-{{ $loan->id }}" class="w-full max-w-2xl space-y-6">
                             <div>
                                 <flux:heading size="lg">Detail Peminjaman #{{ $loan->id }}</flux:heading>
                                 <flux:subheading>Informasi lengkap peminjaman kendaraan</flux:subheading>

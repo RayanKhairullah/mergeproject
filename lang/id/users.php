@@ -3,9 +3,6 @@
 return [
     'title' => 'Brugere',
     'title_description' => 'Administrer brugere i applikationen',
-    'impersonate' => 'Log ind som',
-    'you_are_impersonating' => 'Du er logget ind som',
-    'stop_impersonating' => 'Skift tilbage til dig selv',
     'all_roles' => 'Alle roller',
     'locale' => 'Sprog',
     'locale_description' => 'Vælg dit foretrukne sprog',

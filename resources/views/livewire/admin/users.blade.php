@@ -62,16 +62,6 @@
                             {{ __('global.view') }}
                         </flux:button>
 
-                        @can('impersonate')
-                            @if(auth()->user()->id !== $user->id)
-                                <form action="{{ route('impersonate.store', $user) }}" method="POST">
-                                    @csrf
-                                    <flux:button type="submit" size="sm">
-                                        {{ __('users.impersonate') }}
-                                    </flux:button>
-                                </form>
-                            @endif
-                        @endcan
 
                         @can('update users')
                             <flux:button href="{{ route('admin.users.edit', $user) }}" size="sm">

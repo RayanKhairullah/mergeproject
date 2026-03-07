@@ -110,26 +110,12 @@
     {{--            </flux:navbar>--}}
 
     @auth
-        @if (Session::has('admin_user_id'))
-            <div class="py-2 flex items-center justify-center dark:text-white rounded mr-4">
-                <form id="stop-impersonating" class="flex flex-col items-center gap-3" action="{{ route('impersonate.destroy') }}"
-                      method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <flux:button type="submit" size="sm" variant="danger" form="stop-impersonating" class="!w-full !flex !flex-row cursor-pointer">
-                        <div class="flex items-center gap-2">
-                            <flux:icon.loader-circle class="animate-spin mr-2"/>
-                            {{ __('users.stop_impersonating') }}
-                        </div>
-                    </flux:button>
-                </form>
-            </div>
-        @endif
+
         <!-- Desktop User Menu -->
         <flux:dropdown position="top" align="end">
             <flux:profile
                 class="cursor-pointer"
-                :initials="auth()->user()->initials()"
+                :initials="auth()->user()?->initials() ?? '?'"
             />
 
             <flux:menu>
@@ -140,7 +126,7 @@
                                     <span
                                         class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
                                     >
-                                        {{ auth()->user()->initials() }}
+                                        {{ auth()->user()?->initials() ?? '?' }}
                                     </span>
                                 </span>
 
@@ -231,17 +217,18 @@
 
 </flux:sidebar>
 
-{{ $slot }}
+@if(request()->routeIs('home'))
+    {{ $slot }}
+@else
+    <main class="px-4 sm:px-6 lg:px-8 py-8">
+        {{ $slot }}
+    </main>
+@endif
+
 
 @unless(request()->routeIs('home'))
     @include('partials.footer')
 @endunless
-
-
-
-
-
-
 
 @fluxScripts
 </body>

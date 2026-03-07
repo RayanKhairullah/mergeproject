@@ -28,14 +28,17 @@ class Locale extends Component
         $this->dispatch('locale-updated', name: auth()->user()->name);
     }
 
-    #[Layout('components.layouts.app')]
     public function render(): View
     {
+        $layout = auth()->user()->hasRole(['admin', 'super-admin'])
+            ? 'components.layouts.admin'
+            : 'components.layouts.app.frontend';
+
         return view('livewire.settings.locale', [
             'locales' => [
                 'en' => 'English',
                 'id' => 'Indonesian',
             ],
-        ]);
+        ])->layout($layout);
     }
 }

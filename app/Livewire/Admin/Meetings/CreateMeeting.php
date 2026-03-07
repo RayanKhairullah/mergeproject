@@ -28,6 +28,7 @@ class CreateMeeting extends Component
 
     public function mount(): void
     {
+        $this->authorize('create meetings');
         $this->started_at = now()->addHour()->format('Y-m-d\TH:i');
     }
 

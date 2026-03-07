@@ -8,7 +8,7 @@
         <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div class="text-center md:text-left">
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter text-white mb-4 animate-in fade-in slide-in-from-left duration-700">
-                    {{ __('global.welcome') }}, <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">{{ auth()->user()->name }}</span>!
+                    {{ __('global.welcome') }}, <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">{{ auth()->user()?->name }}</span>!
                 </h1>
                 <p class="text-zinc-400 text-lg sm:text-xl font-light max-w-xl">
                     {{ __('global.dashboard_description') }}
@@ -86,113 +86,53 @@
 
     <!-- Two-Column Layout -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        
+
         <!-- Main Quick Access (2 Cols) -->
         <div class="xl:col-span-2 space-y-6">
             <div class="flex items-center justify-between px-2 mb-6">
                 <h2 class="text-xl font-black tracking-tight text-zinc-900 dark:text-white uppercase pb-2 border-b-2 border-zinc-200 dark:border-zinc-800 w-fit">{{ __('global.quick_access') }}</h2>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {{-- Vehicle Monitor --}}
-                <a href="{{ route('vehicles.monitor') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-teal-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/5 overflow-hidden">
+                {{-- Manage Meetings --}}
+                @can('view meetings')
+                <a href="{{ route('admin.meetings.index') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-teal-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/5 overflow-hidden">
                     <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                         <flux:icon.arrow-up-right class="w-5 h-5 text-teal-500" />
                     </div>
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <flux:icon.computer-desktop class="w-6 h-6" />
+                            <flux:icon.calendar class="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.monitor_mobil') }}</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">{{ __('global.monitor_mobil_desc') }}</p>
+                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.manage_meetings') }}</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">Kelola jadwal rapat, ruangan, dan persetujuan meeting.</p>
                         </div>
                     </div>
                 </a>
+                @endcan
 
-                {{-- Meeting Monitor --}}
-                <a href="{{ route('meetings.monitor') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5 overflow-hidden">
-                    <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <flux:icon.arrow-up-right class="w-5 h-5 text-blue-500" />
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <flux:icon.tv class="w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.monitor_rapat') }}</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">{{ __('global.monitor_rapat_desc') }}</p>
-                        </div>
-                    </div>
-                </a>
-
-                {{-- Digital Library --}}
-                <a href="{{ route('books.index') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/5 overflow-hidden">
-                    <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <flux:icon.arrow-up-right class="w-5 h-5 text-purple-500" />
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <flux:icon.book-open class="w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.digital_library') }}</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">{{ __('global.digital_library_desc') }}</p>
-                        </div>
-                    </div>
-                </a>
-
-                {{-- Loan Form --}}
-                <a href="{{ route('vehicles.loan') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5 overflow-hidden">
+                {{-- Manage Banquets --}}
+                @can('view banquets')
+                <a href="{{ route('admin.banquets.index') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5 overflow-hidden">
                     <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                         <flux:icon.arrow-up-right class="w-5 h-5 text-emerald-500" />
                     </div>
                     <div class="flex items-start gap-4">
                         <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <flux:icon.identification class="w-6 h-6" />
+                            <flux:icon.cake class="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.peminjaman') }}</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">{{ __('global.peminjaman_desc') }}</p>
+                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.manage_banquets') }}</h3>
+                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">Kelola jamuan, katering, dan persetujuan banquet.</p>
                         </div>
                     </div>
                 </a>
-                
-                {{-- Return Form --}}
-                <a href="{{ route('vehicles.return') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5 overflow-hidden">
-                    <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <flux:icon.arrow-up-right class="w-5 h-5 text-emerald-500" />
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <flux:icon.key class="w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.pengembalian') }}</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">{{ __('global.pengembalian_desc') }}</p>
-                        </div>
-                    </div>
-                </a>
-
-                {{-- Expense Form --}}
-                <a href="{{ route('vehicles.expense') }}" class="group relative p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl hover:border-teal-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/5 overflow-hidden">
-                    <div class="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <flux:icon.arrow-up-right class="w-5 h-5 text-teal-500" />
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                            <flux:icon.banknotes class="w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-zinc-900 dark:text-white text-lg">{{ __('global.rupa_rupa') }}</h3>
-                            <p class="text-zinc-500 text-sm leading-relaxed mt-1">{{ __('global.rupa_rupa_desc') }}</p>
-                        </div>
-                    </div>
-                </a>
+                @endcan
             </div>
         </div>
 
-        <!-- Sidebar Actions/Admins (1 Col) -->
+        <!-- Sidebar (1 Col) -->
         <div class="space-y-10">
             @can('access dashboard')
                 <div>
@@ -223,27 +163,6 @@
                     </div>
                 </div>
             @endcan
-
-            {{-- SDM Panel --}}
-            @role('sdm')
-                <div>
-                    <h2 class="text-lg font-black tracking-tight text-zinc-900 dark:text-white uppercase mb-5 px-1 pb-2 border-b-2 border-emerald-500 w-fit">{{ __('global.sdm_panel') }}</h2>
-                    <div class="space-y-3">
-                        <a href="{{ route('admin.meetings.index') }}" class="flex items-center gap-3 p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                            <div class="w-9 h-9 rounded-lg bg-teal-50 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400">
-                                <flux:icon.calendar class="w-5 h-5" />
-                            </div>
-                            <span class="font-bold text-zinc-800 dark:text-zinc-200 text-sm">{{ __('global.manage_meetings') }}</span>
-                        </a>
-                        <a href="{{ route('admin.banquets.index') }}" class="flex items-center gap-3 p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                                <flux:icon.cake class="w-5 h-5" />
-                            </div>
-                            <span class="font-bold text-zinc-800 dark:text-zinc-200 text-sm">{{ __('global.manage_banquets') }}</span>
-                        </a>
-                    </div>
-                </div>
-            @endrole
 
             {{-- Global Settings --}}
             <div>

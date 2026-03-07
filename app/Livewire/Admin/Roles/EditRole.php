@@ -59,7 +59,66 @@ class EditRole extends Component
     public function render(): View
     {
         return view('livewire.admin.roles.edit-role', [
-            'permissions' => Permission::all(),
+            'groupedPermissions' => $this->groupPermissions(Permission::all()),
         ]);
+    }
+
+    /**
+     * Group permissions by a logical category name.
+     *
+     * @param  \Illuminate\Database\Eloquent\Collection<Permission>  $permissions
+     * @return array<string, \Illuminate\Database\Eloquent\Collection<Permission>>
+     */
+    private function groupPermissions($permissions): array
+    {
+        $groups = $permissions->groupBy(fn (Permission $permission): string => $this->permissionCategory($permission->name));
+
+        $order = [
+            'Dashboard',
+            'Users',
+            'Roles',
+            'Permissions',
+            'Vehicles',
+            'Loans',
+            'Inspections',
+            'Expenses',
+            'Meetings',
+            'Banquets',
+            'Rooms',
+            'Dining Venues',
+            'Books',
+            'Categories',
+            'Other',
+        ];
+
+        $sorted = [];
+
+        foreach ($order as $key) {
+            if ($groups->has($key)) {
+                $sorted[$key] = $groups->get($key);
+                $groups->forget($key);
+            }
+        }
+
+        // Put any remaining groups at the end in alphabetical order
+        foreach ($groups->sortKeys() as $key => $value) {
+            $sorted[$key] = $value;
+        }
+
+        return $sorted;
+    }
+
+    private function permissionCategory(string $permissionName): string
+    {
+        $parts = explode(' ', $permissionName);
+
+        if (count($parts) === 1) {
+            return 'Other';
+        }
+
+        // Use the last word (usually the resource) as the category.
+        $category = ucfirst(str_replace('_', ' ', $parts[count($parts) - 1]));
+
+        return $category;
     }
 }

@@ -6,6 +6,7 @@ namespace App\Livewire\Frontend\Books;
 
 use App\Models\Book;
 use App\Models\Category;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,6 +22,7 @@ class Index extends Component
 
     public string $viewMode = 'grid'; // grid, list
 
+    #[Layout('components.layouts.app.frontend')]
     public function render()
     {
         $categories = Category::alphabetical()->get();

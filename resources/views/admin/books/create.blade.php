@@ -67,7 +67,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Cover Image -->
-                    <div>
+                    <div x-data="{ photoPreview: null }">
                         <flux:label for="cover_image">Cover Image</flux:label>
                         <input 
                             type="file" 
@@ -75,7 +75,21 @@
                             name="cover_image" 
                             accept="image/jpeg,image/png,image/webp"
                             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-mint-50 file:text-mint-700 hover:file:bg-mint-100"
+                            x-on:change="
+                                const file = $event.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = (e) => { photoPreview = e.target.result; };
+                                    reader.readAsDataURL(file);
+                                }
+                            "
                         />
+                        <template x-if="photoPreview">
+                            <div class="mt-3">
+                                <p class="text-sm text-gray-500 mb-2">Preview Image:</p>
+                                <img :src="photoPreview" class="w-32 h-40 object-cover rounded-lg border shadow-sm">
+                            </div>
+                        </template>
                         <p class="mt-1 text-sm text-gray-500">JPEG, PNG, or WebP. Max 2MB.</p>
                         <flux:error name="cover_image" />
                     </div>

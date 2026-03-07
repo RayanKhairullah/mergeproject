@@ -1,29 +1,36 @@
-<div class="space-y-6">
-    <div class="flex items-center justify-between">
-        <flux:heading size="xl">Kelola Meeting</flux:heading>
-        @can('meetings.create')
+<div class="space-y-6 px-4 sm:px-6 lg:px-8 py-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white">
+                Kelola Meeting
+            </h1>
+            <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-1">
+                Jadwal dan manajemen ruang rapat
+            </p>
+        </div>
+        @can('create meetings')
             <flux:modal.trigger name="create-meeting">
-                <flux:button variant="primary" icon="plus">
-                    Buat Meeting Baru
+                <flux:button variant="primary" icon="plus" class="w-full md:w-auto">
+                    Buat Meeting
                 </flux:button>
             </flux:modal.trigger>
         @endcan
     </div>
 
-    @can('meetings.create')
+    @can('create meetings')
         <livewire:admin.meetings.create-meeting-modal />
     @endcan
 
     @foreach($meetings as $meeting)
-        @can('meetings.edit')
+        @can('update meetings')
             <livewire:admin.meetings.edit-meeting-modal :meetingId="$meeting->id" wire:key="edit-meeting-{{ $meeting->id }}" />
         @endcan
     @endforeach
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <flux:input wire:model.live.debounce.300ms="search" placeholder="Cari meeting..." />
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+        <flux:input wire:model.live.debounce.300ms="search" placeholder="Cari meeting..." icon="magnifying-glass" />
         
-        <flux:select wire:model.live="statusFilter">
+        <flux:select wire:model.live="statusFilter" placeholder="Semua Status">
             <flux:select.option value="">Semua Status</flux:select.option>
             <flux:select.option value="DRAFT">Draft</flux:select.option>
             <flux:select.option value="PENDING_APPROVAL">Pending Approval</flux:select.option>
@@ -31,15 +38,15 @@
             <flux:select.option value="COMPLETED">Completed</flux:select.option>
             <flux:select.option value="REJECTED">Rejected</flux:select.option>
         </flux:select>
-
-        <flux:select wire:model.live="roomFilter">
+ 
+        <flux:select wire:model.live="roomFilter" placeholder="Semua Ruang">
             <flux:select.option value="">Semua Ruang</flux:select.option>
             @foreach($rooms as $room)
                 <flux:select.option value="{{ $room->id }}">{{ $room->name }}</flux:select.option>
             @endforeach
         </flux:select>
-
-        <flux:input type="date" wire:model.live="dateFilter" placeholder="Filter tanggal" />
+ 
+        <flux:input type="date" wire:model.live="dateFilter" />
     </div>
 
     @if(session('success'))
@@ -56,14 +63,15 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full">
+            <table class="min-w-full table-auto">
                 <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Judul</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ruang</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Waktu Mulai</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Estimasi Durasi</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Peserta</th>
+                        <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Estimasi Durasi</th>
+                        <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Peserta</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Aksi</th>
                     </tr>
@@ -71,6 +79,9 @@
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($meetings as $meeting)
                         <tr wire:key="meeting-{{ $meeting->id }}">
+                            <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 font-mono">
+                                #{{ $meeting->id }}
+                            </td>
                             <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                                 {{ $meeting->title }}
                             </td>
@@ -80,10 +91,10 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $meeting->started_at?->format('d M Y H:i') }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                            <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $meeting->duration }} menit
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                            <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $meeting->estimated_participants }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -91,32 +102,38 @@
                                     {{ $meeting->status->label() }}
                                 </flux:badge>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                                <flux:button size="sm" wire:click="showDetail({{ $meeting->id }})">
-                                    Detail
-                                </flux:button>
-                                @can('meetings.edit')
-                                    <flux:modal.trigger name="edit-meeting-{{ $meeting->id }}">
-                                        <flux:button size="sm">
-                                            Edit
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <flux:button size="sm" variant="ghost" icon="eye" wire:click="showDetail({{ $meeting->id }})">
+                                        <span class="hidden md:inline">Detail</span>
+                                    </flux:button>
+                                    @can('update meetings')
+                                        @if(in_array($meeting->status->value, ['DRAFT', 'PENDING_APPROVAL']))
+                                            <flux:modal.trigger name="edit-meeting-{{ $meeting->id }}">
+                                                <flux:button size="sm" variant="ghost" icon="pencil-square">
+                                                    <span class="hidden md:inline">Edit</span>
+                                                </flux:button>
+                                            </flux:modal.trigger>
+                                        @endif
+                                    @endcan
+                                    @if($meeting->status->value === 'PENDING_APPROVAL' && auth()->user()->can('approve meetings'))
+                                        <flux:button size="sm" variant="primary" icon="check" wire:click="approve({{ $meeting->id }})">
+                                            <span class="hidden md:inline">Setujui</span>
                                         </flux:button>
-                                    </flux:modal.trigger>
-                                @endcan
-                                @if($meeting->status->value === 'PENDING_APPROVAL' && auth()->user()->can('meetings.approve'))
-                                    <flux:button size="sm" variant="primary" wire:click="approve({{ $meeting->id }})">
-                                        Setujui
-                                    </flux:button>
-                                @endif
-                                @can('meetings.delete')
-                                    <flux:button size="sm" variant="danger" wire:click="delete({{ $meeting->id }})" wire:confirm="Yakin ingin menghapus meeting ini?">
-                                        Hapus
-                                    </flux:button>
-                                @endcan
+                                    @endif
+                                    @can('delete meetings')
+                                        @if(in_array($meeting->status->value, ['DRAFT', 'PENDING_APPROVAL']) || auth()->user()->can('approve meetings'))
+                                            <flux:button size="sm" variant="danger" icon="trash" wire:click="delete({{ $meeting->id }})" wire:confirm="Yakin ingin menghapus meeting ini?">
+                                                <span class="hidden md:inline">Hapus</span>
+                                            </flux:button>
+                                        @endif
+                                    @endcan
+                                </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
                                 Tidak ada meeting ditemukan
                             </td>
                         </tr>
@@ -131,11 +148,11 @@
     </div>
 
     @if($detailMeeting)
-        <flux:modal wire:model="detailId" class="max-w-2xl">
+        <flux:modal wire:model="detailId" class="w-full max-w-2xl">
             <div class="space-y-4">
                 <flux:heading size="lg">Detail Meeting</flux:heading>
                 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Judul</p>
                         <p class="font-medium">{{ $detailMeeting->title }}</p>

@@ -8,9 +8,12 @@ use Livewire\Component;
 
 class Appearance extends Component
 {
-    #[Layout('components.layouts.app')]
     public function render(): View
     {
-        return view('livewire.settings.appearance');
+        $layout = auth()->user()->hasRole(['admin', 'super-admin'])
+            ? 'components.layouts.admin'
+            : 'components.layouts.app.frontend';
+
+        return view('livewire.settings.appearance')->layout($layout);
     }
 }

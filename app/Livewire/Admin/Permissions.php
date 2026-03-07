@@ -59,10 +59,11 @@ class Permissions extends Component
     {
         return view('livewire.admin.permissions', [
             'permissions' => Permission::query()
+                ->select(['id', 'name'])
                 ->when($this->search, function ($query, $search): void {
                     $query->whereAny($this->searchableFields, 'LIKE', "%$search%");
                 })
-                ->paginate($this->perPage),
+                ->simplePaginate($this->perPage),
         ]);
     }
 }

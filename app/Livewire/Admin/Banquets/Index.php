@@ -26,7 +26,7 @@ class Index extends Component
     public string $statusFilter = '';
 
     public string $venueFilter = '';
-
+    public string $guestTypeFilter = '';
     public string $dateFilter = '';
 
     public ?int $detailId = null;
@@ -42,6 +42,11 @@ class Index extends Component
     }
 
     public function updatedVenueFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedGuestTypeFilter(): void
     {
         $this->resetPage();
     }
@@ -142,6 +147,7 @@ class Index extends Component
             ->when($this->search, fn ($q) => $q->where('title', 'like', "%{$this->search}%"))
             ->when($this->statusFilter, fn ($q) => $q->where('status', $this->statusFilter))
             ->when($this->venueFilter, fn ($q) => $q->where('venue_id', $this->venueFilter))
+            ->when($this->guestTypeFilter, fn ($q) => $q->where('guest_type', $this->guestTypeFilter))
             ->when($this->dateFilter, fn ($q) => $q->whereDate('scheduled_at', $this->dateFilter))
             ->orderBy('scheduled_at', 'desc')
             ->paginate(10);

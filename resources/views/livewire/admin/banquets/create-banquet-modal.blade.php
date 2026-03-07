@@ -17,6 +17,7 @@ state([
 ]);
 
 mount(function () {
+    $this->authorize('create banquets');
     $this->scheduled_at = now()->addHour()->format('Y-m-d\TH:i');
 });
 
@@ -70,6 +71,7 @@ $createVenue = function () {
 };
 
 $create = function () {
+    $this->authorize('create banquets');
     $this->validate([
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
@@ -117,7 +119,7 @@ $toggleCreateGuestType = fn() => $this->showCreateGuestType = !$this->showCreate
 $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 ?>
 
-<flux:modal name="create-banquet" class="min-w-[600px] max-w-4xl">
+<flux:modal name="create-banquet" class="w-full max-w-4xl">
     <form wire:submit="create" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">New Banquet</flux:heading>

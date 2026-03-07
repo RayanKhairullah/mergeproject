@@ -119,16 +119,22 @@
                         </flux:button>
                     @endif
 
-                    @auth
-                        @if($userReview)
+                    @if($userReview)
+                        {{-- If review exists, show edit/delete but check time limit --}}
+                        @if($userReview->canBeEdited())
                             <flux:button @click="showReviewForm = !showReviewForm" variant="ghost" class="rounded-xl!" icon="pencil-square">{{ __('global.edit_my_review') ?? 'Edit Ulasan Saya' }}</flux:button>
                             <flux:button wire:click="deleteReview" variant="danger" class="rounded-xl!" wire:confirm="{{ __('global.confirm_delete_review') ?? 'Yakin ingin menghapus ulasan ini?' }}">{{ __('global.delete_review') ?? 'Hapus Ulasan' }}</flux:button>
                         @else
-                            <flux:button @click="showReviewForm = !showReviewForm" variant="ghost" class="rounded-xl!" icon="chat-bubble-left-ellipsis">{{ __('global.write_review') ?? 'Tulis Ulasan' }}</flux:button>
+                            {{-- Cannot edit anymore, but still show that they've reviewed --}}
+                            <div class="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 rounded-xl text-sm font-medium flex items-center gap-2">
+                                <flux:icon.check-circle class="w-4 h-4 text-teal-500" />
+                                {{ __('global.review_submitted') ?? 'Ulasan Terkirim' }}
+                            </div>
                         @endif
                     @else
+                        {{-- No review yet --}}
                         <flux:button @click="showReviewForm = !showReviewForm" variant="ghost" class="rounded-xl!" icon="chat-bubble-left-ellipsis">{{ __('global.write_review') ?? 'Tulis Ulasan' }}</flux:button>
-                    @endauth
+                    @endif
                 </div>
             </div>
         </div>
@@ -231,7 +237,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="text-xs text-zinc-400">{{ $review->created_at->format('d M Y') }}</span>
+                                <div class="flex flex-col items-end gap-1">
+                                    <span class="text-xs text-zinc-400">{{ $review->created_at->format('d M Y, H:i') }}</span>
+                                    @if($review->isEdited())
+                                        <span class="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded italic leading-none">{{ __('global.edited') ?? '(disunting)' }}</span>
+                                    @endif
+                                </div>
                             </div>
                             @if($review->comment)
                                 <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed ml-12">{{ $review->comment }}</p>
@@ -248,11 +259,18 @@
             @endif
         </div>
 
-        {{-- Flash Message --}}
+        {{-- Flash Messages --}}
         @if(session('success'))
             <div class="fixed bottom-4 right-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-3 text-sm font-semibold" x-data x-init="setTimeout(() => $el.remove(), 3000)">
                 <flux:icon.check-circle class="w-5 h-5 text-teal-400" />
                 {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="fixed bottom-4 right-4 bg-red-600 text-white px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-3 text-sm font-semibold" x-data x-init="setTimeout(() => $el.remove(), 4000)">
+                <flux:icon.exclamation-circle class="w-5 h-5 text-white" />
+                {{ session('error') }}
             </div>
         @endif
     </div>

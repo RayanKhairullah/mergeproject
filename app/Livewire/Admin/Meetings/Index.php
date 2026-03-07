@@ -63,7 +63,7 @@ class Index extends Component
 
     public function approve(int $id): void
     {
-        if (! auth()->user()->can('meetings.approve')) {
+        if (! auth()->user()->can('approve meetings')) {
             session()->flash('error', 'Anda tidak memiliki izin untuk menyetujui meeting!');
 
             return;
@@ -88,7 +88,7 @@ class Index extends Component
 
     public function reject(int $id, string $reason): void
     {
-        if (! auth()->user()->can('meetings.approve')) {
+        if (! auth()->user()->can('approve meetings')) {
             session()->flash('error', 'Anda tidak memiliki izin untuk menolak meeting!');
 
             return;
@@ -135,7 +135,6 @@ class Index extends Component
         session()->flash('success', 'Meeting berhasil dihapus!');
     }
 
-    #[Layout('components.layouts.admin')]
     public function render()
     {
         $meetings = Meeting::query()

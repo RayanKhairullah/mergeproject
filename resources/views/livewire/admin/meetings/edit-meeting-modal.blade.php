@@ -20,6 +20,7 @@ state([
 mount(function ($meetingId) {
     $this->meetingId = $meetingId;
     $meeting = \App\Models\Meeting::findOrFail($meetingId);
+    $this->authorize('update meetings', $meeting);
     
     $this->title = $meeting->title;
     $this->notes = $meeting->notes;
@@ -57,6 +58,8 @@ $createRoom = function () {
 };
 
 $update = function () {
+    $meeting = \App\Models\Meeting::findOrFail($this->meetingId);
+    $this->authorize('update meetings', $meeting);
     $this->validate([
         'title' => 'required|string|max:255',
         'notes' => 'nullable|string',
@@ -101,7 +104,7 @@ $update = function () {
 $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 ?>
 
-<flux:modal name="edit-meeting-{{ $meetingId }}" class="min-w-[600px] max-w-4xl">
+<flux:modal name="edit-meeting-{{ $meetingId }}" class="w-full max-w-4xl">
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">Edit Meeting</flux:heading>

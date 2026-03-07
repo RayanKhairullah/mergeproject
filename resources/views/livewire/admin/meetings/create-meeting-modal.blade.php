@@ -17,6 +17,7 @@ state([
 ]);
 
 mount(function () {
+    $this->authorize('create meetings');
     $this->started_at = now()->addHour()->format('Y-m-d\TH:i');
 });
 
@@ -46,6 +47,7 @@ $createRoom = function () {
 };
 
 $create = function () {
+    $this->authorize('create meetings');
     $this->validate([
         'title' => 'required|string|max:255',
         'notes' => 'nullable|string',
@@ -101,7 +103,7 @@ $create = function () {
 $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 ?>
 
-<flux:modal name="create-meeting" class="min-w-[600px] max-w-4xl">
+<flux:modal name="create-meeting" class="w-full max-w-4xl">
     <form wire:submit="create" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">New Meeting</flux:heading>

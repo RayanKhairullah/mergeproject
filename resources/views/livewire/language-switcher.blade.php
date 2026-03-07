@@ -1,34 +1,3 @@
-<?php
-
-namespace App\Livewire;
-
-use Livewire\Volt\Component;
-
-new class extends Component {
-    public string $locale;
-    public string $mode = 'dropdown'; // 'dropdown' or 'full'
-
-    public function mount(string $mode = 'dropdown')
-    {
-        $this->locale = app()->getLocale();
-        $this->mode = $mode;
-    }
-
-    public function switchLanguage($lang)
-    {
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            \Illuminate\Support\Facades\Auth::user()->update(['locale' => $lang]);
-        }
-        
-        session()->put('locale', $lang);
-        app()->setLocale($lang);
-        $this->locale = $lang;
-        
-        $this->redirect(request()->header('Referer') ?? '/', navigate: true);
-    }
-}
-?>
-
 <div>
     @if($mode === 'full')
         <div class="flex flex-col gap-4 w-full">

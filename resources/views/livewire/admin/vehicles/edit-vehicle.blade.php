@@ -66,12 +66,20 @@
                 @endif
 
                 {{-- Image Upload --}}
-                <div>
+                <div x-data="{ photoPreview: null }">
                     <flux:label>{{ $existing_image ? 'Ganti Foto' : 'Foto Kendaraan' }} (Opsional)</flux:label>
                     <input 
                         type="file" 
                         wire:model="image" 
                         accept="image/*"
+                        x-on:change="
+                            const file = $event.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = (e) => { photoPreview = e.target.result; };
+                                reader.readAsDataURL(file);
+                            }
+                        "
                         class="mt-2 block w-full text-sm text-zinc-900 dark:text-zinc-100
                                file:mr-4 file:py-2 file:px-4
                                file:rounded-lg file:border-0
@@ -80,18 +88,23 @@
                                hover:file:bg-blue-100
                                dark:file:bg-blue-900/20 dark:file:text-blue-400"
                     />
-                    <div wire:loading wire:target="image" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
-                        Mengupload...
+                    
+                    <div wire:loading wire:target="image" class="mt-2 flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                        <flux:icon.loader-circle class="animate-spin w-4 h-4"/>
+                        <span>Mengupload ke server...</span>
                     </div>
+
                     @error('image')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
-                    @if($image)
-                        <div class="mt-3">
+
+                    {{-- Instant Alpine Preview --}}
+                    <template x-if="photoPreview">
+                        <div class="mt-4">
                             <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">Preview Foto Baru:</p>
-                            <img src="{{ $image->temporaryUrl() }}" class="rounded-lg max-w-xs shadow-md" alt="Preview">
+                            <img :src="photoPreview" class="rounded-xl max-w-xs shadow-lg border border-zinc-200 dark:border-zinc-700" alt="Preview">
                         </div>
-                    @endif
+                    </template>
                 </div>
 
                 {{-- Submit Buttons --}}

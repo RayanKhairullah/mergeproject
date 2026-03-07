@@ -28,6 +28,7 @@ class CreateBanquet extends Component
 
     public function mount(): void
     {
+        $this->authorize('create banquets');
         $this->scheduled_at = now()->addDay()->format('Y-m-d\TH:i');
     }
 

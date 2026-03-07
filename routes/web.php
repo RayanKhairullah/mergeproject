@@ -23,7 +23,9 @@ Route::prefix('meetings')->as('meetings.')->group(function (): void {
 Route::prefix('books')->as('books.')->group(function (): void {
     Route::get('/', \App\Livewire\Frontend\Books\Index::class)->name('index');
     Route::get('/{book:slug}', \App\Livewire\Frontend\Books\Show::class)->name('show');
-    Route::get('/{book:slug}/download', [\App\Http\Controllers\BookController::class, 'download'])->name('download');
+    Route::get('/{book:slug}/download', [\App\Http\Controllers\BookController::class, 'download'])
+        ->middleware('auth')
+        ->name('download');
     Route::get('/{book:slug}/read', [\App\Http\Controllers\BookController::class, 'read'])->name('read');
     Route::get('/{book:slug}/stream', [\App\Http\Controllers\BookController::class, 'stream'])->name('stream');
 });
@@ -34,10 +36,6 @@ Route::prefix('api')->as('api.')->group(function (): void {
 });
 
 Route::middleware(['auth'])->group(function (): void {
-
-    // Impersonations
-    Route::post('/impersonate/{user}', [\App\Http\Controllers\ImpersonationController::class, 'store'])->name('impersonate.store')->middleware('can:impersonate');
-    Route::delete('/impersonate/stop', [\App\Http\Controllers\ImpersonationController::class, 'destroy'])->name('impersonate.destroy');
 
     // Authenticated Vehicle Management Routes
     Route::prefix('vehicles')->as('vehicles.')->group(function (): void {

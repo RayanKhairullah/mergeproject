@@ -62,13 +62,14 @@ class Users extends Component
     {
         return view('livewire.admin.users', [
             'users' => User::query()
-                ->with('roles')
+                ->select(['id', 'name', 'email'])
+                ->with('roles:id,name')
                 ->when($this->search, function ($query, $search): void {
                     $query->whereAny($this->searchableFields, 'LIKE', "%$search%");
                 })
                 ->when($this->role, fn ($query) => $query->role($this->role))
-                ->paginate($this->perPage),
-            'roles' => Role::all(),
+                ->simplePaginate($this->perPage),
+            'roles' => Role::select(['id', 'name'])->get(),
         ]);
     }
 }

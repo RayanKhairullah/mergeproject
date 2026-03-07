@@ -29,6 +29,7 @@ class EditMeeting extends Component
 
     public function mount(Meeting $meeting): void
     {
+        $this->authorize('update meetings', $meeting);
         $this->meeting = $meeting;
         $this->title = $meeting->title;
         $this->notes = $meeting->notes ?? '';

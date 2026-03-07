@@ -41,7 +41,7 @@ class Banquet extends Model
         ];
     }
 
-    public function diningVenue(): BelongsTo
+    public function venue(): BelongsTo
     {
         return $this->belongsTo(DiningVenue::class, 'venue_id');
     }

@@ -1,9 +1,11 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <flux:heading size="xl">Manage Categories</flux:heading>
-        <flux:button wire:click="showCreateForm" variant="primary" icon="plus">
-            Add New Category
-        </flux:button>
+        <flux:modal.trigger name="category-form">
+            <flux:button wire:click="showCreateForm" variant="primary" icon="plus">
+                Add New Category
+            </flux:button>
+        </flux:modal.trigger>
     </div>
 
     <!-- Search -->
@@ -16,31 +18,29 @@
         />
     </div>
 
-    <!-- Create/Edit Form -->
-    @if($showCreateForm)
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-                {{ $editingCategory ? 'Edit Category' : 'Create New Category' }}
-            </h3>
+    <!-- Create/Edit Modal -->
+    <flux:modal name="category-form" :show="$showCreateForm" class="max-w-lg">
+        <form wire:submit.prevent="saveCategory" class="space-y-4">
+            <div>
+                <flux:heading size="lg">{{ $editingCategory ? 'Edit Category' : 'Create New Category' }}</flux:heading>
+            </div>
 
-            <form wire:submit="saveCategory" class="space-y-4">
-                <div>
-                    <flux:label>Category Name</flux:label>
-                    <flux:input wire:model="name" placeholder="Enter category name" class="mt-1" />
-                    <flux:error name="name" />
-                </div>
+            <div>
+                <flux:label>Category Name</flux:label>
+                <flux:input wire:model="name" placeholder="Enter category name" class="mt-1" />
+                <flux:error name="name" />
+            </div>
 
-                <div class="flex gap-3">
-                    <flux:button type="submit" variant="primary">
-                        {{ $editingCategory ? 'Update Category' : 'Create Category' }}
-                    </flux:button>
-                    <flux:button type="button" wire:click="cancelForm" variant="ghost">
-                        Cancel
-                    </flux:button>
-                </div>
-            </form>
-        </div>
-    @endif
+            <div class="flex gap-3 justify-end">
+                <flux:modal.close>
+                    <flux:button type="button" variant="ghost" wire:click="cancelForm">Cancel</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" variant="primary">
+                    {{ $editingCategory ? 'Update Category' : 'Create Category' }}
+                </flux:button>
+            </div>
+        </form>
+    </flux:modal>
 
     <!-- Success Message -->
     @if(session('success'))
@@ -78,12 +78,14 @@
                                 {{ $category->created_at->format('M j, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                                <flux:button 
-                                    wire:click="editCategory({{ $category->id }})" 
-                                    size="sm"
-                                >
-                                    Edit
-                                </flux:button>
+                                <flux:modal.trigger name="category-form">
+                                    <flux:button 
+                                        wire:click="editCategory({{ $category->id }})" 
+                                        size="sm"
+                                    >
+                                        Edit
+                                    </flux:button>
+                                </flux:modal.trigger>
                                 <flux:button 
                                     size="sm" 
                                     variant="danger" 

@@ -16,8 +16,6 @@ class PermissionSeeder extends Seeder
             // Dashboard access
             'access dashboard',
 
-            // Impersonation
-            'impersonate',
 
             // User management
             'view users',

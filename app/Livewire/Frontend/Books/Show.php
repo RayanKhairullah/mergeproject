@@ -35,13 +35,17 @@ class Show extends Component
             $this->userReview = \App\Models\Review::where('user_id', Auth::id())
                 ->where('book_id', $book->id)
                 ->first();
-
-            if ($this->userReview) {
-                $this->rating = $this->userReview->rating;
-                $this->comment = $this->userReview->comment ?? '';
-            }
         } else {
-            $this->anonymous_name = 'Anonymus';
+            $this->userReview = \App\Models\Review::where('anonymous_session_key', session()->getId())
+                ->where('book_id', $book->id)
+                ->first();
+            
+            $this->anonymous_name = $this->userReview?->anonymous_name ?? 'Anonymus';
+        }
+
+        if ($this->userReview) {
+            $this->rating = $this->userReview->rating;
+            $this->comment = $this->userReview->comment ?? '';
         }
     }
 
@@ -62,22 +66,32 @@ class Show extends Component
             'anonymous_name.required' => 'Nama (Anonim) wajib diisi untuk ulasan tanpa login.',
         ]);
 
-        if (Auth::check() && $this->userReview) {
+        if ($this->userReview) {
+            // Check time limit
+            if (!$this->userReview->canBeEdited()) {
+                session()->flash('error', 'Batas waktu 10 menit untuk mengedit ulasan telah berakhir.');
+                return;
+            }
+
             // Update existing review
             $this->userReview->update([
                 'rating' => $this->rating,
                 'comment' => $this->comment,
+                'anonymous_name' => Auth::check() ? null : $this->anonymous_name,
+                'user_id' => Auth::id() ?? $this->userReview->user_id, // If they log in later, we don't necessarily update but we could.
+                'edited_at' => now(),
             ]);
 
             session()->flash('success', 'Review updated successfully!');
         } else {
             // Create new review
-            \App\Models\Review::create([
+            $this->userReview = \App\Models\Review::create([
                 'user_id' => Auth::id() ?? null,
                 'book_id' => $this->book->id,
                 'rating' => $this->rating,
                 'comment' => $this->comment,
                 'anonymous_name' => Auth::check() ? null : $this->anonymous_name,
+                'anonymous_session_key' => Auth::check() ? null : session()->getId(),
             ]);
 
             session()->flash('success', 'Review submitted successfully!');
@@ -86,26 +100,21 @@ class Show extends Component
         $this->showReviewForm = false;
         $this->book->refresh();
         $this->book->load(['reviews.user']);
-
-        if (Auth::check()) {
-            $this->userReview = \App\Models\Review::where('user_id', Auth::id())
-                ->where('book_id', $this->book->id)
-                ->first();
-        } else {
-            // Reset for anonymous
-            $this->rating = 5;
-            $this->comment = '';
-            $this->anonymous_name = 'Anonymus';
-        }
     }
 
     public function deleteReview(): void
     {
         if ($this->userReview) {
+            if (!$this->userReview->canBeEdited()) {
+                session()->flash('error', 'Batas waktu 10 menit untuk menghapus ulasan telah berakhir.');
+                return;
+            }
+
             $this->userReview->delete();
             $this->userReview = null;
             $this->rating = 5;
             $this->comment = '';
+            $this->anonymous_name = 'Anonymus';
 
             $this->book->refresh();
             $this->book->load(['reviews.user']);

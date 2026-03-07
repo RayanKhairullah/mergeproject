@@ -29,6 +29,7 @@ class EditBanquet extends Component
 
     public function mount(Banquet $banquet): void
     {
+        $this->authorize('update banquets', $banquet);
         $this->banquet = $banquet;
         $this->title = $banquet->title;
         $this->description = $banquet->description ?? '';

@@ -24,9 +24,11 @@
             <flux:select.option value="in_use">Sedang Digunakan</flux:select.option>
             <flux:select.option value="maintenance">Maintenance</flux:select.option>
         </flux:select>
-        <flux:button href="{{ route('admin.vehicles.create') }}" variant="primary" icon="plus">
-            Tambah Kendaraan
-        </flux:button>
+        <flux:modal.trigger name="vehicle-form">
+            <flux:button wire:click="showCreateForm" variant="primary" icon="plus">
+                Tambah Kendaraan
+            </flux:button>
+        </flux:modal.trigger>
     </div>
 
     @if(session('success'))
@@ -91,9 +93,11 @@
                             </td>
                             <td class="px-4 py-3">
                                 <div class="flex gap-2">
-                                    <flux:button href="{{ route('admin.vehicles.edit', $vehicle) }}" size="sm" variant="ghost" icon="pencil">
-                                        Edit
-                                    </flux:button>
+                                    <flux:modal.trigger name="vehicle-form">
+                                        <flux:button wire:click="showEditForm({{ $vehicle->id }})" size="sm" variant="ghost" icon="pencil">
+                                            Edit
+                                        </flux:button>
+                                    </flux:modal.trigger>
                                     <flux:button 
                                         wire:click="delete({{ $vehicle->id }})" 
                                         wire:confirm="Apakah Anda yakin ingin menghapus kendaraan ini?"
@@ -122,4 +126,65 @@
     <div class="mt-6">
         {{ $vehicles->links() }}
     </div>
+
+    <flux:modal name="vehicle-form" :show="$showForm" class="min-w-[26rem]">
+        <form wire:submit.prevent="{{ $editingVehicleId ? 'update' : 'save' }}" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <flux:heading size="lg">{{ $editingVehicleId ? 'Edit Kendaraan' : 'Tambah Kendaraan' }}</flux:heading>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4">
+                <flux:field>
+                    <flux:label>Plat Nomor</flux:label>
+                    <flux:input wire:model="license_plate" placeholder="Masukkan plat nomor" />
+                    <flux:error name="license_plate" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Status</flux:label>
+                    <flux:select wire:model="status">
+                        <flux:select.option value="available">Tersedia</flux:select.option>
+                        <flux:select.option value="in_use">Sedang Digunakan</flux:select.option>
+                        <flux:select.option value="maintenance">Maintenance</flux:select.option>
+                    </flux:select>
+                    <flux:error name="status" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Kilometer Saat Ini</flux:label>
+                    <flux:input type="number" wire:model="current_mileage" min="0" />
+                    <flux:error name="current_mileage" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Tanggal Service Terakhir</flux:label>
+                    <flux:input type="date" wire:model="last_service_date" />
+                    <flux:error name="last_service_date" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Foto Kendaraan</flux:label>
+                    <flux:input type="file" wire:model="image" />
+                    <flux:error name="image" />
+
+                    @if($existingImage)
+                        <div class="mt-2">
+                            <p class="text-xs text-zinc-500">Foto saat ini:</p>
+                            <img src="{{ Storage::url($existingImage) }}" alt="Vehicle image" class="h-24 rounded-md" />
+                        </div>
+                    @endif
+                </flux:field>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-4 border-t border-zinc-200 dark:border-zinc-700">
+                <flux:modal.close>
+                    <flux:button type="button" variant="ghost" wire:click="cancelForm">Batal</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" variant="primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove>{{ $editingVehicleId ? 'Update' : 'Simpan' }}</span>
+                    <span wire:loading>{{ $editingVehicleId ? 'Updating...' : 'Saving...' }}</span>
+                </flux:button>
+            </div>
+        </form>
+    </flux:modal>
 </div>

@@ -1,4 +1,4 @@
-<section class="w-full">
+<section class="w-full max-w-4xl mx-auto">
     <x-page-heading>
         <x-slot:title>{{ __('settings.title') }}</x-slot:title>
         <x-slot:subtitle>{{ __('settings.subtitle') }}</x-slot:subtitle>
