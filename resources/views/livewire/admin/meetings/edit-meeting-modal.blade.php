@@ -98,13 +98,14 @@ $update = function () {
     ]);
 
     $this->dispatch('meeting-updated');
+    session()->flash('success', __('meetings.success_updated'));
     $this->dispatch('close-modal');
 };
 
 $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 ?>
 
-<flux:modal name="edit-meeting-{{ $meetingId }}" class="w-full max-w-4xl">
+<flux:modal name="edit-meeting-{{ $meetingId }}" class="w-full max-w-4xl" x-on:meeting-updated.window="$flux.modal('edit-meeting-{{ $meetingId }}').close()">
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('meetings.edit') }}</flux:heading>

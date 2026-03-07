@@ -14,7 +14,7 @@ return [
     'vehicle_reports' => 'Vehicle Reports',
     'loans' => 'Loans',
     'vehicle_readiness' => 'Vehicle Readiness',
-    'expenses' => 'Expenses',
+    'expenses' => 'Rupa-Rupa',
     'meeting_banquet' => 'Meeting & Banquet',
     'meeting' => 'Meeting',
     'banquet' => 'Banquet',

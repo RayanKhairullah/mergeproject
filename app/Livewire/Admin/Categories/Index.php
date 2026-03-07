@@ -34,9 +34,8 @@ class Index extends Component
         $categories = $query->paginate(15);
 
         return view('livewire.admin.categories.index', [
-            'title' => __('sidebar.book_categories'),
             'categories' => $categories,
-        ]);
+        ])->title(__('sidebar.book_categories'));
     }
 
     public function showCreateForm(): void

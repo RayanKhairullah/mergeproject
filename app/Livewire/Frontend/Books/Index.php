@@ -49,10 +49,9 @@ class Index extends Component
         $books = $query->paginate(12);
 
         return view('livewire.frontend.books.index', [
-            'title' => __('global.digital_library'),
             'books' => $books,
             'categories' => $categories,
-        ]);
+        ])->title(__('global.digital_library'));
     }
 
     public function clearFilters(): void

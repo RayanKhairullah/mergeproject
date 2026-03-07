@@ -224,8 +224,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.vehicles.index', [
-            'title' => __('sidebar.vehicles'),
             'vehicles' => $vehicles,
-        ]);
+        ])->title(__('sidebar.vehicles'));
     }
 }

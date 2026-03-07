@@ -98,6 +98,6 @@ class EditBanquet extends Component
 
         return view('livewire.admin.banquets.edit-banquet', [
             'venues' => $venues,
-        ])->layout($layout);
+        ])->title(__('banquets.edit_banquet'))->layout($layout);
     }
 }

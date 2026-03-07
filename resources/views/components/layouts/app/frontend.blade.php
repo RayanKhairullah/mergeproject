@@ -1,7 +1,8 @@
+@props(['title' => null])
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @include('partials.head')
+    @include('partials.head', ['title' => $title ?? null])
 </head>
 <body class="min-h-screen bg-white dark:bg-zinc-800">
 <flux:header 
@@ -13,7 +14,7 @@
 
     <div class="flex w-full items-center justify-between gap-2 lg:gap-4 pl-4 md:pl-0">
         <!-- 1. Left Section: Logo -->
-        <div class="flex flex-1 items-center justify-start min-w-[120px] md:min-w-[200px] shrink overflow-hidden pr-2">
+        <div class="flex flex-none items-center justify-start pr-4">
             <a href="{{ route('home') }}" class="flex items-center gap-1.5 md:gap-3 py-1 hover:opacity-80 transition-opacity">
                 @if(request()->routeIs('home'))
                     <img src="{{ asset('images/logo-putih.png') }}" alt="Danantara" class="h-4 sm:h-5 w-auto object-contain shrink-0">
@@ -34,7 +35,7 @@
         </div>
 
         <!-- 2. Middle Section: Esthetic Centered Navigation -->
-        <div class="hidden lg:flex shrink justify-center overflow-hidden">
+        <div class="hidden lg:flex flex-1 justify-center min-w-0">
             @php
                 $navColor = request()->routeIs('home') 
                     ? 'text-zinc-200 hover:text-white' 
@@ -82,7 +83,7 @@
         </div>
 
         <!-- 3. Right Section: Utilities & Auth -->
-        <div class="flex flex-1 items-center justify-end gap-3 md:gap-4 shrink-0 px-2 lg:px-0">
+        <div class="flex flex-none items-center justify-end gap-3 md:gap-4 px-2 lg:px-0">
             <!-- Settings Dropdown (Theme & Language) -->
             <div class="shrink-0">
                 <livewire:language-switcher />

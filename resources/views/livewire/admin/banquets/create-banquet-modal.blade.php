@@ -86,15 +86,11 @@ $create = function () {
         'cost.min' => 'Biaya tidak boleh negatif.',
     ]);
 
-    // Get the guest type enum value
-    $guestTypeModel = \App\Models\GuestType::where('value', $this->guest_type)->first();
-    $guestTypeEnum = \App\Enums\GuestType::from($guestTypeModel->value);
-
     \App\Models\Banquet::create([
         'title' => $this->title,
         'description' => $this->description,
         'venue_id' => $this->venue_id,
-        'guest_type' => $guestTypeEnum,
+        'guest_type' => $this->guest_type,
         'estimated_guests' => $this->estimated_guests,
         'cost' => $this->cost,
         'scheduled_at' => $this->scheduled_at,
@@ -103,6 +99,7 @@ $create = function () {
     ]);
 
     $this->dispatch('banquet-created');
+    session()->flash('success', __('banquets.success_created'));
     $this->dispatch('close-modal');
     
     // Reset form
@@ -119,7 +116,7 @@ $toggleCreateGuestType = fn() => $this->showCreateGuestType = !$this->showCreate
 $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 ?>
 
-<flux:modal name="create-banquet" class="w-full max-w-4xl">
+<flux:modal name="create-banquet" class="w-full max-w-4xl" x-on:banquet-created.window="$flux.modal('create-banquet').close()">
     <form wire:submit="create" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('banquets.create') }}</flux:heading>

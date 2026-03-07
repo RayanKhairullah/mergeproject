@@ -28,6 +28,6 @@ class Dashboard extends Component
     #[Layout('components.layouts.app.frontend')]
     public function render(): View
     {
-        return view('livewire.dashboard');
+        return view('livewire.dashboard')->title(__('sidebar.dashboard'));
     }
 }

@@ -40,10 +40,9 @@ class MeetingMonitor extends Component
         $rooms = Room::all();
 
         return view('livewire.frontend.meeting-monitor', [
-            'title' => __('global.monitor_rapat'),
             'currentMeeting' => $currentMeeting,
             'upcomingMeetings' => $upcomingMeetings,
             'rooms' => $rooms,
-        ]);
+        ])->title(__('global.monitor_rapat'));
     }
 }

@@ -61,7 +61,6 @@ class Users extends Component
     public function render(): View
     {
         return view('livewire.admin.users', [
-            'title' => __('sidebar.users'),
             'users' => User::query()
                 ->select(['id', 'name', 'email'])
                 ->with('roles:id,name')
@@ -71,6 +70,6 @@ class Users extends Component
                 ->when($this->role, fn ($query) => $query->role($this->role))
                 ->simplePaginate($this->perPage),
             'roles' => Role::select(['id', 'name'])->get(),
-        ]);
+        ])->title(__('sidebar.users'));
     }
 }

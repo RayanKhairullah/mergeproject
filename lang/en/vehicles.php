@@ -37,6 +37,7 @@ return [
     'select' => 'Select',
     'vehicle' => 'Vehicle',
     'borrower' => 'Borrower',
+    'update' => 'Update',
 
     // Inspection
     'inspection_title' => 'Vehicle Inspection',

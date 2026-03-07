@@ -130,7 +130,7 @@
     <flux:modal name="vehicle-form" :show="$showForm" class="min-w-[26rem]">
         <form wire:submit.prevent="{{ $editingVehicleId ? 'update' : 'save' }}" class="space-y-6">
             <div class="flex items-center justify-between">
-                <flux:heading size="lg">{{ $editingVehicleId ? __('vehicles.edit_vehicle') : __('vehicles.create_vehicle') }}</flux:heading>
+                <flux:heading size="lg">{{ $editingVehicleId ? __('vehicles.edit_vehicle') : __('vehicles.add_vehicle') }}</flux:heading>
             </div>
 
             <div class="grid grid-cols-1 gap-4">
@@ -181,7 +181,7 @@
                     <flux:button type="button" variant="ghost" wire:click="cancelForm">{{ __('global.cancel') }}</flux:button>
                 </flux:modal.close>
                 <flux:button type="submit" variant="primary" wire:loading.attr="disabled">
-                    <span wire:loading.remove>{{ $editingVehicleId ? __('vehicles.update') : __('vehicles.save') }}</span>
+                    <span wire:loading.remove>{{ $editingVehicleId ? __('vehicles.update') : __('vehicles.save_button') }}</span>
                     <span wire:loading>{{ $editingVehicleId ? __('vehicles.updating') : __('vehicles.saving') }}</span>
                 </flux:button>
             </div>

@@ -303,9 +303,8 @@ class ExpenseForm extends Component
             ->get();
 
         return view('livewire.frontend.expense-form', [
-            'title' => __('global.rupa_rupa'),
             'vehicles' => $vehicles,
             'users' => $users,
-        ]);
+        ])->title(__('global.rupa_rupa'));
     }
 }

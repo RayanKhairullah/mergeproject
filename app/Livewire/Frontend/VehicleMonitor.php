@@ -67,8 +67,7 @@ class VehicleMonitor extends Component
             ->paginate(12);
 
         return view('livewire.frontend.vehicle-monitor', [
-            'title' => __('global.monitor_mobil'),
             'vehicles' => $vehicles,
-        ]);
+        ])->title(__('global.monitor_mobil'));
     }
 }

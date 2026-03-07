@@ -164,7 +164,7 @@
                         @endforelse
                     </div>
 
-                    <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-zinc-800 flex justify-between items-center text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
+                    <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-zinc-200 dark:border-zinc-800 flex justify-between items-center text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
                         <span>{{ __('global.status_online') }}</span>
                         <div class="flex gap-1">
                             <div class="w-1 h-1 rounded-full bg-emerald-500 opacity-50"></div>

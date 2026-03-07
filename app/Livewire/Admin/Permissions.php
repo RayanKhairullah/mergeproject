@@ -58,13 +58,12 @@ class Permissions extends Component
     public function render(): View
     {
         return view('livewire.admin.permissions', [
-            'title' => __('permissions.title'),
             'permissions' => Permission::query()
                 ->select(['id', 'name'])
                 ->when($this->search, function ($query, $search): void {
                     $query->whereAny($this->searchableFields, 'LIKE', "%$search%");
                 })
                 ->simplePaginate($this->perPage),
-        ]);
+        ])->title(__('permissions.title'));
     }
 }

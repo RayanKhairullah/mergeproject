@@ -77,6 +77,6 @@ class CreateBanquet extends Component
 
         return view('livewire.admin.banquets.create-banquet', [
             'venues' => $venues,
-        ])->layout($layout);
+        ])->title(__('banquets.create_banquet'))->layout($layout);
     }
 }

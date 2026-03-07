@@ -156,6 +156,6 @@ class PublicReturnForm extends Component
     #[Layout('components.layouts.app.frontend')]
     public function render(): View
     {
-        return view('livewire.frontend.public-return-form');
+        return view('livewire.frontend.public-return-form')->title(__('global.pengembalian'));
     }
 }

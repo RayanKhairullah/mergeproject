@@ -61,6 +61,32 @@ class Index extends Component
         $this->detailId = null;
     }
 
+    public function publish(int $id): void
+    {
+        $meeting = Meeting::findOrFail($id);
+
+        // Only allow publishing from DRAFT
+        if ($meeting->status !== MeetingStatus::DRAFT) {
+            return;
+        }
+
+        // If user has approve permission, they can publish directly to PUBLISHED
+        // Otherwise, it goes to PENDING_APPROVAL
+        if (auth()->user()->can('approve meetings')) {
+            $meeting->update([
+                'status' => MeetingStatus::PUBLISHED,
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
+            session()->flash('success', __('meetings.success_updated'));
+        } else {
+            $meeting->update([
+                'status' => MeetingStatus::PENDING_APPROVAL,
+            ]);
+            session()->flash('success', __('meetings.success_updated'));
+        }
+    }
+
     public function approve(int $id): void
     {
         if (! auth()->user()->can('approve meetings')) {
@@ -161,10 +187,9 @@ class Index extends Component
             : 'components.layouts.app.frontend';
 
         return view('livewire.admin.meetings.index', [
-            'title' => __('sidebar.meeting'),
             'meetings' => $meetings,
             'rooms' => $rooms,
             'detailMeeting' => $detailMeeting,
-        ])->layout($layout);
+        ])->title(__('sidebar.meeting'))->layout($layout);
     }
 }

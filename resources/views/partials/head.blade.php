@@ -1,7 +1,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>{{ config('app.name', 'Pelindo Internship') }}{{ isset($title) ? ' | '.$title : '' }}</title>
+<title>{{ config('app.name', 'Pelindo Internship') }}{{ (isset($title) && is_string($title)) ? ' | '.$title : '' }}</title>
 <link rel="icon" type="image/svg+xml" href="{{ asset('images/icon_web.svg') }}">
 
 @stack('meta')

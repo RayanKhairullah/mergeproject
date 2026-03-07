@@ -45,10 +45,9 @@ class Index extends Component
         $books = $query->paginate(15);
 
         return view('livewire.admin.books.index', [
-            'title' => __('sidebar.manage_books'),
             'books' => $books,
             'categories' => $categories,
-        ]);
+        ])->title(__('sidebar.manage_books'));
     }
 
     public function deleteBook(int $bookId): void

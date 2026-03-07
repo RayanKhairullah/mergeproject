@@ -66,6 +66,32 @@ class Index extends Component
         $this->detailId = null;
     }
 
+    public function publish(int $id): void
+    {
+        $banquet = Banquet::findOrFail($id);
+
+        // Only allow publishing from DRAFT
+        if ($banquet->status !== BanquetStatus::DRAFT) {
+            return;
+        }
+
+        // If user has approve permission, they can publish directly to PUBLISHED
+        // Otherwise, it goes to PENDING_APPROVAL
+        if (auth()->user()->can('approve banquets')) {
+            $banquet->update([
+                'status' => BanquetStatus::PUBLISHED,
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
+            session()->flash('success', __('banquets.success_updated'));
+        } else {
+            $banquet->update([
+                'status' => BanquetStatus::PENDING_APPROVAL,
+            ]);
+            session()->flash('success', __('banquets.success_updated'));
+        }
+    }
+
     public function approve(int $id): void
     {
         if (! auth()->user()->can('approve banquets')) {
@@ -159,6 +185,7 @@ class Index extends Component
             ->paginate(10);
 
         $venues = DiningVenue::all();
+        $guestTypes = \App\Models\GuestType::all();
         $detailBanquet = $this->detailId ? Banquet::with(['venue', 'creator', 'approver'])->find($this->detailId) : null;
 
         // Determine layout based on user role
@@ -167,10 +194,10 @@ class Index extends Component
             : 'components.layouts.app.frontend';
 
         return view('livewire.admin.banquets.index', [
-            'title' => __('sidebar.banquet'),
             'banquets' => $banquets,
             'venues' => $venues,
+            'guestTypes' => $guestTypes,
             'detailBanquet' => $detailBanquet,
-        ])->layout($layout);
+        ])->title(__('sidebar.banquet'))->layout($layout);
     }
 }

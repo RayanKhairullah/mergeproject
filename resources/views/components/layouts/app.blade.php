@@ -1,4 +1,4 @@
-<x-layouts.app.frontend>
+<x-layouts.app.frontend :title="$title ?? null">
     <flux:main>
         {{ $slot }}
     </flux:main>

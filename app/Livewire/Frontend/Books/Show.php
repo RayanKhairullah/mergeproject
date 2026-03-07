@@ -20,7 +20,7 @@ class Show extends Component
 
     public string $comment = '';
 
-    public string $anonymous_name = 'Anonymus';
+    public string $anonymous_name = 'Anonymous';
 
     public function setRating(int $rating): void
     {
@@ -40,7 +40,7 @@ class Show extends Component
                 ->where('book_id', $book->id)
                 ->first();
             
-            $this->anonymous_name = $this->userReview?->anonymous_name ?? 'Anonymus';
+            $this->anonymous_name = $this->userReview?->anonymous_name ?? 'Anonymous';
         }
 
         if ($this->userReview) {

@@ -11,6 +11,6 @@ class Home extends Component
     #[Layout('components.layouts.app.frontend')]
     public function render(): View
     {
-        return view('livewire.home');
+        return view('livewire.home')->title(__('sidebar.dashboard'));
     }
 }

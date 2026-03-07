@@ -1,7 +1,8 @@
+@props(['title' => null])
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @include('partials.head')
+    @include('partials.head', ['title' => $title ?? null])
 </head>
 <body class="min-h-screen bg-white dark:bg-zinc-800">
 <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 lg:dark:bg-zinc-900/50">
@@ -73,7 +74,7 @@
         </flux:navlist.group>
 
         {{-- Meeting & Banquet Management Section --}}
-        <flux:navlist.group expandable heading="{{ __('sidebar.meeting_banquet') }}" icon="calendar" :expanded="request()->routeIs(['admin.meetings.*', 'admin.banquets.*'])" class="grid">
+        <flux:navlist.group expandable heading="{!! __('sidebar.meeting_banquet') !!}" icon="calendar" :expanded="request()->routeIs(['admin.meetings.*', 'admin.banquets.*'])" class="grid">
             <flux:navlist.item icon="calendar" :href="route('admin.meetings.index')" :current="request()->routeIs('admin.meetings.*')">
                 {{ __('sidebar.meeting') }}
             </flux:navlist.item>

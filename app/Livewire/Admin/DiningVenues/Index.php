@@ -88,8 +88,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.dining-venues.index', [
-            'title' => __('sidebar.dining_venues'),
             'venues' => $venues,
-        ]);
+        ])->title(__('sidebar.dining_venues'));
     }
 }

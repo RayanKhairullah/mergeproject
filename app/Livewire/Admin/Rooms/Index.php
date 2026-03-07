@@ -95,8 +95,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.rooms.index', [
-            'title' => __('sidebar.meeting_rooms'),
             'rooms' => $rooms,
-        ]);
+        ])->title(__('sidebar.meeting_rooms'));
     }
 }

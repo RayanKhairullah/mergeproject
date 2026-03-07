@@ -34,7 +34,6 @@ class Banquet extends Model
         return [
             'scheduled_at' => 'datetime',
             'approved_at' => 'datetime',
-            'guest_type' => GuestType::class,
             'status' => BanquetStatus::class,
             'estimated_guests' => 'integer',
             'cost' => 'decimal:2',

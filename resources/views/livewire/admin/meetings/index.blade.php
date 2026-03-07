@@ -107,8 +107,13 @@
                                     <flux:button size="sm" variant="ghost" icon="eye" wire:click="showDetail({{ $meeting->id }})">
                                         <span class="hidden md:inline">{{ __('meetings.detail') }}</span>
                                     </flux:button>
+                                    @if($meeting->status->value === 'DRAFT' && (auth()->user()->can('approve meetings') || $meeting->created_by === auth()->id()))
+                                        <flux:button size="sm" variant="ghost" icon="paper-airplane" wire:click="publish({{ $meeting->id }})">
+                                            <span class="hidden md:inline">{{ __('meetings.publish') }}</span>
+                                        </flux:button>
+                                    @endif
                                     @can('update meetings')
-                                        @if(in_array($meeting->status->value, ['DRAFT', 'PENDING_APPROVAL']) && (auth()->user()->can('approve meetings') || $meeting->created_by === auth()->id()))
+                                        @if((in_array($meeting->status->value, ['DRAFT', 'PENDING_APPROVAL']) && (auth()->user()->can('approve meetings') || $meeting->created_by === auth()->id())) || (auth()->user()->can('approve meetings') && $meeting->status->value === 'PUBLISHED'))
                                             <flux:modal.trigger name="edit-meeting-{{ $meeting->id }}">
                                                 <flux:button size="sm" variant="ghost" icon="pencil-square">
                                                     <span class="hidden md:inline">{{ __('global.edit') }}</span>

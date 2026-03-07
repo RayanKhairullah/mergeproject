@@ -48,9 +48,9 @@
  
         <flux:select wire:model.live="guestTypeFilter" placeholder="{{ __('banquets.all_guest_types') }}">
             <flux:select.option value="">{{ __('banquets.all_guest_types') }}</flux:select.option>
-            <flux:select.option value="VVIP">{{ __('banquets.guest_types.vvip') }}</flux:select.option>
-            <flux:select.option value="VIP">{{ __('banquets.guest_types.vip') }}</flux:select.option>
-            <flux:select.option value="Internal">{{ __('banquets.guest_types.internal') }}</flux:select.option>
+            @foreach($guestTypes as $type)
+                <flux:select.option value="{{ $type->value }}">{{ $type->label }}</flux:select.option>
+            @endforeach
         </flux:select>
  
         <flux:input type="date" wire:model.live="dateFilter" />
@@ -94,7 +94,7 @@
                                 {{ $banquet->title }}
                             </td>
                             <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                {{ $banquet->guest_type->value }}
+                                {{ $banquet->guest_type }}
                             </td>
                             <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $banquet->venue->name }}
@@ -118,6 +118,11 @@
                                     <flux:button size="sm" variant="ghost" icon="eye" wire:click="showDetail({{ $banquet->id }})">
                                         <span class="hidden md:inline">{{ __('banquets.detail') }}</span>
                                     </flux:button>
+                                    @if($banquet->status->value === 'DRAFT' && (auth()->user()->can('approve banquets') || $banquet->created_by === auth()->id()))
+                                        <flux:button size="sm" variant="ghost" icon="paper-airplane" wire:click="publish({{ $banquet->id }})">
+                                            <span class="hidden md:inline">{{ __('banquets.publish') }}</span>
+                                        </flux:button>
+                                    @endif
                                     @can('update banquets')
                                         @if(in_array($banquet->status->value, ['DRAFT', 'PENDING_APPROVAL']) && (auth()->user()->can('approve banquets') || $banquet->created_by === auth()->id()))
                                             <flux:modal.trigger name="edit-banquet-{{ $banquet->id }}">
@@ -170,7 +175,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('banquets.fields.guest_type') }}</p>
-                        <p class="font-medium">{{ $detailBanquet->guest_type->value }}</p>
+                        <p class="font-medium">{{ $detailBanquet->guest_type }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('banquets.fields.venue') }}</p>

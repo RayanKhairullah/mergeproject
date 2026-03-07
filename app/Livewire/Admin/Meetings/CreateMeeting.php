@@ -88,6 +88,6 @@ class CreateMeeting extends Component
 
         return view('livewire.admin.meetings.create-meeting', [
             'rooms' => $rooms,
-        ])->layout($layout);
+        ])->title(__('meetings.create_meeting'))->layout($layout);
     }
 }

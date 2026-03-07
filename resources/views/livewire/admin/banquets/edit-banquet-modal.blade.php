@@ -25,7 +25,7 @@ mount(function ($banquetId) {
     $this->title = $banquet->title;
     $this->description = $banquet->description;
     $this->venue_id = $banquet->venue_id;
-    $this->guest_type = $banquet->guest_type->value;
+    $this->guest_type = $banquet->guest_type;
     $this->estimated_guests = $banquet->estimated_guests;
     $this->cost = $banquet->cost;
     $this->scheduled_at = $banquet->scheduled_at?->format('Y-m-d\TH:i');
@@ -97,22 +97,19 @@ $update = function () {
         'cost.min' => 'Biaya tidak boleh negatif.',
     ]);
 
-    // Get the guest type enum value
-    $guestTypeModel = \App\Models\GuestType::where('value', $this->guest_type)->first();
-    $guestTypeEnum = \App\Enums\GuestType::from($guestTypeModel->value);
-
     $banquet = \App\Models\Banquet::findOrFail($this->banquetId);
     $banquet->update([
         'title' => $this->title,
         'description' => $this->description,
         'venue_id' => $this->venue_id,
-        'guest_type' => $guestTypeEnum,
+        'guest_type' => $this->guest_type,
         'estimated_guests' => $this->estimated_guests,
         'cost' => $this->cost,
         'scheduled_at' => $this->scheduled_at,
     ]);
 
     $this->dispatch('banquet-updated');
+    session()->flash('success', __('banquets.success_updated'));
     $this->dispatch('close-modal');
 };
 
@@ -120,7 +117,7 @@ $toggleCreateGuestType = fn() => $this->showCreateGuestType = !$this->showCreate
 $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 ?>
 
-<flux:modal name="edit-banquet-{{ $banquetId }}" class="w-full max-w-4xl">
+<flux:modal name="edit-banquet-{{ $banquetId }}" class="w-full max-w-4xl" x-on:banquet-updated.window="$flux.modal('edit-banquet-{{ $banquetId }}').close()">
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('banquets.edit') }}</flux:heading>

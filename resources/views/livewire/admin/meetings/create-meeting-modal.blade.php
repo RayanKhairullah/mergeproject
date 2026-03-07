@@ -87,6 +87,7 @@ $create = function () {
     ]);
 
     $this->dispatch('meeting-created');
+    session()->flash('success', __('meetings.success_created'));
     $this->dispatch('close-modal');
     
     // Reset form
@@ -103,7 +104,7 @@ $create = function () {
 $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 ?>
 
-<flux:modal name="create-meeting" class="w-full max-w-4xl">
+<flux:modal name="create-meeting" class="w-full max-w-4xl" x-on:meeting-created.window="$flux.modal('create-meeting').close()">
     <form wire:submit="create" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('meetings.create') }}</flux:heading>

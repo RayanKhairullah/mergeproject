@@ -105,9 +105,8 @@ class LoanForm extends Component
             ->get();
 
         return view('livewire.frontend.loan-form', [
-            'title' => __('global.peminjaman'),
             'vehicles' => $vehicles,
             'users' => $users,
-        ]);
+        ])->title(__('global.peminjaman'));
     }
 }

@@ -167,6 +167,7 @@ return [
     'new_photo_preview' => 'Pratinjau Foto Baru:',
     'photo_preview' => 'Pratinjau Foto:',
     'save_button' => 'Simpan',
+    'update' => 'Update',
     'saving_button' => 'Menyimpan...',
     'updating_button' => 'Mengupdate...',
     'success_added' => 'Kendaraan berhasil ditambahkan!',

@@ -176,10 +176,9 @@ class Index extends Component
             });
 
         return view('livewire.admin.inspections.index', [
-            'title' => __('sidebar.vehicle_readiness'),
             'inspections' => $inspections,
             'vehicles' => $vehicles,
             'vehicleMileages' => $vehicleMileages,
-        ]);
+        ])->title(__('sidebar.vehicle_readiness'));
     }
 }

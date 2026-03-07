@@ -109,6 +109,6 @@ class EditMeeting extends Component
 
         return view('livewire.admin.meetings.edit-meeting', [
             'rooms' => $rooms,
-        ])->layout($layout);
+        ])->title(__('meetings.edit_meeting'))->layout($layout);
     }
 }

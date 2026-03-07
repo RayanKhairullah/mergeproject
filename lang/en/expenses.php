@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Miscellaneous (Costs)',
+    'title' => 'Rupa Rupa (Costs)',
     'subtitle' => 'Operational vehicle activity/cost report',
     'search_placeholder' => 'Search vehicle...',
     'all_vehicles' => 'All Vehicles',

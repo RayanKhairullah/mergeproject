@@ -140,9 +140,8 @@ class Index extends Component
         $vehicles = Vehicle::orderBy('license_plate')->get();
 
         return view('livewire.admin.expenses.index', [
-            'title' => __('sidebar.expenses'),
             'expenses' => $expenses,
             'vehicles' => $vehicles,
-        ]);
+        ])->title(__('sidebar.expenses'));
     }
 }
