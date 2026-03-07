@@ -3,14 +3,14 @@
         {{-- Header --}}
         <div class="mb-6 sm:mb-8">
             <flux:button href="{{ route('home') }}" variant="ghost" icon="arrow-left" class="mb-4">
-                Kembali ke Home
+                {{ __('vehicles.back_to_home') }}
             </flux:button>
             
             <h1 class="text-3xl sm:text-4xl font-bold tracking-tighter text-balance text-gray-950 dark:text-white mb-2">
                 {{ __('vehicles.inspection_form') }}
             </h1>
             <p class="text-base sm:text-lg text-zinc-600 dark:text-zinc-400">
-                Inspeksi kesiapan kendaraan operasional
+                {{ __('vehicles.inspection_description') }}
             </p>
         </div>
 
@@ -26,7 +26,7 @@
                             <flux:select 
                                 wire:model.live="vehicle_id" 
                                 label="{{ __('vehicles.select_vehicle') }}" 
-                                placeholder="Pilih kendaraan..."
+                                placeholder="{{ __('vehicles.select_vehicle_placeholder') }}"
                             >
                                 @foreach($vehicles as $vehicle)
                                     <flux:select.option value="{{ $vehicle->id }}">
@@ -53,7 +53,7 @@
                             {{-- Kondisi Kendaraan --}}
                             <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 space-y-4 sm:space-y-6">
                                 <p class="text-sm font-semibold text-purple-900 dark:text-purple-200">
-                                    Kondisi Kendaraan
+                                    {{ __('vehicles.vehicle_condition') }}
                                 </p>
 
                                 {{-- Tire Condition --}}
@@ -63,17 +63,17 @@
                                         <div class="flex gap-4">
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="radio" wire:model.live="tire_condition_type" value="good" class="mr-2" />
-                                                <span class="text-sm">Good</span>
+                                                <span class="text-sm">{{ __('vehicles.good') }}</span>
                                             </label>
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="radio" wire:model.live="tire_condition_type" value="other" class="mr-2" />
-                                                <span class="text-sm">Lainnya</span>
+                                                <span class="text-sm">{{ __('vehicles.other') }}</span>
                                             </label>
                                         </div>
                                         @if($tire_condition_type === 'other')
                                             <flux:textarea 
                                                 wire:model="tire_condition_notes" 
-                                                placeholder="Jelaskan kondisi ban..."
+                                                placeholder="{{ __('vehicles.describe_tire_condition') }}"
                                                 rows="2"
                                             />
                                             @error('tire_condition_notes')
@@ -90,17 +90,17 @@
                                         <div class="flex gap-4">
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="radio" wire:model.live="body_condition_type" value="good" class="mr-2" />
-                                                <span class="text-sm">Good</span>
+                                                <span class="text-sm">{{ __('vehicles.good') }}</span>
                                             </label>
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="radio" wire:model.live="body_condition_type" value="other" class="mr-2" />
-                                                <span class="text-sm">Lainnya</span>
+                                                <span class="text-sm">{{ __('vehicles.other') }}</span>
                                             </label>
                                         </div>
                                         @if($body_condition_type === 'other')
                                             <flux:textarea 
                                                 wire:model="body_condition_notes" 
-                                                placeholder="Jelaskan kondisi body..."
+                                                placeholder="{{ __('vehicles.describe_body_condition') }}"
                                                 rows="2"
                                             />
                                             @error('body_condition_notes')
@@ -117,17 +117,17 @@
                                         <div class="flex gap-4">
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="radio" wire:model.live="glass_condition_type" value="good" class="mr-2" />
-                                                <span class="text-sm">Good</span>
+                                                <span class="text-sm">{{ __('vehicles.good') }}</span>
                                             </label>
                                             <label class="flex items-center cursor-pointer">
                                                 <input type="radio" wire:model.live="glass_condition_type" value="other" class="mr-2" />
-                                                <span class="text-sm">Lainnya</span>
+                                                <span class="text-sm">{{ __('vehicles.other') }}</span>
                                             </label>
                                         </div>
                                         @if($glass_condition_type === 'other')
                                             <flux:textarea 
                                                 wire:model="glass_condition_notes" 
-                                                placeholder="Jelaskan kondisi kaca..."
+                                                placeholder="{{ __('vehicles.describe_glass_condition') }}"
                                                 rows="2"
                                             />
                                             @error('glass_condition_notes')
@@ -140,9 +140,9 @@
 
                             {{-- Foto Masalah (Opsional) --}}
                             <div>
-                                <flux:label>{{ __('vehicles.issue_photos') }} (Opsional)</flux:label>
+                                <flux:label>{{ __('vehicles.issue_photos') }} ({{ __('vehicles.optional') }})</flux:label>
                                 <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-3">
-                                    Upload foto jika ditemukan masalah (maksimal 3 foto, max 2MB per foto)
+                                    {{ __('vehicles.issue_photos_desc') }}
                                 </p>
                                 
                                 @for($i = 0; $i < 3; $i++)
@@ -163,7 +163,7 @@
                                         @endif
 
                                         <div wire:loading wire:target="issue_photos.{{ $i }}" class="mt-2 text-sm text-purple-600 dark:text-purple-400">
-                                            Mengupload...
+                                            {{ __('vehicles.uploading') }}
                                         </div>
 
                                         @if(isset($issue_photos[$i]))
@@ -177,7 +177,7 @@
                                                     type="button"
                                                     wire:click="clearIssuePhoto({{ $i }})"
                                                     class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors duration-200"
-                                                    title="Hapus foto"
+                                                    title="{{ __('vehicles.delete_photo_title') }}"
                                                 >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -195,7 +195,7 @@
                                     wire:model.live="mileage_check" 
                                     type="number" 
                                     label="{{ __('vehicles.mileage_check') }}" 
-                                    placeholder="Masukkan posisi kilometer saat ini"
+                                    placeholder="{{ __('vehicles.mileage_check_placeholder') }}"
                                     min="0"
                                 />
 
@@ -206,11 +206,11 @@
                                     @if($selectedVehicle && $mileage_check != $selectedVehicle->current_mileage)
                                         <div class="mt-3 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
                                             <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">
-                                                Perubahan Kilometer
+                                                {{ __('vehicles.mileage_change_title') }}
                                             </p>
                                             <p class="text-sm text-amber-800 dark:text-amber-300">
-                                                Dari: {{ number_format($selectedVehicle->current_mileage) }} km → 
-                                                Ke: {{ number_format($mileage_check) }} km
+                                                {{ __('vehicles.mileage_change_from') }}: {{ number_format($selectedVehicle->current_mileage) }} km → 
+                                                {{ __('vehicles.mileage_change_to') }}: {{ number_format($mileage_check) }} km
                                                 ({{ $mileage_check > $selectedVehicle->current_mileage ? '+' : '' }}{{ number_format($mileage_check - $selectedVehicle->current_mileage) }} km)
                                             </p>
                                         </div>
@@ -221,7 +221,7 @@
                             {{-- Foto Speedometer --}}
                             <div>
                                 <flux:label>{{ __('vehicles.speedometer_photo') }} *</flux:label>
-                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">Maksimal ukuran file: 2MB</p>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-2">{{ __('vehicles.max_file_size_2mb') }}</p>
                                 
                                 @if(!$speedometer_photo)
                                     <input 
@@ -239,7 +239,7 @@
                                 @endif
 
                                 <div wire:loading wire:target="speedometer_photo" class="mt-2 text-sm text-blue-600 dark:text-blue-400">
-                                    Mengupload...
+                                    {{ __('vehicles.uploading') }}
                                 </div>
 
                                 @error('speedometer_photo')
@@ -257,7 +257,7 @@
                                             type="button"
                                             wire:click="clearPhoto"
                                             class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 shadow-lg transition-colors duration-200"
-                                            title="Hapus foto"
+                                            title="{{ __('vehicles.delete_photo_title') }}"
                                         >
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -271,7 +271,7 @@
                             <flux:textarea 
                                 wire:model="additional_notes" 
                                 label="{{ __('vehicles.additional_notes') }}" 
-                                placeholder="Catatan tambahan (opsional)"
+                                placeholder="{{ __('vehicles.additional_notes_placeholder') }}"
                                 rows="3"
                             />
 
@@ -282,7 +282,7 @@
                                     variant="ghost"
                                     class="w-full sm:flex-1"
                                 >
-                                    Batal
+                                    {{ __('vehicles.cancel') }}
                                 </flux:button>
                                 <flux:button 
                                     type="submit" 
@@ -292,7 +292,7 @@
                                     wire:loading.attr="disabled"
                                 >
                                     <span wire:loading.remove wire:target="submitInspection">{{ __('vehicles.submit_inspection') }}</span>
-                                    <span wire:loading wire:target="submitInspection">Menyimpan...</span>
+                                    <span wire:loading wire:target="submitInspection">{{ __('vehicles.saving') }}</span>
                                 </flux:button>
                             </div>
                         </x-form>
@@ -306,12 +306,12 @@
                     <div class="flex">
                         <flux:icon.information-circle class="w-5 h-5 text-purple-600 dark:text-purple-400 mr-3 flex-shrink-0 mt-0.5" />
                         <div class="text-sm text-purple-800 dark:text-purple-300">
-                            <p class="font-semibold mb-2">Catatan Penting:</p>
+                            <p class="font-semibold mb-2">{{ __('vehicles.important_notes') }}</p>
                             <ul class="list-disc list-inside space-y-1.5">
-                                <li>Posisi kilometer akan otomatis tersinkron dengan data kendaraan</li>
-                                <li>Upload foto masalah hanya jika ditemukan kondisi yang tidak baik</li>
-                                <li>Foto speedometer wajib untuk validasi kilometer</li>
-                                <li>Pilih "Good" jika kondisi normal, "Lainnya" jika ada masalah</li>
+                                <li>{{ __('vehicles.note_mileage_sync') }}</li>
+                                <li>{{ __('vehicles.note_photo_issue') }}</li>
+                                <li>{{ __('vehicles.note_photo_speedometer_required') }}</li>
+                                <li>{{ __('vehicles.note_choose_status') }}</li>
                             </ul>
                         </div>
                     </div>

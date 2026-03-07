@@ -11,12 +11,6 @@
         <x-app-logo class="size-8"></x-app-logo>
     </a>
 
-    <div>
-        <flux:button href="{{ route('home') }}" icon="arrow-left" size="sm">
-            {{ __('global.go_to_frontend') }}
-        </flux:button>
-    </div>
-
     <flux:navlist variant="outline">
         <flux:navlist.group heading="Platform" class="grid">
             <flux:navlist.item icon="home" :href="route('admin.index')" :current="request()->routeIs('admin.index')">Dashboard</flux:navlist.item>
@@ -43,7 +37,7 @@
         @endcanany
 
         {{-- Master Data Section --}}
-        <flux:navlist.group heading="Master Data" class="grid">
+        <flux:navlist.group expandable heading="Master Data" icon="database" :expanded="request()->routeIs(['admin.vehicles.*', 'admin.rooms.*', 'admin.dining-venues.*', 'admin.categories.*'])" class="grid">
             <flux:navlist.item icon="truck" :href="route('admin.vehicles.index')" :current="request()->routeIs('admin.vehicles.*')">
                 Kendaraan
             </flux:navlist.item>
@@ -59,14 +53,14 @@
         </flux:navlist.group>
 
         {{-- Digital Library Section --}}
-        <flux:navlist.group heading="Digital Library" class="grid">
+        <flux:navlist.group expandable heading="Digital Library" icon="lightbulb" :expanded="request()->routeIs('admin.books.*')" class="grid">
             <flux:navlist.item icon="book-open" :href="route('admin.books.index')" :current="request()->routeIs('admin.books.*')">
                 Kelola Buku
             </flux:navlist.item>
         </flux:navlist.group>
 
         {{-- Vehicle Management Section --}}
-        <flux:navlist.group heading="Laporan Kendaraan" class="grid">
+        <flux:navlist.group expandable heading="Laporan Kendaraan" icon="document-chart-bar" :expanded="request()->routeIs(['admin.loans.*', 'admin.inspections.*', 'admin.expenses.*'])" class="grid">
             <flux:navlist.item icon="truck" :href="route('admin.loans.index')" :current="request()->routeIs('admin.loans.*')">
                 Peminjaman
             </flux:navlist.item>
@@ -79,7 +73,7 @@
         </flux:navlist.group>
 
         {{-- Meeting & Banquet Management Section --}}
-        <flux:navlist.group heading="Meeting & Banquet" class="grid">
+        <flux:navlist.group expandable heading="Meeting & Banquet" icon="calendar" :expanded="request()->routeIs(['admin.meetings.*', 'admin.banquets.*'])" class="grid">
             <flux:navlist.item icon="calendar" :href="route('admin.meetings.index')" :current="request()->routeIs('admin.meetings.*')">
                 Meeting
             </flux:navlist.item>
@@ -110,8 +104,7 @@
         </div>
     @endif
 
-    <flux:navlist variant="outline">
-    </flux:navlist>
+
 
     @auth
         <!-- Desktop User Menu -->
@@ -215,9 +208,7 @@
     @endauth
 </flux:header>
 
-<flux:main>
-    {{ $slot }}
-</flux:main>
+{{ $slot }} 
 
 @fluxScripts
 <x-livewire-alert::scripts />

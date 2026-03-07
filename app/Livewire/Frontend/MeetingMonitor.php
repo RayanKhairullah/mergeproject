@@ -7,12 +7,14 @@ namespace App\Livewire\Frontend;
 use App\Enums\MeetingStatus;
 use App\Models\Meeting;
 use App\Models\Room;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class MeetingMonitor extends Component
 {
     public ?int $roomFilter = null;
 
+    #[Layout('components.layouts.app.frontend')]
     public function render()
     {
         $currentMeeting = Meeting::query()

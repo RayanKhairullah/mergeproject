@@ -19,7 +19,6 @@ class Index extends Component
         'banquet-created' => '$refresh',
         'banquet-updated' => '$refresh',
         'venue-created' => '$refresh',
-        'guest-type-created' => '$refresh',
     ];
 
     public string $search = '';
@@ -27,8 +26,6 @@ class Index extends Component
     public string $statusFilter = '';
 
     public string $venueFilter = '';
-
-    public string $guestTypeFilter = '';
 
     public string $dateFilter = '';
 
@@ -45,11 +42,6 @@ class Index extends Component
     }
 
     public function updatedVenueFilter(): void
-    {
-        $this->resetPage();
-    }
-
-    public function updatedGuestTypeFilter(): void
     {
         $this->resetPage();
     }
@@ -71,7 +63,7 @@ class Index extends Component
 
     public function approve(int $id): void
     {
-        if (! auth()->user()->can('banquets.approve')) {
+        if (! auth()->user()->can('approve banquets')) {
             session()->flash('error', 'Anda tidak memiliki izin untuk menyetujui banquet!');
 
             return;
@@ -96,7 +88,7 @@ class Index extends Component
 
     public function reject(int $id, string $reason): void
     {
-        if (! auth()->user()->can('banquets.approve')) {
+        if (! auth()->user()->can('approve banquets')) {
             session()->flash('error', 'Anda tidak memiliki izin untuk menolak banquet!');
 
             return;
@@ -132,7 +124,7 @@ class Index extends Component
         }
 
         // Regular users cannot delete approved banquets
-        if (! auth()->user()->can('approve banquets') && $banquet->status !== \App\Enums\BanquetStatus::DRAFT && $banquet->status !== \App\Enums\BanquetStatus::PENDING_APPROVAL) {
+        if (! auth()->user()->can('approve banquets') && $banquet->status !== BanquetStatus::DRAFT && $banquet->status !== BanquetStatus::PENDING_APPROVAL) {
             session()->flash('error', 'Anda tidak dapat menghapus banquet yang sudah disetujui!');
 
             return;
@@ -143,26 +135,29 @@ class Index extends Component
         session()->flash('success', 'Banquet berhasil dihapus!');
     }
 
-    #[Layout('components.layouts.admin')]
     public function render()
     {
         $banquets = Banquet::query()
-            ->with(['diningVenue', 'creator', 'approver'])
+            ->with(['venue', 'creator', 'approver'])
             ->when($this->search, fn ($q) => $q->where('title', 'like', "%{$this->search}%"))
             ->when($this->statusFilter, fn ($q) => $q->where('status', $this->statusFilter))
             ->when($this->venueFilter, fn ($q) => $q->where('venue_id', $this->venueFilter))
-            ->when($this->guestTypeFilter, fn ($q) => $q->where('guest_type', $this->guestTypeFilter))
             ->when($this->dateFilter, fn ($q) => $q->whereDate('scheduled_at', $this->dateFilter))
             ->orderBy('scheduled_at', 'desc')
             ->paginate(10);
 
         $venues = DiningVenue::all();
-        $detailBanquet = $this->detailId ? Banquet::with(['diningVenue', 'creator', 'approver'])->find($this->detailId) : null;
+        $detailBanquet = $this->detailId ? Banquet::with(['venue', 'creator', 'approver'])->find($this->detailId) : null;
+
+        // Determine layout based on user role
+        $layout = auth()->user()->hasRole(['admin', 'super-admin'])
+            ? 'components.layouts.admin'
+            : 'components.layouts.app.frontend';
 
         return view('livewire.admin.banquets.index', [
             'banquets' => $banquets,
             'venues' => $venues,
             'detailBanquet' => $detailBanquet,
-        ]);
+        ])->layout($layout);
     }
 }

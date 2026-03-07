@@ -101,8 +101,13 @@ class EditMeeting extends Component
     {
         $rooms = Room::all();
 
+        // Determine layout based on user role
+        $layout = auth()->user()->hasRole(['admin', 'super-admin'])
+            ? 'components.layouts.admin'
+            : 'components.layouts.app.frontend';
+
         return view('livewire.admin.meetings.edit-meeting', [
             'rooms' => $rooms,
-        ]);
+        ])->layout($layout);
     }
 }

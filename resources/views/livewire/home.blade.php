@@ -1,5 +1,5 @@
 <!-- Full Screen Hero with Video Background -->
-<div class="fixed inset-0 w-full h-screen">
+<div class="fixed inset-0 w-full h-screen font-[Roboto]">
     <style>
     @keyframes fade-in {
         from {

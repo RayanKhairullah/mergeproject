@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Frontend\Books;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Book;
 use Livewire\Component;
 
@@ -19,12 +20,19 @@ class Show extends Component
 
     public string $comment = '';
 
+    public string $anonymous_name = 'Anonymus';
+
+    public function setRating(int $rating): void
+    {
+        $this->rating = $rating;
+    }
+
     public function mount(Book $book): void
     {
         $this->book = $book->load(['category', 'reviews.user']);
 
-        if (auth()->check()) {
-            $this->userReview = \App\Models\Review::where('user_id', auth()->id())
+        if (Auth::check()) {
+            $this->userReview = \App\Models\Review::where('user_id', Auth::id())
                 ->where('book_id', $book->id)
                 ->first();
 
@@ -32,28 +40,29 @@ class Show extends Component
                 $this->rating = $this->userReview->rating;
                 $this->comment = $this->userReview->comment ?? '';
             }
+        } else {
+            $this->anonymous_name = 'Anonymus';
         }
     }
 
     public function render()
     {
+        $this->book->loadMissing(['category', 'reviews.user']);
+        
         return view('livewire.frontend.books.show');
     }
 
     public function submitReview(): void
     {
-        if (! auth()->check()) {
-            $this->redirect(route('login'));
-
-            return;
-        }
-
         $this->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
+            'anonymous_name' => Auth::check() ? 'nullable|string|max:255' : 'required|string|max:255',
+        ], [
+            'anonymous_name.required' => 'Nama (Anonim) wajib diisi untuk ulasan tanpa login.',
         ]);
 
-        if ($this->userReview) {
+        if (Auth::check() && $this->userReview) {
             // Update existing review
             $this->userReview->update([
                 'rating' => $this->rating,
@@ -64,10 +73,11 @@ class Show extends Component
         } else {
             // Create new review
             \App\Models\Review::create([
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id() ?? null,
                 'book_id' => $this->book->id,
                 'rating' => $this->rating,
                 'comment' => $this->comment,
+                'anonymous_name' => Auth::check() ? null : $this->anonymous_name,
             ]);
 
             session()->flash('success', 'Review submitted successfully!');
@@ -77,9 +87,16 @@ class Show extends Component
         $this->book->refresh();
         $this->book->load(['reviews.user']);
 
-        $this->userReview = \App\Models\Review::where('user_id', auth()->id())
-            ->where('book_id', $this->book->id)
-            ->first();
+        if (Auth::check()) {
+            $this->userReview = \App\Models\Review::where('user_id', Auth::id())
+                ->where('book_id', $this->book->id)
+                ->first();
+        } else {
+            // Reset for anonymous
+            $this->rating = 5;
+            $this->comment = '';
+            $this->anonymous_name = 'Anonymus';
+        }
     }
 
     public function deleteReview(): void

@@ -14,10 +14,6 @@ class BookController extends Controller
 {
     public function download(Book $book): BinaryFileResponse|Response
     {
-        // Check if user is authenticated
-        if (! auth()->check()) {
-            abort(401, 'Authentication required to download books.');
-        }
 
         // Check if file exists
         if (! $book->file_path || ! Storage::disk('private')->exists($book->file_path)) {
@@ -34,6 +30,29 @@ class BookController extends Controller
         $filename = pathinfo($book->file_path, PATHINFO_BASENAME);
 
         return response()->download($filePath, $filename);
+    }
+
+    public function read(Book $book)
+    {
+        if (! $book->file_path || ! Storage::disk('private')->exists($book->file_path)) {
+            abort(404, 'Book file not found or has been removed.');
+        }
+
+        return view('frontend.books.read', compact('book'));
+    }
+
+    public function stream(Book $book)
+    {
+        if (! $book->file_path || ! Storage::disk('private')->exists($book->file_path)) {
+            abort(404, 'Book file not found or has been removed.');
+        }
+
+        $filePath = Storage::disk('private')->path($book->file_path);
+        
+        return response()->file($filePath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . basename($book->file_path) . '"'
+        ]);
     }
 
     public function search(Request $request)

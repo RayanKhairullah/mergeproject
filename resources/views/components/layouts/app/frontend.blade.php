@@ -4,54 +4,87 @@
     @include('partials.head')
 </head>
 <body class="min-h-screen bg-white dark:bg-zinc-800">
-<flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-    <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left"/>
+<flux:header 
+    sticky 
+    container 
+    :class="request()->routeIs('home') ? 'bg-transparent border-transparent z-50 py-4 md:py-6 transition-all duration-300' : 'bg-white/80 dark:bg-zinc-800/80 backdrop-blur-xl border-b border-zinc-200/50 dark:border-zinc-700/50 z-50 py-3 md:py-4 transition-all duration-300'"
+>
+    <flux:sidebar.toggle class="lg:hidden {{ request()->routeIs('home') ? 'text-zinc-200 hover:text-white' : '' }}" icon="bars-2" inset="left"/>
 
-    <a href="{{ route('home') }}" class="ml-2 mr-5 flex items-center space-x-2 lg:ml-0">
-        <x-app-logo class="size-8" href="#"></x-app-logo>
-    </a>
-
-    <flux:navbar class="-mb-px max-lg:hidden">
-        <flux:navbar.item icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')">
-            Monitor Mobil
-        </flux:navbar.item>
-        <flux:navbar.item icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')">
-            Monitor Rapat
-        </flux:navbar.item>
-        <flux:navbar.item icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')">
-            Digital Library
-        </flux:navbar.item>
-        <flux:navbar.item icon="arrow-up-tray" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')">
-            Peminjaman
-        </flux:navbar.item>
-        <flux:navbar.item icon="arrow-down-tray" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')">
-            Pengembalian
-        </flux:navbar.item>
-        <flux:navbar.item icon="currency-dollar" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
-            Rupa-rupa
-        </flux:navbar.item>
-        @can('access dashboard')
-            <flux:navbar.item icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')">
-                Kesiapan Mobil
-            </flux:navbar.item>
-        @endcan
-    </flux:navbar>
-
-    <flux:spacer/>
-    @if (Route::has('login'))
-        <nav class="flex items-center justify-end gap-4">
-            @guest
-                <flux:button href="{{ route('login') }}" variant="primary">
-                    {{ __('global.log_in') }}
-                </flux:button>
-                @if (Route::has('register'))
-                    <flux:button href="{{ route('register') }}">
-                        {{ __('global.register') }}
-                    </flux:button>
+    <div class="flex w-full items-center justify-between gap-2 lg:gap-4 pl-4 md:pl-0">
+        <!-- 1. Left Section: Logo -->
+        <div class="flex flex-1 items-center justify-start min-w-[120px] md:min-w-[200px] shrink overflow-hidden pr-2">
+            <a href="{{ route('home') }}" class="flex items-center gap-1.5 md:gap-3 py-1 hover:opacity-80 transition-opacity">
+                @if(request()->routeIs('home'))
+                    <img src="{{ asset('images/logo-putih.png') }}" alt="Danantara" class="h-4 sm:h-5 w-auto object-contain shrink-0">
+                    <span class="text-white/60 text-[10px] sm:text-xs md:text-lg font-light shrink-0">|</span>
+                    <img src="{{ asset('images/pelindo-teks.png') }}" alt="Pelindo" class="h-4 sm:h-5 w-auto object-contain shrink min-w-0">
+                @else
+                    <!-- Danantara Logo -->
+                    <img src="{{ asset('images/logo-primer.png') }}" alt="Danantara" class="h-4 sm:h-5 w-auto object-contain shrink-0 dark:hidden">
+                    <img src="{{ asset('images/logo-putih.png') }}" alt="Danantara" class="h-4 sm:h-5 w-auto object-contain shrink-0 hidden dark:block">
+                    
+                    <span class="text-zinc-400 dark:text-white/30 text-[10px] sm:text-xs md:text-lg font-light shrink-0">|</span>
+                    
+                    <!-- Pelindo Logo -->
+                    <img src="{{ asset('images/kop-surat2.png') }}" alt="Pelindo" class="h-4 sm:h-5 w-auto object-contain shrink min-w-0 dark:hidden">
+                    <img src="{{ asset('images/pelindo-teks.png') }}" alt="Pelindo" class="h-4 sm:h-5 w-auto object-contain shrink min-w-0 hidden dark:block">
                 @endif
-            @endguest
-        </nav>
-    @endif
+            </a>
+        </div>
+
+        <!-- 2. Middle Section: Esthetic Centered Navigation -->
+        <div class="hidden lg:flex shrink justify-center overflow-hidden">
+            @php
+                $navColor = request()->routeIs('home') 
+                    ? 'text-zinc-200 hover:text-white' 
+                    : 'text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors';
+            @endphp
+            <flux:navbar class="-mb-px flex-none space-x-0 xl:space-x-1">
+                <flux:navbar.item variant="subtle" icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.monitor_mobil') }}
+                </flux:navbar.item>
+                <flux:navbar.item variant="subtle" icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.monitor_rapat') }}
+                </flux:navbar.item>
+                <flux:navbar.item variant="subtle" icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.digital_library') }}
+                </flux:navbar.item>
+                <flux:navbar.item variant="subtle" icon="identification" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.peminjaman') }}
+                </flux:navbar.item>
+                <flux:navbar.item variant="subtle" icon="key" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.pengembalian') }}
+                </flux:navbar.item>
+                <flux:navbar.item variant="subtle" icon="banknotes" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.rupa_rupa') }}
+                </flux:navbar.item>
+            </flux:navbar>
+        </div>
+
+        <!-- 3. Right Section: Utilities & Auth -->
+        <div class="flex flex-1 items-center justify-end gap-3 md:gap-4 shrink-0 px-2 lg:px-0">
+            <!-- Settings Dropdown (Theme & Language) -->
+            <div class="shrink-0">
+                <livewire:language-switcher />
+            </div>
+
+            @if (Route::has('login'))
+                <nav class="flex items-center gap-2 shrink-0">
+                    @guest
+                        <flux:button 
+                            href="{{ route('login') }}" 
+                            variant="primary" 
+                            size="sm" 
+                            class="{{ request()->routeIs('home') ? 'bg-white! text-black! hover:bg-zinc-200!' : 'bg-blue-600 text-white hover:bg-blue-700' }} border-0 rounded-full px-3 lg:px-5 h-8 lg:h-9 text-[10px] lg:text-xs font-semibold whitespace-nowrap"
+                        >
+                            {{ __('global.log_in') }}
+                        </flux:button>
+                    @endguest
+                </nav>
+            @endif
+        </div>
+    </div>
     {{--            <flux:navbar class="mr-1.5 space-x-0.5 py-0!">--}}
     {{--                <flux:tooltip content="Search" position="bottom">--}}
     {{--                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" label="Search" />--}}
@@ -161,39 +194,35 @@
 
 <!-- Mobile Menu -->
 <flux:sidebar stashable sticky class="lg:hidden border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
-    <flux:sidebar.toggle class="lg:hidden" icon="x-mark"/>
-
-    <a href="{{ route('dashboard') }}" class="ml-1 flex items-center space-x-2">
-        <x-app-logo class="size-8" href="#"></x-app-logo>
-    </a>
+    <flux:sidebar.toggle class="lg:hidden"/>
     <flux:navlist variant="outline">
-        <flux:navlist.group heading="Kendaraan">
+        <flux:navlist.group heading="{{ __('vehicles.title') }}">
             <flux:navlist.item icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')">
-                Monitor Mobil
+                {{ __('global.monitor_mobil') }}
             </flux:navlist.item>
-            <flux:navlist.item icon="arrow-up-tray" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')">
-                Peminjaman
+            <flux:navlist.item icon="identification" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')">
+                {{ __('global.peminjaman') }}
             </flux:navlist.item>
-            <flux:navlist.item icon="arrow-down-tray" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')">
-                Pengembalian
+            <flux:navlist.item icon="key" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')">
+                {{ __('global.pengembalian') }}
             </flux:navlist.item>
-            <flux:navlist.item icon="currency-dollar" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
-                Rupa-rupa
+            <flux:navlist.item icon="banknotes" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
+                {{ __('global.rupa_rupa') }}
             </flux:navlist.item>
             @can('access dashboard')
                 <flux:navlist.item icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')">
-                    Kesiapan Mobil
+                    {{ __('global.kesiapan_mobil') }}
                 </flux:navlist.item>
             @endcan
         </flux:navlist.group>
-        <flux:navlist.group heading="Meeting">
+        <flux:navlist.group heading="{{ __('meetings.title') }}">
             <flux:navlist.item icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')">
-                Monitor Rapat
+                {{ __('global.monitor_rapat') }}
             </flux:navlist.item>
         </flux:navlist.group>
-        <flux:navlist.group heading="Digital Library">
+        <flux:navlist.group heading="{{ __('global.digital_library') }}">
             <flux:navlist.item icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')">
-                Digital Library
+                {{ __('global.digital_library') }}
             </flux:navlist.item>
         </flux:navlist.group>
     </flux:navlist>
@@ -202,13 +231,11 @@
 
 </flux:sidebar>
 
-<flux:main container class="flex flex-col">
-    <div class="">
-        {{ $slot }}
-    </div>
+{{ $slot }}
 
+@unless(request()->routeIs('home'))
     @include('partials.footer')
-</flux:main>
+@endunless
 
 
 

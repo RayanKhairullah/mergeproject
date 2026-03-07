@@ -35,7 +35,8 @@ class BookController extends Controller
             'book_file' => 'nullable|file|mimes:pdf|max:10240', // 10MB max
         ]);
 
-        $book = new Book($validated);
+        $data = collect($validated)->except(['book_file'])->toArray();
+        $book = new Book($data);
 
         // Handle cover image upload
         if ($request->hasFile('cover_image')) {
@@ -73,7 +74,8 @@ class BookController extends Controller
             'book_file' => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
-        $book->fill($validated);
+        $data = collect($validated)->except(['book_file'])->toArray();
+        $book->fill($data);
 
         // Handle cover image upload
         if ($request->hasFile('cover_image')) {

@@ -150,10 +150,15 @@ class Index extends Component
         $rooms = Room::all();
         $detailMeeting = $this->detailId ? Meeting::with(['room', 'creator', 'approver'])->find($this->detailId) : null;
 
+        // Determine layout based on user role
+        $layout = auth()->user()->hasRole(['admin', 'super-admin'])
+            ? 'components.layouts.admin'
+            : 'components.layouts.app.frontend';
+
         return view('livewire.admin.meetings.index', [
             'meetings' => $meetings,
             'rooms' => $rooms,
             'detailMeeting' => $detailMeeting,
-        ]);
+        ])->layout($layout);
     }
 }

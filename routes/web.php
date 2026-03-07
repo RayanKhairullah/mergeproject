@@ -23,7 +23,9 @@ Route::prefix('meetings')->as('meetings.')->group(function (): void {
 Route::prefix('books')->as('books.')->group(function (): void {
     Route::get('/', \App\Livewire\Frontend\Books\Index::class)->name('index');
     Route::get('/{book:slug}', \App\Livewire\Frontend\Books\Show::class)->name('show');
-    Route::get('/{book:slug}/download', [\App\Http\Controllers\BookController::class, 'download'])->name('download')->middleware('auth');
+    Route::get('/{book:slug}/download', [\App\Http\Controllers\BookController::class, 'download'])->name('download');
+    Route::get('/{book:slug}/read', [\App\Http\Controllers\BookController::class, 'read'])->name('read');
+    Route::get('/{book:slug}/stream', [\App\Http\Controllers\BookController::class, 'stream'])->name('stream');
 });
 
 // API Routes for Digital Library
@@ -46,7 +48,6 @@ Route::middleware(['auth'])->group(function (): void {
     Route::redirect('settings', 'settings/profile');
     Route::get('settings/profile', \App\Livewire\Settings\Profile::class)->name('settings.profile');
     Route::get('settings/password', \App\Livewire\Settings\Password::class)->name('settings.password');
-    Route::get('settings/two-factor', \App\Livewire\Settings\TwoFactor::class)->name('settings.two-factor');
     Route::get('settings/appearance', \App\Livewire\Settings\Appearance::class)->name('settings.appearance');
     Route::get('settings/locale', \App\Livewire\Settings\Locale::class)->name('settings.locale');
 
@@ -73,14 +74,14 @@ Route::middleware(['auth'])->group(function (): void {
         Route::get('/expenses', \App\Livewire\Admin\Expenses\Index::class)->name('expenses.index')->middleware('can:access dashboard');
 
         // Meeting & Banquet Management
-        Route::get('/rooms', \App\Livewire\Admin\Rooms\Index::class)->name('rooms.index')->middleware('can:access dashboard');
-        Route::get('/dining-venues', \App\Livewire\Admin\DiningVenues\Index::class)->name('dining-venues.index')->middleware('can:access dashboard');
-        Route::get('/meetings', \App\Livewire\Admin\Meetings\Index::class)->name('meetings.index')->middleware('can:access dashboard');
-        Route::get('/meetings/create', \App\Livewire\Admin\Meetings\CreateMeeting::class)->name('meetings.create')->middleware('can:access dashboard');
-        Route::get('/meetings/{meeting}/edit', \App\Livewire\Admin\Meetings\EditMeeting::class)->name('meetings.edit')->middleware('can:access dashboard');
-        Route::get('/banquets', \App\Livewire\Admin\Banquets\Index::class)->name('banquets.index')->middleware('can:access dashboard');
-        Route::get('/banquets/create', \App\Livewire\Admin\Banquets\CreateBanquet::class)->name('banquets.create')->middleware('can:access dashboard');
-        Route::get('/banquets/{banquet}/edit', \App\Livewire\Admin\Banquets\EditBanquet::class)->name('banquets.edit')->middleware('can:access dashboard');
+        Route::get('/rooms', \App\Livewire\Admin\Rooms\Index::class)->name('rooms.index')->middleware('can:view rooms');
+        Route::get('/dining-venues', \App\Livewire\Admin\DiningVenues\Index::class)->name('dining-venues.index')->middleware('can:view dining_venues');
+        Route::get('/meetings', \App\Livewire\Admin\Meetings\Index::class)->name('meetings.index')->middleware('can:view meetings');
+        Route::get('/meetings/create', \App\Livewire\Admin\Meetings\CreateMeeting::class)->name('meetings.create')->middleware('can:create meetings');
+        Route::get('/meetings/{meeting}/edit', \App\Livewire\Admin\Meetings\EditMeeting::class)->name('meetings.edit')->middleware('can:update meetings');
+        Route::get('/banquets', \App\Livewire\Admin\Banquets\Index::class)->name('banquets.index')->middleware('can:view banquets');
+        Route::get('/banquets/create', \App\Livewire\Admin\Banquets\CreateBanquet::class)->name('banquets.create')->middleware('can:create banquets');
+        Route::get('/banquets/{banquet}/edit', \App\Livewire\Admin\Banquets\EditBanquet::class)->name('banquets.edit')->middleware('can:update banquets');
 
         // Digital Library Management
         Route::get('/books', \App\Livewire\Admin\Books\Index::class)->name('books.index')->middleware('can:access dashboard');

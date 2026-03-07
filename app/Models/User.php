@@ -29,9 +29,6 @@ class User extends Authenticatable // implements MustVerifyEmail
         'email',
         'password',
         'locale',
-        'provider_name',
-        'provider_id',
-        'provider_token',
         'email_verified_at',
     ];
 
@@ -43,8 +40,6 @@ class User extends Authenticatable // implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
     ];
 
     /**
@@ -57,7 +52,6 @@ class User extends Authenticatable // implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'two_factor_confirmed_at' => 'datetime',
         ];
     }
 
@@ -70,40 +64,5 @@ class User extends Authenticatable // implements MustVerifyEmail
             ->explode(' ')
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
-    }
-
-    /**
-     * Determine if two-factor authentication is enabled.
-     */
-    public function hasTwoFactorEnabled(): bool
-    {
-        return ! is_null($this->two_factor_secret) && ! is_null($this->two_factor_confirmed_at);
-    }
-
-    /**
-     * Get the two-factor recovery codes.
-     */
-    public function recoveryCodes(): array
-    {
-        if (is_null($this->two_factor_recovery_codes)) {
-            return [];
-        }
-
-        return json_decode(decrypt($this->two_factor_recovery_codes), true) ?? [];
-    }
-
-    /**
-     * Replace the given recovery code with a new one.
-     */
-    public function replaceRecoveryCode(string $code): void
-    {
-        $codes = $this->recoveryCodes();
-        $index = array_search($code, $codes);
-
-        if ($index !== false) {
-            unset($codes[$index]);
-            $this->two_factor_recovery_codes = encrypt(json_encode(array_values($codes)));
-            $this->save();
-        }
     }
 }

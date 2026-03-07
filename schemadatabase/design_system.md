@@ -23,13 +23,13 @@ The system has migrated to the `oklch()` color space for better perceptual unifo
 | `white` | `oklch(1 0 0)` | Backgrounds, text on dark |
 | `gray-950` | `oklch(0.05 0 0)` | Deepest text, dark backgrounds |
 
-### **Brand Accent: Mint (New)**
+### **Brand Accent: Blue (New)**
 
 | Shade | Value |
 | --- | --- |
-| `mint-100` | `oklch(0.97 0.15 145)` |
-| `mint-500` | `oklch(0.7 0.28 145)` |
-| `mint-950` | `oklch(0.3 0.4 145)` |
+| `primary-100` | Tailwind `blue-100` |
+| `primary-500` | Tailwind `blue-600` |
+| `primary-950` | Tailwind `blue-950` |
 
 ### **Vibrant Palettes**
 
@@ -88,7 +88,7 @@ The system supports LTR (Left-to-Right) and RTL (Right-to-Left) automatically us
 
 Tailwind v4 organizes the final CSS into four distinct layers to solve specificity issues:
 
-1. **`theme`**: Where variables like `--color-mint-500` live.
+1. **`theme`**: Where variables like `--color-primary-500` live.
 2. **`base`**: Global reset (Preflight).
 3. **`components`**: Complex, reusable class groups.
 4. **`utilities`**: Atomic classes (e.g., `flex`, `pt-4`).
@@ -106,7 +106,7 @@ Here is how you would define this system in your CSS file using the new v4 synta
   --font-mono: "IBM Plex Mono", monospace;
 
   /* P3 Colors */
-  --color-mint-500: oklch(0.7 0.28 145);
+  --color-primary-500: var(--color-blue-600);
   
   /* Custom Sizes */
   --text-tiny: 0.625rem;

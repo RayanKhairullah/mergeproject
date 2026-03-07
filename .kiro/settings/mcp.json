@@ -16,7 +16,8 @@
         "last-error",
         "list-artisan-commands",
         "browser-logs",
-        "get-config"
+        "get-config",
+        "read-log-entries"
       ],
       "disabled": false
     },

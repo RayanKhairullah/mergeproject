@@ -1,300 +1,242 @@
+<div class="min-h-screen font-roboto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
+        {{-- PAGE HERO HEADER --}}
+        <div class="relative text-center mb-12 overflow-hidden">
+            {{-- Decorative blobs --}}
+            <div class="pointer-events-none absolute -top-16 left-1/2 -translate-x-1/2 w-[600px] h-48 bg-teal-400/20 dark:bg-teal-500/10 blur-3xl rounded-full"></div>
+            <div class="pointer-events-none absolute -top-8 left-1/4 w-40 h-40 bg-blue-300/20 dark:bg-blue-500/10 blur-2xl rounded-full"></div>
+            <div class="pointer-events-none absolute -top-8 right-1/4 w-40 h-40 bg-emerald-300/20 dark:bg-emerald-500/10 blur-2xl rounded-full"></div>
 
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-mint-50/20 dark:from-slate-900 dark:to-slate-800">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold tracking-tighter text-balance text-slate-900 dark:text-slate-100 mb-4">
-                Digital Library
-            </h1>
-            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                Discover, download, and review our collection of digital books and resources
-            </p>
-        </div>
-
-        <!-- Search and Filters -->
-        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-6 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                <!-- Search -->
-                <div class="md:col-span-2">
-                    <flux:input 
-                        wire:model.live.debounce.300ms="search" 
-                        placeholder="Search books by title or author..." 
-                        icon="magnifying-glass"
-                        class="w-full"
-                    />
-                </div>
-
-                <!-- Category Filter -->
-                <div>
-                    <flux:select wire:model.live="selectedCategory" placeholder="All Categories">
-                        <flux:select.option value="">All Categories</flux:select.option>
-                        @foreach($categories as $category)
-                            <flux:select.option value="{{ $category->id }}">
-                                {{ $category->name }}
-                            </flux:select.option>
-                        @endforeach
-                    </flux:select>
-                </div>
-
-                <!-- Sort -->
-                <div>
-                    <flux:select wire:model.live="sortBy">
-                        <flux:select.option value="recent">Recently Added</flux:select.option>
-                        <flux:select.option value="popular">Most Popular</flux:select.option>
-                        <flux:select.option value="title">Title A-Z</flux:select.option>
-                    </flux:select>
-                </div>
+            {{-- Tag --}}
+            <div class="relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 dark:bg-teal-900/40 text-teal-700 dark:text-teal-400 text-xs font-bold uppercase tracking-widest mb-5 border border-teal-200 dark:border-teal-800 shadow-sm">
+                <flux:icon.book-open class="w-3.5 h-3.5" />
+                {{ __('global.monitor_perpustakaan') }}
             </div>
 
-            <!-- View Mode and Clear Filters -->
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <flux:button 
-                        wire:click="$set('viewMode', 'grid')" 
-                        variant="{{ $viewMode === 'grid' ? 'primary' : 'ghost' }}"
-                        size="sm"
-                        icon="squares-2x2"
-                    >
-                        Grid
-                    </flux:button>
-                    <flux:button 
-                        wire:click="$set('viewMode', 'list')" 
-                        variant="{{ $viewMode === 'list' ? 'primary' : 'ghost' }}"
-                        size="sm"
-                        icon="list-bullet"
-                    >
-                        List
-                    </flux:button>
-                </div>
+            {{-- Title --}}
+            <h1 class="relative text-3xl min-[400px]:text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4">
+                <span class="text-zinc-900 dark:text-white">{{ explode(' ', __('global.monitor_perpustakaan'))[0] }} </span>
+                <span class="relative inline-block">
+                    <span class="text-teal-500">{{ explode(' ', __('global.monitor_perpustakaan'))[1] ?? '' }}</span>
+                    {{-- Underline decoration --}}
+                    <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 8" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 5.5C50 1.5 100 7.5 199 3" stroke="#14b8a6" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </span>
+            </h1>
 
+            {{-- Subtitle --}}
+            <p class="relative text-zinc-500 dark:text-zinc-400 text-sm md:text-lg font-light max-w-xl mx-auto mb-6 px-2">
+                {{ __('global.read_and_download') }}
+            </p>
+
+            {{-- Stats row --}}
+            <div class="relative inline-flex items-center divide-x divide-zinc-200 dark:divide-zinc-700 overflow-hidden max-w-full">
+                <div class="px-3 sm:px-8 py-2 sm:py-4 flex flex-col items-center">
+                    <span class="text-xl sm:text-3xl font-black text-teal-600 dark:text-teal-400">{{ $books->total() }}</span>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 mt-0.5">{{ __('global.books_count') }}</span>
+                </div>
+                <div class="px-3 sm:px-8 py-2 sm:py-4 flex flex-col items-center">
+                    <span class="text-xl sm:text-3xl font-black text-teal-600 dark:text-teal-400">{{ $categories->count() }}</span>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 mt-0.5">{{ __('global.categories_count') }}</span>
+                </div>
+                <div class="px-3 sm:px-8 py-2 sm:py-4 flex flex-col items-center hidden min-[360px]:flex">
+                    <div class="flex items-center gap-0.5 sm:gap-1">
+                        <flux:icon.star class="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" variant="solid" />
+                        <flux:icon.star class="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" variant="solid" />
+                        <flux:icon.star class="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" variant="solid" />
+                        <flux:icon.star class="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" variant="solid" />
+                        <flux:icon.star class="w-4 h-4 sm:w-5 sm:h-5 text-teal-400" variant="solid" />
+                    </div>
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 mt-1">{{ __('global.top_rated') }}</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- STICKY CONTROL BAR --}}
+        <div class="sticky top-20 z-30 mb-8">
+            <div class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-4">
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1">
+                        <flux:input 
+                            wire:model.live.debounce.300ms="search" 
+                            placeholder="{{ __('global.search_books_placeholder') }}" 
+                            icon="magnifying-glass"
+                        />
+                    </div>
+                    <div class="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
+                        <div class="w-full sm:w-44 flex-1">
+                            <flux:select wire:model.live="selectedCategory">
+                                <flux:select.option value="">{{ __('global.all_categories') }}</flux:select.option>
+                                @foreach($categories as $category)
+                                    <flux:select.option value="{{ $category->id }}">{{ $category->name }}</flux:select.option>
+                                @endforeach
+                            </flux:select>
+                        </div>
+                        <div class="w-full sm:w-44 flex-1">
+                            <flux:select wire:model.live="sortBy">
+                                <flux:select.option value="recent">{{ __('global.recent') }}</flux:select.option>
+                                <flux:select.option value="popular">{{ __('global.popular') }}</flux:select.option>
+                                <flux:select.option value="title">{{ __('global.title_az') }}</flux:select.option>
+                            </flux:select>
+                        </div>
+                        <div class="flex gap-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl p-1 shrink-0 ml-auto sm:ml-0">
+                            <button wire:click="$set('viewMode', 'grid')" class="p-2 rounded-lg transition-colors {{ $viewMode === 'grid' ? 'bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-600' }}">
+                                <flux:icon.squares-2x2 class="w-4 h-4" />
+                            </button>
+                            <button wire:click="$set('viewMode', 'list')" class="p-2 rounded-lg transition-colors {{ $viewMode === 'list' ? 'bg-white dark:bg-zinc-700 shadow-sm text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-600' }}">
+                                <flux:icon.list-bullet class="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 @if($search || $selectedCategory || $sortBy !== 'recent')
-                    <flux:button wire:click="clearFilters" variant="ghost" size="sm">
-                        Clear Filters
-                    </flux:button>
+                    <div class="flex items-center justify-between mt-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                        <p class="text-sm text-zinc-500">{{ __('global.results_found', ['count' => $books->total()]) }}</p>
+                        <button wire:click="clearFilters" class="text-xs font-bold text-teal-600 hover:text-teal-700 underline">{{ __('global.clear_filters') }}</button>
+                    </div>
                 @endif
             </div>
         </div>
 
-        <!-- Results Count -->
-        <div class="mb-6">
-            <p class="text-slate-600 dark:text-slate-400">
-                Showing {{ $books->count() }} of {{ $books->total() }} books
-            </p>
-        </div>
-
-        <!-- Books Grid/List -->
+        {{-- BOOKS DISPLAY --}}
         @if($books->count() > 0)
-            <div class="{{ $viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'space-y-4' }} mb-8">
-                @foreach($books as $book)
-                    <div wire:key="book-{{ $book->id }}" class="group">
-                        @if($viewMode === 'grid')
-                            <!-- Grid View Card -->
-                            <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 overflow-hidden hover:shadow-xl transition-all duration-750 ease-in-out hover:scale-105">
-                                <!-- Cover Image -->
-                                <div class="aspect-[3/4] bg-gradient-to-br from-mint-100 to-mint-200 dark:from-mint-900/20 dark:to-mint-800/20 relative overflow-hidden">
-                                    @if($book->cover_image)
-                                        <img src="{{ $book->cover_url }}" alt="{{ $book->title }}" class="w-full h-full object-cover">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center">
-                                            <flux:icon name="book-open" class="w-16 h-16 text-mint-600 dark:text-mint-400" />
-                                        </div>
-                                    @endif
-                                    
-                                    <!-- Download Count Badge -->
-                                    <div class="absolute top-2 right-2 bg-mint-600 text-white text-xs px-2 py-1 rounded-full">
-                                        {{ $book->download_count }} downloads
+            @if($viewMode === 'grid')
+                {{-- GRID VIEW (Masonry Layout) --}}
+                <div class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-5 space-y-5 mb-10">
+                    @foreach($books as $book)
+                        <a href="{{ route('books.show', $book) }}" wire:key="book-{{ $book->id }}" class="group block break-inside-avoid">
+                            {{-- Book Cover --}}
+                            <div class="relative rounded-xl overflow-hidden mb-3 shadow-md group-hover:shadow-xl transition-all duration-300 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center border border-zinc-100 dark:border-zinc-800">
+                                @if($book->cover_image)
+                                    <img src="{{ $book->cover_url }}" alt="{{ $book->title }}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500">
+                                @else
+                                    <div class="w-full aspect-[2/3] bg-gradient-to-br from-blue-500 to-teal-400 flex flex-col items-center justify-center p-4">
+                                        <flux:icon.book-open class="w-10 h-10 text-white opacity-80 mb-2" />
+                                        <p class="text-white text-xs font-bold text-center line-clamp-3 leading-tight">{{ $book->title }}</p>
                                     </div>
-                                </div>
+                                @endif
 
-                                <!-- Content -->
-                                <div class="p-4">
-                                    <h3 class="font-bold text-lg tracking-tighter text-balance text-slate-900 dark:text-slate-100 mb-2 line-clamp-2">
-                                        {{ $book->title }}
-                                    </h3>
-                                    
-                                    <p class="text-slate-600 dark:text-slate-400 text-sm mb-2">
-                                        by {{ $book->author }}
-                                    </p>
-
-                                    @if($book->category)
-                                        <flux:badge variant="outline" class="mb-3">
-                                            {{ $book->category->name }}
-                                        </flux:badge>
-                                    @endif
-
-                                    <!-- Rating -->
+                                {{-- Hover overlay --}}
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2 p-3">
+                                    <span class="text-white text-xs font-black uppercase tracking-widest">{{ __('global.view_detail') }}</span>
                                     @if($book->reviews->count() > 0)
-                                        <div class="flex items-center gap-1 mb-3">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                <flux:icon 
-                                                    name="star" 
-                                                    class="w-4 h-4 {{ $i <= $book->average_rating ? 'text-mint-500' : 'text-slate-300' }}"
-                                                    variant="{{ $i <= $book->average_rating ? 'solid' : 'outline' }}"
-                                                />
-                                            @endfor
-                                            <span class="text-sm text-slate-600 dark:text-slate-400 ml-1">
-                                                ({{ $book->reviews->count() }})
-                                            </span>
+                                        <div class="flex items-center gap-1">
+                                            <flux:icon.star class="w-3.5 h-3.5 text-teal-400" variant="solid" />
+                                            <span class="text-white text-xs font-bold">{{ number_format($book->average_rating, 1) }}</span>
                                         </div>
                                     @endif
+                                </div>
 
-                                    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-4">
-                                        {{ $book->description }}
-                                    </p>
+                                {{-- Download count --}}
+                                <div class="absolute top-2 right-2 bg-black/70 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                                    <flux:icon.arrow-down-tray class="w-3 h-3" />
+                                    {{ $book->download_count }}
+                                </div>
 
-                                    <!-- Actions -->
-                                    <div class="flex gap-2">
-                                        <flux:button 
-                                            href="{{ route('books.show', $book) }}" 
-                                            variant="primary" 
-                                            size="sm" 
-                                            class="flex-1"
-                                        >
-                                            View Details
-                                        </flux:button>
-                                        
-                                        @auth
-                                            @if($book->file_path)
-                                                <flux:button 
-                                                    href="{{ route('books.download', $book) }}" 
-                                                    variant="outline" 
-                                                    size="sm"
-                                                    icon="arrow-down-tray"
-                                                >
-                                                    Download
-                                                </flux:button>
+                                @if($book->category)
+                                    <div class="absolute bottom-2 left-2">
+                                        <span class="bg-teal-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{{ $book->category->name }}</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="px-0.5">
+                                <h3 class="text-sm font-bold text-zinc-900 dark:text-white line-clamp-2 leading-tight mb-1 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">{{ $book->title }}</h3>
+                                <p class="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{{ $book->author }}</p>
+                                @if($book->reviews->count() > 0)
+                                    <div class="flex items-center gap-1 mt-1.5">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <flux:icon.star class="w-3 h-3 {{ $i <= $book->average_rating ? 'text-teal-400' : 'text-zinc-300' }}" variant="{{ $i <= $book->average_rating ? 'solid' : 'outline' }}" />
+                                        @endfor
+                                        <span class="text-[10px] text-zinc-400 ml-0.5">({{ $book->reviews->count() }})</span>
+                                    </div>
+                                @endif
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                {{-- LIST VIEW --}}
+                <div class="space-y-3 mb-10">
+                    @foreach($books as $book)
+                        <div wire:key="book-list-{{ $book->id }}" class="group bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-5 hover:shadow-lg hover:border-teal-200 dark:hover:border-teal-800 transition-all duration-300">
+                            <div class="flex gap-5 items-center">
+                                {{-- Cover --}}
+                                <a href="{{ route('books.show', $book) }}" class="w-20 rounded-xl overflow-hidden shrink-0 shadow-md bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 flex items-center justify-center">
+                                    @if($book->cover_image)
+                                        <img src="{{ $book->cover_url }}" alt="{{ $book->title }}" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
+                                    @else
+                                        <div class="w-full aspect-[2/3] bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center">
+                                            <flux:icon.book-open class="w-6 h-6 text-white" />
+                                        </div>
+                                    @endif
+                                </a>
+
+                                {{-- Info --}}
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <div class="min-w-0">
+                                            <a href="{{ route('books.show', $book) }}">
+                                                <h3 class="font-bold text-zinc-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors mb-1 truncate">{{ $book->title }}</h3>
+                                            </a>
+                                            <p class="text-sm text-zinc-500 mb-2">oleh {{ $book->author }}</p>
+                                            @if($book->category)
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-teal-50 dark:bg-teal-900/40 text-teal-700 dark:text-teal-400">{{ $book->category->name }}</span>
                                             @endif
-                                        @else
-                                            <flux:button 
-                                                href="{{ route('login') }}" 
-                                                variant="outline" 
-                                                size="sm"
-                                                icon="arrow-down-tray"
-                                            >
-                                                Login to Download
-                                            </flux:button>
-                                        @endauth
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <!-- List View Card -->
-                            <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-slate-200/50 dark:border-slate-700/50 p-6 hover:shadow-xl transition-all duration-750 ease-in-out">
-                                <div class="flex gap-4">
-                                    <!-- Cover Image -->
-                                    <div class="w-20 h-28 bg-gradient-to-br from-mint-100 to-mint-200 dark:from-mint-900/20 dark:to-mint-800/20 rounded-lg flex-shrink-0 overflow-hidden">
-                                        @if($book->cover_image)
-                                            <img src="{{ $book->cover_url }}" alt="{{ $book->title }}" class="w-full h-full object-cover">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center">
-                                                <flux:icon name="book-open" class="w-8 h-8 text-mint-600 dark:text-mint-400" />
-                                            </div>
-                                        @endif
-                                    </div>
-
-                                    <!-- Content -->
-                                    <div class="flex-1">
-                                        <div class="flex items-start justify-between mb-2">
-                                            <div>
-                                                <h3 class="font-bold text-xl tracking-tighter text-balance text-slate-900 dark:text-slate-100 mb-1">
-                                                    {{ $book->title }}
-                                                </h3>
-                                                <p class="text-slate-600 dark:text-slate-400">
-                                                    by {{ $book->author }}
-                                                </p>
-                                            </div>
-                                            
-                                            <div class="text-right">
-                                                <div class="text-sm text-mint-600 dark:text-mint-400 font-medium">
-                                                    {{ $book->download_count }} downloads
+                                        </div>
+                                        <div class="shrink-0 text-right">
+                                            @if($book->reviews->count() > 0)
+                                                <div class="flex items-center gap-1 justify-end mb-1">
+                                                    <flux:icon.star class="w-4 h-4 text-teal-400" variant="solid" />
+                                                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">{{ number_format($book->average_rating, 1) }}</span>
                                                 </div>
-                                                @if($book->category)
-                                                    <flux:badge variant="outline" class="mt-1">
-                                                        {{ $book->category->name }}
-                                                    </flux:badge>
-                                                @endif
+                                            @endif
+                                            <div class="flex items-center gap-1 text-zinc-400">
+                                                <flux:icon.arrow-down-tray class="w-3.5 h-3.5" />
+                                                <span class="text-xs font-medium">{{ $book->download_count }}</span>
                                             </div>
-                                        </div>
-
-                                        <!-- Rating -->
-                                        @if($book->reviews->count() > 0)
-                                            <div class="flex items-center gap-1 mb-2">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    <flux:icon 
-                                                        name="star" 
-                                                        class="w-4 h-4 {{ $i <= $book->average_rating ? 'text-mint-500' : 'text-slate-300' }}"
-                                                        variant="{{ $i <= $book->average_rating ? 'solid' : 'outline' }}"
-                                                    />
-                                                @endfor
-                                                <span class="text-sm text-slate-600 dark:text-slate-400 ml-1">
-                                                    ({{ $book->reviews->count() }} reviews)
-                                                </span>
-                                            </div>
-                                        @endif
-
-                                        <p class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2">
-                                            {{ $book->description }}
-                                        </p>
-
-                                        <!-- Actions -->
-                                        <div class="flex gap-2">
-                                            <flux:button 
-                                                href="{{ route('books.show', $book) }}" 
-                                                variant="primary" 
-                                                size="sm"
-                                            >
-                                                View Details
-                                            </flux:button>
-                                            
-                                            @auth
-                                                @if($book->file_path)
-                                                    <flux:button 
-                                                        href="{{ route('books.download', $book) }}" 
-                                                        variant="outline" 
-                                                        size="sm"
-                                                        icon="arrow-down-tray"
-                                                    >
-                                                        Download
-                                                    </flux:button>
-                                                @endif
-                                            @else
-                                                <flux:button 
-                                                    href="{{ route('login') }}" 
-                                                    variant="outline" 
-                                                    size="sm"
-                                                    icon="arrow-down-tray"
-                                                >
-                                                    Login to Download
-                                                </flux:button>
-                                            @endauth
                                         </div>
                                     </div>
+
+                                    <p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1 mt-2">{{ $book->description }}</p>
+                                </div>
+
+                                {{-- Actions --}}
+                                <div class="flex gap-2 shrink-0">
+                                    <flux:button href="{{ route('books.show', $book) }}" variant="ghost" size="sm" class="rounded-xl!">{{ __('global.detail') ?? 'Detail' }}</flux:button>
+                                    @auth
+                                        @if($book->file_path)
+                                            <flux:button href="{{ route('books.download', $book) }}" icon="arrow-down-tray" size="sm" variant="primary" class="rounded-xl!" />
+                                        @endif
+                                    @else
+                                        <flux:button href="{{ route('login') }}" size="sm" variant="ghost" class="rounded-xl!" icon="lock-closed" />
+                                    @endauth
                                 </div>
                             </div>
-                        @endif
-                    </div>
-                @endforeach
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Pagination --}}
+            <div class="flex justify-center">
+                <div class="bg-white dark:bg-zinc-900 p-2 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
+                    {{ $books->links() }}
+                </div>
             </div>
 
-            <!-- Pagination -->
-            <div class="flex justify-center">
-                {{ $books->links() }}
-            </div>
         @else
-            <!-- Empty State -->
-            <div class="text-center py-16">
-                <flux:icon name="book-open" class="w-24 h-24 text-slate-400 mx-auto mb-4" />
-                <h3 class="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-                    No books found
-                </h3>
-                <p class="text-slate-600 dark:text-slate-400 mb-4">
-                    Try adjusting your search criteria or browse all categories.
-                </p>
+            {{-- EMPTY STATE --}}
+            <div class="flex flex-col items-center justify-center py-24 text-center">
+                <div class="w-32 h-32 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center mb-6">
+                    <flux:icon.book-open class="w-14 h-14 text-zinc-300 dark:text-zinc-700" />
+                </div>
+                <h3 class="text-2xl font-black text-zinc-900 dark:text-white mb-2">{{ __('global.no_books_found') }}</h3>
+                <p class="text-zinc-500 max-w-sm mb-6">{{ __('global.no_books_description') }}</p>
                 @if($search || $selectedCategory || $sortBy !== 'recent')
-                    <flux:button wire:click="clearFilters" variant="primary">
-                        Clear Filters
-                    </flux:button>
+                    <flux:button wire:click="clearFilters" variant="primary" class="rounded-xl!">{{ __('global.clear_filters') }}</flux:button>
                 @endif
             </div>
         @endif

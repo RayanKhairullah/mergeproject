@@ -69,8 +69,13 @@ class CreateBanquet extends Component
     {
         $venues = DiningVenue::all();
 
+        // Determine layout based on user role
+        $layout = auth()->user()->hasRole(['admin', 'super-admin'])
+            ? 'components.layouts.admin'
+            : 'components.layouts.app.frontend';
+
         return view('livewire.admin.banquets.create-banquet', [
             'venues' => $venues,
-        ]);
+        ])->layout($layout);
     }
 }

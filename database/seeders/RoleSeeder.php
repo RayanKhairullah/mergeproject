@@ -64,8 +64,6 @@ class RoleSeeder extends Seeder
         // ========================================
         $sdmRole = Role::query()->updateOrCreate(['name' => 'sdm']);
         $sdmPermissions = [
-            'access dashboard',
-
             // Meeting management (with approval)
             'view meetings', 'create meetings', 'update meetings', 'delete meetings', 'approve meetings',
 
@@ -113,14 +111,10 @@ class RoleSeeder extends Seeder
 
     private function createUserWithRole(string $email, string $name, string $roleName): void
     {
-        // Extract username from email (part before @)
-        $username = explode('@', $email)[0];
-
         $user = \App\Models\User::query()->updateOrCreate(
             ['email' => $email],
             [
                 'name' => $name,
-                'username' => $username,
                 'password' => bcrypt('password'),
                 'email_verified_at' => now(),
             ]
