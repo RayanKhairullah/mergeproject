@@ -1,9 +1,9 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <flux:heading size="xl">Manage Categories</flux:heading>
+        <flux:heading size="xl">{{ __('categories.title') }}</flux:heading>
         <flux:modal.trigger name="category-form">
             <flux:button wire:click="showCreateForm" variant="primary" icon="plus">
-                Add New Category
+                {{ __('categories.add_new') }}
             </flux:button>
         </flux:modal.trigger>
     </div>
@@ -12,7 +12,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <flux:input 
             wire:model.live.debounce.300ms="search" 
-            placeholder="Search categories..." 
+            placeholder="{{ __('categories.search_placeholder') }}" 
             icon="magnifying-glass"
             class="max-w-md"
         />
@@ -22,21 +22,21 @@
     <flux:modal name="category-form" :show="$showCreateForm" class="max-w-lg">
         <form wire:submit.prevent="saveCategory" class="space-y-4">
             <div>
-                <flux:heading size="lg">{{ $editingCategory ? 'Edit Category' : 'Create New Category' }}</flux:heading>
+                <flux:heading size="lg">{{ $editingCategory ? __('categories.edit_title') : __('categories.add_new') }}</flux:heading>
             </div>
 
             <div>
-                <flux:label>Category Name</flux:label>
-                <flux:input wire:model="name" placeholder="Enter category name" class="mt-1" />
+                <flux:label>{{ __('categories.name') }}</flux:label>
+                <flux:input wire:model="name" placeholder="{{ __('categories.name_placeholder') }}" class="mt-1" />
                 <flux:error name="name" />
             </div>
 
             <div class="flex gap-3 justify-end">
                 <flux:modal.close>
-                    <flux:button type="button" variant="ghost" wire:click="cancelForm">Cancel</flux:button>
+                    <flux:button type="button" variant="ghost" wire:click="cancelForm">{{ __('global.cancel') }}</flux:button>
                 </flux:modal.close>
                 <flux:button type="submit" variant="primary">
-                    {{ $editingCategory ? 'Update Category' : 'Create Category' }}
+                    {{ $editingCategory ? __('global.save') : __('categories.add_new') }}
                 </flux:button>
             </div>
         </form>
@@ -55,10 +55,10 @@
             <table class="w-full">
                 <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Books Count</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Created</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('categories.name') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('categories.books_count') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('global.added_at') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('categories.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -71,7 +71,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 <flux:badge variant="outline">
-                                    {{ $category->books_count }} {{ Str::plural('book', $category->books_count) }}
+                                    {{ $category->books_count }} {{ __('global.books_count') }}
                                 </flux:badge>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -83,23 +83,23 @@
                                         wire:click="editCategory({{ $category->id }})" 
                                         size="sm"
                                     >
-                                        Edit
+                                        {{ __('global.edit') }}
                                     </flux:button>
                                 </flux:modal.trigger>
                                 <flux:button 
                                     size="sm" 
                                     variant="danger" 
                                     wire:click="deleteCategory({{ $category->id }})"
-                                    wire:confirm="Are you sure you want to delete this category?{{ $category->books_count > 0 ? ' Books in this category will be uncategorized.' : '' }}"
+                                    wire:confirm="{{ $category->books_count > 0 ? __('categories.delete_confirm_with_books') : __('categories.delete_confirm') }}"
                                 >
-                                    Delete
+                                    {{ __('global.delete') }}
                                 </flux:button>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                No categories found
+                                {{ __('categories.no_categories_found') }}
                             </td>
                         </tr>
                     @endforelse

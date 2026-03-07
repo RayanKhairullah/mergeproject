@@ -52,7 +52,7 @@ class Index extends Component
 
         $inspection->delete();
 
-        session()->flash('success', 'Laporan inspeksi berhasil dihapus');
+        session()->flash('success', __('inspections.success_deleted'));
     }
 
     public function downloadExcel(): \Symfony\Component\HttpFoundation\BinaryFileResponse
@@ -65,7 +65,7 @@ class Index extends Component
                 'laporan-inspeksi-'.now()->format('Y-m-d').'.xlsx'
             );
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengunduh file: '.$e->getMessage());
+            session()->flash('error', __('inspections.error_download', ['message' => $e->getMessage()]));
 
             return redirect()->back();
         }
@@ -85,7 +85,7 @@ class Index extends Component
                 echo $pdf->output();
             }, 'laporan-inspeksi-'.now()->format('Y-m-d').'.pdf');
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengunduh PDF: '.$e->getMessage());
+            session()->flash('error', __('inspections.error_download', ['message' => $e->getMessage()]));
 
             return redirect()->back();
         }
@@ -152,17 +152,17 @@ class Index extends Component
 
                 if ($latestLoan && $latestInspection) {
                     if ($latestLoan->updated_at > $latestInspection->updated_at) {
-                        $source = 'Peminjaman';
+                        $source = __('inspections.source.peminjaman');
                         $sourceDate = $latestLoan->updated_at;
                     } else {
-                        $source = 'Inspeksi';
+                        $source = __('inspections.source.inspeksi');
                         $sourceDate = $latestInspection->updated_at;
                     }
                 } elseif ($latestLoan) {
-                    $source = 'Peminjaman';
+                    $source = __('inspections.source.peminjaman');
                     $sourceDate = $latestLoan->updated_at;
                 } elseif ($latestInspection) {
-                    $source = 'Inspeksi';
+                    $source = __('inspections.source.inspeksi');
                     $sourceDate = $latestInspection->updated_at;
                 }
 
@@ -176,6 +176,7 @@ class Index extends Component
             });
 
         return view('livewire.admin.inspections.index', [
+            'title' => __('sidebar.vehicle_readiness'),
             'inspections' => $inspections,
             'vehicles' => $vehicles,
             'vehicleMileages' => $vehicleMileages,

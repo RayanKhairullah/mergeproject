@@ -69,7 +69,7 @@ class Index extends Component
     public function approve(int $id): void
     {
         if (! auth()->user()->can('approve banquets')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk menyetujui banquet!');
+            session()->flash('error', __('banquets.error_no_permission_approve'));
 
             return;
         }
@@ -77,7 +77,7 @@ class Index extends Component
         $banquet = Banquet::findOrFail($id);
 
         if ($banquet->status !== BanquetStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Banquet tidak dalam status pending approval!');
+            session()->flash('error', __('banquets.error_not_pending_approval'));
 
             return;
         }
@@ -88,13 +88,13 @@ class Index extends Component
             'approved_at' => now(),
         ]);
 
-        session()->flash('success', 'Banquet berhasil disetujui!');
+        session()->flash('success', __('banquets.success_approved'));
     }
 
     public function reject(int $id, string $reason): void
     {
         if (! auth()->user()->can('approve banquets')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk menolak banquet!');
+            session()->flash('error', __('banquets.error_no_permission_reject'));
 
             return;
         }
@@ -102,7 +102,7 @@ class Index extends Component
         $banquet = Banquet::findOrFail($id);
 
         if ($banquet->status !== BanquetStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Banquet tidak dalam status pending approval!');
+            session()->flash('error', __('banquets.error_not_pending_approval'));
 
             return;
         }
@@ -114,7 +114,7 @@ class Index extends Component
             'rejection_reason' => $reason,
         ]);
 
-        session()->flash('success', 'Banquet berhasil ditolak!');
+        session()->flash('success', __('banquets.success_rejected'));
     }
 
     public function delete(int $id): void
@@ -123,21 +123,27 @@ class Index extends Component
 
         // Check if user can delete
         if (! auth()->user()->can('delete banquets')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk menghapus banquet!');
+            session()->flash('error', __('banquets.error_no_permission_delete'));
+
+            return;
+        }
+
+        if (! auth()->user()->can('approve banquets') && $banquet->created_by !== auth()->id()) {
+            session()->flash('error', __('banquets.error_delete_only_own'));
 
             return;
         }
 
         // Regular users cannot delete approved banquets
         if (! auth()->user()->can('approve banquets') && $banquet->status !== BanquetStatus::DRAFT && $banquet->status !== BanquetStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Anda tidak dapat menghapus banquet yang sudah disetujui!');
+            session()->flash('error', __('banquets.error_cannot_delete_approved'));
 
             return;
         }
 
         $banquet->delete();
 
-        session()->flash('success', 'Banquet berhasil dihapus!');
+        session()->flash('success', __('banquets.success_deleted'));
     }
 
     public function render()
@@ -161,6 +167,7 @@ class Index extends Component
             : 'components.layouts.app.frontend';
 
         return view('livewire.admin.banquets.index', [
+            'title' => __('sidebar.banquet'),
             'banquets' => $banquets,
             'venues' => $venues,
             'detailBanquet' => $detailBanquet,

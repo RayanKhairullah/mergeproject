@@ -17,7 +17,13 @@ class LoanFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'vehicle_id' => \App\Models\Vehicle::factory(),
+            'user_id' => \App\Models\User::factory(),
+            'destination' => fake()->city(),
+            'purpose' => fake()->sentence(),
+            'start_mileage' => fake()->numberBetween(1000, 50000),
+            'loan_date' => now()->subHours(fake()->numberBetween(1, 48)),
+            'status' => 'active',
         ];
     }
 }

@@ -61,7 +61,7 @@ class CreateBanquet extends Component
             'created_by' => auth()->id(),
         ]);
 
-        session()->flash('success', 'Banquet berhasil dibuat!');
+        session()->flash('success', __('banquets.success_created'));
         $this->redirect(route('admin.banquets.index'), navigate: true);
     }
 

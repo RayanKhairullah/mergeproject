@@ -80,9 +80,18 @@
                         {{-- Dynamic Info --}}
                         <div class="mb-6 flex-1">
                             @if($vehicle->isAvailable())
-                                <div class="flex items-center gap-2 py-2 px-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    <span class="text-xs font-medium text-emerald-700 dark:text-emerald-400 italic">{{ __('vehicles.ready_for_assignment') }}</span>
+                                <div class="flex flex-col gap-3">
+                                    <div class="flex items-center gap-2 py-2 px-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                        <span class="text-xs font-medium text-emerald-700 dark:text-emerald-400 italic">{{ __('vehicles.ready_for_assignment') }}</span>
+                                    </div>
+                                    @php $lastLoan = $vehicle->loans->first(); @endphp
+                                    @if($lastLoan)
+                                        <div class="flex items-center gap-2 px-1">
+                                            <flux:icon.clock class="w-3 h-3 text-zinc-400" />
+                                            <span class="text-[10px] text-zinc-500 font-medium">Last: {{ $lastLoan->user?->name }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             @else
                                 <div class="space-y-3">
@@ -112,7 +121,12 @@
                             >
                                 {{ $vehicle->isAvailable() ? __('vehicles.reserve_now') : __('vehicles.currently_active') }}
                             </flux:button>
-                            <flux:button icon="information-circle" variant="subtle" class="rounded-xl! h-11 w-11 shrink-0" />
+                            <flux:button 
+                                wire:click="openDetails({{ $vehicle->id }})"
+                                icon="information-circle" 
+                                variant="subtle" 
+                                class="rounded-xl! h-11 w-11 shrink-0 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700" 
+                            />
                         </div>
                     </div>
                 </div>
@@ -131,4 +145,111 @@
             </div>
         </div>
     </div>
+    {{-- Detail Modal --}}
+    @if($selectedVehicle)
+        <div class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm" wire:click="closeDetails"></div>
+            
+            <div class="relative bg-white dark:bg-zinc-900 w-full max-w-lg rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+                {{-- Modal Header --}}
+                <div class="p-8 pb-0 flex justify-between items-start">
+                    <div>
+                        <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-2">{{ $selectedVehicle->license_plate }}</h2>
+                        <p class="text-zinc-500 font-medium">{{ $selectedVehicle->model ?? 'Official Vehicle' }}</p>
+                    </div>
+                    <button wire:click="closeDetails" class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                        <flux:icon.x-mark class="w-5 h-5 text-zinc-500" />
+                    </button>
+                </div>
+
+                <div class="p-8 pt-6 space-y-6">
+                    {{-- Status Section --}}
+                    <div class="flex gap-3">
+                        @if($selectedVehicle->status === 'available')
+                            <span class="px-4 py-1.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-full border border-emerald-500/20 uppercase tracking-widest">{{ __('vehicles.available') }}</span>
+                        @elseif($selectedVehicle->status === 'in_use')
+                            <span class="px-4 py-1.5 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-full border border-amber-500/20 uppercase tracking-widest">{{ __('vehicles.in_use') }}</span>
+                        @else
+                            <span class="px-4 py-1.5 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold rounded-full border border-rose-500/20 uppercase tracking-widest">{{ __('vehicles.maintenance') }}</span>
+                        @endif
+                    </div>
+
+                    {{-- Info Grid --}}
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                            <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mb-1">{{ __('vehicles.current_mileage') }}</p>
+                            <p class="text-lg font-bold text-zinc-800 dark:text-white">{{ number_format($selectedVehicle->current_mileage) }} <span class="text-xs font-normal text-zinc-500 italic ml-1">km</span></p>
+                        </div>
+                        <div class="p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                            <p class="text-[10px] uppercase tracking-widest text-zinc-400 font-bold mb-1">{{ __('vehicles.last_service') }}</p>
+                            <p class="text-lg font-bold text-zinc-800 dark:text-white">{{ $selectedVehicle->inspections->first()?->created_at->format('d M Y') ?? 'N/A' }}</p>
+                        </div>
+                    </div>
+
+                    {{-- Current/Last Loan --}}
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-widest">{{ $selectedVehicle->status === 'in_use' ? 'Current Borrower' : 'Last Borrower' }}</h4>
+                        @php 
+                            $loan = $selectedVehicle->status === 'in_use' 
+                                ? $selectedVehicle->activeLoan->first() 
+                                : $selectedVehicle->loans->first();
+                        @endphp
+                        
+                        @if($loan)
+                            <div class="p-5 bg-zinc-50 dark:bg-zinc-800/50 rounded-[1.5rem] border border-zinc-100 dark:border-zinc-800 flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-lg font-bold text-zinc-500">
+                                    {{ substr($loan->user?->name ?? 'U', 0, 1) }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-bold text-zinc-800 dark:text-zinc-200 truncate">{{ $loan->user?->name }}</p>
+                                    <p class="text-xs text-zinc-500 truncate">{{ $loan->destination }} ({{ $loan->loan_date->format('d M') }})</p>
+                                </div>
+                            </div>
+                        @else
+                            <div class="flex items-center gap-3 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 italic text-zinc-400 text-xs">
+                                <flux:icon.user-minus class="w-4 h-4" />
+                                No recent history recorded
+                            </div>
+                        @endif
+                    </div>
+
+                    {{-- Condition Summary --}}
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Late Inspection Condition</h4>
+                        @php $lastInspection = $selectedVehicle->inspections->first(); @endphp
+                        @if($lastInspection)
+                            <div class="grid grid-cols-3 gap-3 text-center">
+                                <div class="p-3 rounded-2xl {{ str_contains(strtolower($lastInspection->tire_condition), 'good') ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600' }} border border-current/20">
+                                    <p class="text-[9px] font-bold uppercase mb-1">Tires</p>
+                                    <p class="text-xs font-bold capitalize">{{ $lastInspection->tire_condition }}</p>
+                                </div>
+                                <div class="p-3 rounded-2xl {{ str_contains(strtolower($lastInspection->body_condition), 'good') ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600' }} border border-current/20">
+                                    <p class="text-[9px] font-bold uppercase mb-1">Body</p>
+                                    <p class="text-xs font-bold capitalize">{{ $lastInspection->body_condition }}</p>
+                                </div>
+                                <div class="p-3 rounded-2xl {{ str_contains(strtolower($lastInspection->glass_condition), 'good') ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600' : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600' }} border border-current/20">
+                                    <p class="text-[9px] font-bold uppercase mb-1">Glass</p>
+                                    <p class="text-xs font-bold capitalize">{{ $lastInspection->glass_condition }}</p>
+                                </div>
+                            </div>
+                            @if($lastInspection->additional_notes)
+                                <div class="text-[11px] text-zinc-500 italic p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                                    "{{ $lastInspection->additional_notes }}"
+                                </div>
+                            @endif
+                        @else
+                            <div class="flex items-center gap-3 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-dashed border-zinc-200 dark:border-zinc-800 italic text-zinc-400 text-xs">
+                                <flux:icon.clipboard-document-check class="w-4 h-4" />
+                                No inspection report available
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="p-8 pt-0 mt-2">
+                    <flux:button wire:click="closeDetails" class="w-full h-12 rounded-2xl font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white hover:bg-zinc-200 dark:hover:bg-zinc-700">Close Details</flux:button>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

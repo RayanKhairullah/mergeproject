@@ -44,7 +44,7 @@ class EditMeeting extends Component
     {
         // Check if user can update
         if (! auth()->user()->can('update meetings')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk mengubah meeting!');
+            session()->flash('error', __('meetings.error_no_permission_update'));
             $this->redirect(route('admin.meetings.index'), navigate: true);
 
             return;
@@ -52,7 +52,7 @@ class EditMeeting extends Component
 
         // Regular users cannot edit approved meetings
         if (! auth()->user()->can('approve meetings') && $this->meeting->status !== \App\Enums\MeetingStatus::DRAFT && $this->meeting->status !== \App\Enums\MeetingStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Anda tidak dapat mengubah meeting yang sudah disetujui!');
+            session()->flash('error', __('meetings.error_cannot_update_approved'));
             $this->redirect(route('admin.meetings.index'), navigate: true);
 
             return;
@@ -93,7 +93,7 @@ class EditMeeting extends Component
             'estimated_participants' => $this->estimated_participants,
         ]);
 
-        session()->flash('success', 'Meeting berhasil diperbarui!');
+        session()->flash('success', __('meetings.success_updated'));
         $this->redirect(route('admin.meetings.index'), navigate: true);
     }
 

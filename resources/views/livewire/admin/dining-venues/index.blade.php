@@ -1,10 +1,10 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <flux:heading size="xl">Kelola Venue Makan</flux:heading>
+        <flux:heading size="xl">{{ __('dining_venues.title') }}</flux:heading>
     </div>
 
     <div class="flex gap-4 items-end">
-        <flux:input wire:model.live.debounce.300ms="search" placeholder="Cari venue..." class="flex-1" />
+        <flux:input wire:model.live.debounce.300ms="search" placeholder="{{ __('dining_venues.search_placeholder') }}" class="flex-1" />
     </div>
 
     @if(session('success'))
@@ -21,25 +21,25 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <flux:heading size="lg">{{ $editingId ? 'Edit Venue' : 'Tambah Venue Baru' }}</flux:heading>
+            <flux:heading size="lg">{{ $editingId ? __('dining_venues.edit_title') : __('dining_venues.add_new') }}</flux:heading>
         </div>
         <div class="p-6">
             <form wire:submit="{{ $editingId ? 'update' : 'create' }}" class="space-y-4">
                 <div class="grid grid-cols-1 gap-4">
                     <flux:field>
-                        <flux:label>Nama Venue</flux:label>
-                        <flux:input wire:model="name" placeholder="Masukkan nama venue" />
+                        <flux:label>{{ __('dining_venues.name') }}</flux:label>
+                        <flux:input wire:model="name" placeholder="{{ __('dining_venues.name_placeholder') }}" />
                         <flux:error name="name" />
                     </flux:field>
                 </div>
 
                 <div class="flex gap-3">
                     <flux:button type="submit" variant="primary">
-                        {{ $editingId ? 'Update Venue' : 'Tambah Venue' }}
+                        {{ $editingId ? __('global.save') : __('dining_venues.add_new') }}
                     </flux:button>
                     @if($editingId)
                         <flux:button type="button" variant="ghost" wire:click="cancelEdit">
-                            Batal
+                            {{ __('global.cancel') }}
                         </flux:button>
                     @endif
                 </div>
@@ -52,9 +52,9 @@
             <table class="w-full">
                 <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Venue</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Banquet Aktif</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('dining_venues.name') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('dining_venues.active_banquets') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('dining_venues.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -68,17 +68,17 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                                 <flux:button size="sm" wire:click="edit({{ $venue->id }})">
-                                    Edit
+                                    {{ __('global.edit') }}
                                 </flux:button>
-                                <flux:button size="sm" variant="danger" wire:click="delete({{ $venue->id }})" wire:confirm="Yakin ingin menghapus venue ini?">
-                                    Hapus
+                                <flux:button size="sm" variant="danger" wire:click="delete({{ $venue->id }})" wire:confirm="{{ __('dining_venues.delete_confirm') }}">
+                                    {{ __('global.delete') }}
                                 </flux:button>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="3" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                Tidak ada venue ditemukan
+                                {{ __('dining_venues.no_venues_found') }}
                             </td>
                         </tr>
                     @endforelse

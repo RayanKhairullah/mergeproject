@@ -19,6 +19,22 @@ class VehicleMonitor extends Component
     #[Url]
     public string $statusFilter = '';
 
+    public ?Vehicle $selectedVehicle = null;
+
+    public function openDetails(int $vehicleId): void
+    {
+        $this->selectedVehicle = Vehicle::with(['activeLoan.user', 'loans' => function ($query) {
+            $query->where('status', 'returned')->latest('return_date')->limit(1)->with('user');
+        }, 'inspections' => function ($query) {
+            $query->latest()->limit(1);
+        }])->find($vehicleId);
+    }
+
+    public function closeDetails(): void
+    {
+        $this->selectedVehicle = null;
+    }
+
     public function updatingSearch(): void
     {
         $this->resetPage();
@@ -36,7 +52,8 @@ class VehicleMonitor extends Component
             ->with(['activeLoan.user', 'loans' => function ($query) {
                 $query->where('status', 'returned')
                     ->latest('return_date')
-                    ->limit(1);
+                    ->limit(1)
+                    ->with('user');
             }, 'inspections' => function ($query) {
                 $query->latest()->limit(1);
             }])
@@ -50,6 +67,7 @@ class VehicleMonitor extends Component
             ->paginate(12);
 
         return view('livewire.frontend.vehicle-monitor', [
+            'title' => __('global.monitor_mobil'),
             'vehicles' => $vehicles,
         ]);
     }

@@ -60,6 +60,8 @@ class ReturnForm extends Component
     #[Layout('components.layouts.app.frontend')]
     public function render(): View
     {
-        return view('livewire.frontend.return-form');
+        return view('livewire.frontend.return-form', [
+            'title' => __('global.pengembalian'),
+        ]);
     }
 }

@@ -3,10 +3,10 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white">
-                Kesiapan Kendaraan
+                {{ __('inspections.title') }}
             </h1>
             <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-1">
-                Laporan kondisi kesiapan mobil harian (Pagi / Sore)
+                {{ __('inspections.subtitle') }}
             </p>
         </div>
     </div>
@@ -16,12 +16,12 @@
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-bold text-zinc-900 dark:text-white flex items-center gap-2">
                 <flux:icon.presentation-chart-line class="w-5 h-5 text-blue-600" />
-                Kilometer Terkini per Kendaraan
+                {{ __('inspections.current_mileage_title') }}
             </h2>
             <div class="hidden sm:flex gap-1">
                 <span class="text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-full flex items-center gap-1">
                     <flux:icon.arrows-right-left class="w-3 h-3" />
-                    Geser untuk lihat lainnya
+                    {{ __('inspections.scroll_tip') }}
                 </span>
             </div>
         </div>
@@ -48,7 +48,7 @@
                             
                             {{-- Mileage --}}
                             <div class="space-y-1">
-                                <p class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">ODO METER</p>
+                                <p class="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">{{ __('inspections.odo_meter') }}</p>
                                 <div class="flex items-baseline gap-1">
                                     <span class="text-2xl font-black text-zinc-900 dark:text-white tabular-nums">
                                         {{ number_format($vehicle['current_mileage']) }}
@@ -87,20 +87,20 @@
         <div class="sm:col-span-2 lg:col-span-2">
             <flux:input 
                 wire:model.live.debounce.300ms="search" 
-                placeholder="Cari kendaraan..." 
+                placeholder="{{ __('inspections.search_placeholder') }}" 
                 icon="magnifying-glass"
             />
         </div>
-        <flux:select wire:model.live="vehicleFilter" placeholder="Semua Kendaraan">
-            <flux:select.option value="">Semua Kendaraan</flux:select.option>
+        <flux:select wire:model.live="vehicleFilter" placeholder="{{ __('inspections.all_vehicles') }}">
+            <flux:select.option value="">{{ __('inspections.all_vehicles') }}</flux:select.option>
             @foreach($vehicles as $vehicle)
                 <flux:select.option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }}</flux:select.option>
             @endforeach
         </flux:select>
-        <flux:select wire:model.live="timeFilter" placeholder="Semua Waktu">
-            <flux:select.option value="">Semua Waktu</flux:select.option>
-            <flux:select.option value="morning">Pagi</flux:select.option>
-            <flux:select.option value="afternoon">Sore</flux:select.option>
+        <flux:select wire:model.live="timeFilter" placeholder="{{ __('inspections.all_times') }}">
+            <flux:select.option value="">{{ __('inspections.all_times') }}</flux:select.option>
+            <flux:select.option value="morning">{{ __('inspections.morning') }}</flux:select.option>
+            <flux:select.option value="afternoon">{{ __('inspections.afternoon') }}</flux:select.option>
         </flux:select>
         <flux:input 
             wire:model.live="dateFilter" 
@@ -118,7 +118,7 @@
             </flux:button>
         </div>
         <flux:button href="{{ route('vehicles.inspection') }}" variant="primary" icon="plus" class="w-full sm:w-auto">
-            Inspeksi Laporan Baru
+            {{ __('inspections.input_new') }}
         </flux:button>
     </div>
 
@@ -129,14 +129,14 @@
                 <thead class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
                         <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Kendaraan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Waktu</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">KM</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Kondisi</th>
-                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Catatan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Foto</th>
-                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Inspektor</th>
-                        <th class="px-4 py-3 text-right text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Aksi</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.vehicle') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.time') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.mileage') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.condition') }}</th>
+                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.notes') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.photo') }}</th>
+                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.inspector') }}</th>
+                        <th class="px-4 py-3 text-right text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('inspections.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
@@ -158,8 +158,8 @@
                             </td>
                             <td class="px-4 py-3 text-xs text-zinc-600 dark:text-zinc-400">
                                 <div class="flex flex-col gap-0.5">
-                                    <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-zinc-400"></div>Body: {{ Str::limit($inspection->body_condition, 10) }}</div>
-                                    <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-zinc-400"></div>Ban: {{ Str::limit($inspection->tire_condition, 10) }}</div>
+                                    <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-zinc-400"></div>{{ __('inspections.body') }}: {{ Str::limit($inspection->body_condition, 10) }}</div>
+                                    <div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full bg-zinc-400"></div>{{ __('inspections.tire') }}: {{ Str::limit($inspection->tire_condition, 10) }}</div>
                                 </div>
                             </td>
                             <td class="hidden lg:table-cell px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
@@ -181,17 +181,17 @@
                                 <div class="flex items-center justify-end gap-2">
                                     <flux:modal.trigger name="inspection-detail-{{ $inspection->id }}">
                                         <flux:button size="sm" variant="ghost" icon="eye">
-                                            <span class="hidden md:inline">Detail</span>
+                                            <span class="hidden md:inline">{{ __('inspections.detail') }}</span>
                                         </flux:button>
                                     </flux:modal.trigger>
                                     <flux:button 
                                         wire:click="delete({{ $inspection->id }})" 
-                                        wire:confirm="Apakah Anda yakin ingin menghapus laporan ini?"
+                                        wire:confirm="{{ __('inspections.delete_confirm') }}"
                                         size="sm" 
                                         variant="danger" 
                                         icon="trash"
                                     >
-                                        <span class="hidden md:inline">Hapus</span>
+                                        <span class="hidden md:inline">{{ __('global.delete') }}</span>
                                     </flux:button>
                                 </div>
                             </td>
@@ -200,24 +200,24 @@
                         {{-- Modal Detail --}}
                         <flux:modal name="inspection-detail-{{ $inspection->id }}" class="w-full max-w-2xl space-y-6">
                             <div>
-                                <flux:heading size="lg">Detail Inspeksi #{{ $inspection->id }}</flux:heading>
-                                <flux:subheading>Informasi lengkap inspeksi kesiapan kendaraan</flux:subheading>
+                                <flux:heading size="lg">{{ __('inspections.detail_title', ['id' => $inspection->id]) }}</flux:heading>
+                                <flux:subheading>{{ __('inspections.detail_subtitle') }}</flux:subheading>
                             </div>
 
                             <div class="space-y-4">
                                 {{-- Vehicle Info --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Informasi Kendaraan</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('inspections.vehicle_info') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Plat Nomor:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.license_plate') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->vehicle->license_plate }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Waktu Inspeksi:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.inspection_time') }}:</span>
                                             <p class="font-medium">
                                                 <flux:badge :color="$inspection->inspection_time === 'morning' ? 'blue' : 'orange'" size="sm">
-                                                    {{ ucfirst($inspection->inspection_time) }}
+                                                    {{ $inspection->inspection_time === 'morning' ? __('inspections.morning') : __('inspections.afternoon') }}
                                                 </flux:badge>
                                             </p>
                                         </div>
@@ -226,14 +226,14 @@
 
                                 {{-- Inspector Info --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Informasi Inspektor</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('inspections.inspector_info') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Nama:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.name') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->user->name }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Tanggal Inspeksi:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.inspection_date') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->created_at->format('d M Y, H:i') }}</p>
                                         </div>
                                     </div>
@@ -241,27 +241,27 @@
 
                                 {{-- Inspection Details --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Detail Inspeksi</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('inspections.inspection_details') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Kilometer:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.mileage') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ number_format($inspection->mileage_check) }} km</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Kondisi Ban:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.tire_condition') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->tire_condition }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Kondisi Body:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.body_condition') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->body_condition }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Kondisi Kaca:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.glass_condition') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->glass_condition }}</p>
                                         </div>
                                         @if($inspection->additional_notes)
                                             <div class="col-span-2">
-                                                <span class="text-zinc-600 dark:text-zinc-400">Catatan Tambahan:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('inspections.additional_notes') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $inspection->additional_notes }}</p>
                                             </div>
                                         @endif
@@ -271,7 +271,7 @@
                                 {{-- Photo with Zoom --}}
                                 @if($inspection->speedometer_photo_url)
                                     <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                        <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Foto Speedometer</h3>
+                                        <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('inspections.speedometer_photo') }}</h3>
                                         <div class="relative group">
                                             <div class="w-full h-64 bg-zinc-100 dark:bg-zinc-800 rounded-lg overflow-hidden cursor-zoom-in" 
                                                  onclick="openImageModal('{{ Storage::url($inspection->speedometer_photo_url) }}')">
@@ -280,7 +280,7 @@
                                                      class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105">
                                             </div>
                                             <div class="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                                Klik untuk zoom
+                                                {{ __('inspections.click_to_zoom') }}
                                             </div>
                                         </div>
                                     </div>
@@ -289,14 +289,14 @@
 
                             <div class="flex gap-2 justify-end">
                                 <flux:modal.close>
-                                    <flux:button variant="ghost">Tutup</flux:button>
+                                    <flux:button variant="ghost">{{ __('inspections.close') }}</flux:button>
                                 </flux:modal.close>
                             </div>
                         </flux:modal>
                     @empty
                         <tr>
                             <td colspan="10" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">
-                                Tidak ada data inspeksi
+                                {{ __('inspections.no_inspections_found') }}
                             </td>
                         </tr>
                     @endforelse

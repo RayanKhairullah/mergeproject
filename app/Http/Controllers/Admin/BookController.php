@@ -53,7 +53,7 @@ class BookController extends Controller
         $book->save();
 
         return redirect()->route('admin.books.index')
-            ->with('success', 'Book created successfully!');
+            ->with('success', __('books.success_created'));
     }
 
     public function edit(Book $book)
@@ -102,7 +102,7 @@ class BookController extends Controller
         $book->save();
 
         return redirect()->route('admin.books.index')
-            ->with('success', 'Book updated successfully!');
+            ->with('success', __('books.success_updated'));
     }
 
     public function destroy(Book $book)
@@ -119,6 +119,6 @@ class BookController extends Controller
         $book->delete();
 
         return redirect()->route('admin.books.index')
-            ->with('success', 'Book deleted successfully!');
+            ->with('success', __('books.success_deleted'));
     }
 }

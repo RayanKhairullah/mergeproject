@@ -95,7 +95,7 @@ class Index extends Component
 
         Vehicle::create($data);
 
-        $this->alert('success', 'Kendaraan berhasil ditambahkan!');
+        $this->alert('success', __('vehicles.success_added'));
         $this->resetForm();
         $this->showForm = false;
         $this->resetPage();
@@ -130,7 +130,7 @@ class Index extends Component
 
         $vehicle->update($data);
 
-        $this->alert('success', 'Kendaraan berhasil diupdate!');
+        $this->alert('success', __('vehicles.success_updated'));
         $this->resetForm();
         $this->showForm = false;
         $this->resetPage();
@@ -142,7 +142,7 @@ class Index extends Component
 
         // Check if vehicle has active loans
         if ($vehicle->loans()->whereNull('return_date')->exists()) {
-            session()->flash('error', 'Tidak dapat menghapus kendaraan yang sedang dipinjam');
+            session()->flash('error', __('vehicles.error_cannot_delete_in_use'));
 
             return;
         }
@@ -153,7 +153,7 @@ class Index extends Component
 
         $vehicle->delete();
 
-        session()->flash('success', 'Kendaraan berhasil dihapus');
+        session()->flash('success', __('vehicles.success_deleted'));
     }
 
     public function cancelForm(): void
@@ -224,6 +224,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.vehicles.index', [
+            'title' => __('sidebar.vehicles'),
             'vehicles' => $vehicles,
         ]);
     }

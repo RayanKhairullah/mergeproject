@@ -48,7 +48,7 @@ class CreateVehicle extends Component
 
         Vehicle::create($data);
 
-        $this->alert('success', 'Kendaraan berhasil ditambahkan!');
+        $this->alert('success', __('vehicles.success_added'));
 
         $this->redirect(route('admin.vehicles.index'), true);
     }

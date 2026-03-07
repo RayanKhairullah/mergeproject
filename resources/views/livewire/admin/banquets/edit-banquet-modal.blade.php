@@ -123,7 +123,7 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 <flux:modal name="edit-banquet-{{ $banquetId }}" class="w-full max-w-4xl">
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
-            <flux:heading size="lg">Edit Banquet</flux:heading>
+            <flux:heading size="lg">{{ __('banquets.edit') }}</flux:heading>
             <flux:modal.close>
                 <flux:button variant="ghost" size="sm" icon="x-mark" />
             </flux:modal.close>
@@ -133,15 +133,15 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
             <!-- Left Column -->
             <div class="space-y-4">
                 <flux:field>
-                    <flux:label>Title</flux:label>
-                    <flux:input wire:model="title" placeholder="Banquet title" />
+                    <flux:label>{{ __('banquets.fields.title') }}</flux:label>
+                    <flux:input wire:model="title" placeholder="{{ __('banquets.fields.title') }}" />
                     <flux:error name="title" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Dining Venue</flux:label>
+                    <flux:label>{{ __('banquets.fields.venue') }}</flux:label>
                     <div class="flex gap-2">
-                        <flux:select wire:model.live="venue_id" placeholder="Select a venue..." class="flex-1">
+                        <flux:select wire:model.live="venue_id" placeholder="{{ __('banquets.select_venue') }}" class="flex-1">
                             @foreach($this->venues as $venue)
                                 <flux:select.option value="{{ $venue->id }}">
                                     {{ $venue->name }}
@@ -155,27 +155,27 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 
                 @if($showCreateVenue)
                     <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg space-y-3">
-                        <flux:heading size="sm">Add New Venue</flux:heading>
+                        <flux:heading size="sm">{{ __('banquets.add_new_venue') }}</flux:heading>
                         <flux:field>
-                            <flux:label>Venue Name</flux:label>
-                            <flux:input wire:model="new_venue_name" placeholder="Venue name" />
+                            <flux:label>{{ __('banquets.venue_name') }}</flux:label>
+                            <flux:input wire:model="new_venue_name" placeholder="{{ __('banquets.venue_name') }}" />
                             <flux:error name="new_venue_name" />
                         </flux:field>
                         <div class="flex gap-2">
                             <flux:button type="button" wire:click="createVenue" size="sm" variant="primary">
-                                Add Venue
+                                {{ __('banquets.add_venue') }}
                             </flux:button>
                             <flux:button type="button" wire:click="toggleCreateVenue" size="sm" variant="ghost">
-                                Cancel
+                                {{ __('global.cancel') }}
                             </flux:button>
                         </div>
                     </div>
                 @endif
 
                 <flux:field>
-                    <flux:label>Guest Type</flux:label>
+                    <flux:label>{{ __('banquets.fields.guest_type') }}</flux:label>
                     <div class="flex gap-2">
-                        <flux:select wire:model="guest_type" placeholder="Select guest type..." class="flex-1">
+                        <flux:select wire:model="guest_type" placeholder="{{ __('banquets.select_guest_type') }}" class="flex-1">
                             @foreach($this->guestTypes as $type)
                                 <flux:select.option value="{{ $type->value }}">
                                     {{ $type->label }}
@@ -189,18 +189,18 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 
                 @if($showCreateGuestType)
                     <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg space-y-3">
-                        <flux:heading size="sm">Add New Guest Type</flux:heading>
+                        <flux:heading size="sm">{{ __('banquets.add_new_guest_type') }}</flux:heading>
                         <flux:field>
-                            <flux:label>Guest Type Name</flux:label>
-                            <flux:input wire:model="new_guest_type" placeholder="e.g., Corporate Guest" />
+                            <flux:label>{{ __('banquets.guest_type_name') }}</flux:label>
+                            <flux:input wire:model="new_guest_type" placeholder="{{ __('banquets.guest_type_name') }}" />
                             <flux:error name="new_guest_type" />
                         </flux:field>
                         <div class="flex gap-2">
                             <flux:button type="button" wire:click="createGuestType" size="sm" variant="primary">
-                                Add Guest Type
+                                {{ __('banquets.add_guest_type') }}
                             </flux:button>
                             <flux:button type="button" wire:click="toggleCreateGuestType" size="sm" variant="ghost">
-                                Cancel
+                                {{ __('global.cancel') }}
                             </flux:button>
                         </div>
                     </div>
@@ -210,19 +210,19 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
             <!-- Right Column -->
             <div class="space-y-4">
                 <flux:field>
-                    <flux:label>Scheduled At</flux:label>
+                    <flux:label>{{ __('banquets.fields.scheduled_at') }}</flux:label>
                     <flux:input type="datetime-local" wire:model="scheduled_at" />
                     <flux:error name="scheduled_at" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Estimasi Tamu</flux:label>
+                    <flux:label>{{ __('banquets.fields.estimated_guests') }}</flux:label>
                     <flux:input type="number" wire:model="estimated_guests" min="1" />
                     <flux:error name="estimated_guests" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Biaya Jamuan (Rp)</flux:label>
+                    <flux:label>{{ __('banquets.cost') }} (Rp)</flux:label>
                     <flux:input type="number" wire:model="cost" min="0" step="0.01" />
                     <flux:error name="cost" />
                 </flux:field>
@@ -230,18 +230,18 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
         </div>
 
         <flux:field>
-            <flux:label>Notes</flux:label>
-            <flux:textarea wire:model="description" placeholder="Additional notes..." rows="3" />
+            <flux:label>{{ __('banquets.fields.description') }}</flux:label>
+            <flux:textarea wire:model="description" placeholder="{{ __('banquets.fields.description') }}" rows="3" />
             <flux:error name="description" />
         </flux:field>
 
         <div class="flex gap-3 justify-end pt-4 border-t border-zinc-200 dark:border-zinc-700">
             <flux:modal.close>
-                <flux:button variant="ghost">Cancel</flux:button>
+                <flux:button variant="ghost">{{ __('global.cancel') }}</flux:button>
             </flux:modal.close>
             <flux:button type="submit" variant="primary" wire:loading.attr="disabled">
-                <span wire:loading.remove>Update</span>
-                <span wire:loading>Updating...</span>
+                <span wire:loading.remove>{{ __('global.update') }}</span>
+                <span wire:loading>{{ __('global.updating') }}</span>
             </flux:button>
         </div>
     </form>

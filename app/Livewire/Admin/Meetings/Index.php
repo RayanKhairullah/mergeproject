@@ -64,7 +64,7 @@ class Index extends Component
     public function approve(int $id): void
     {
         if (! auth()->user()->can('approve meetings')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk menyetujui meeting!');
+            session()->flash('error', __('meetings.error_no_permission_approve'));
 
             return;
         }
@@ -72,7 +72,7 @@ class Index extends Component
         $meeting = Meeting::findOrFail($id);
 
         if ($meeting->status !== MeetingStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Meeting tidak dalam status pending approval!');
+            session()->flash('error', __('meetings.error_not_pending_approval'));
 
             return;
         }
@@ -83,13 +83,13 @@ class Index extends Component
             'approved_at' => now(),
         ]);
 
-        session()->flash('success', 'Meeting berhasil disetujui!');
+        session()->flash('success', __('meetings.success_approved'));
     }
 
     public function reject(int $id, string $reason): void
     {
         if (! auth()->user()->can('approve meetings')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk menolak meeting!');
+            session()->flash('error', __('meetings.error_no_permission_reject'));
 
             return;
         }
@@ -97,7 +97,7 @@ class Index extends Component
         $meeting = Meeting::findOrFail($id);
 
         if ($meeting->status !== MeetingStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Meeting tidak dalam status pending approval!');
+            session()->flash('error', __('meetings.error_not_pending_approval'));
 
             return;
         }
@@ -109,7 +109,7 @@ class Index extends Component
             'rejection_reason' => $reason,
         ]);
 
-        session()->flash('success', 'Meeting berhasil ditolak!');
+        session()->flash('success', __('meetings.success_rejected'));
     }
 
     public function delete(int $id): void
@@ -118,21 +118,27 @@ class Index extends Component
 
         // Check if user can delete
         if (! auth()->user()->can('delete meetings')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk menghapus meeting!');
+            session()->flash('error', __('meetings.error_no_permission_delete'));
+
+            return;
+        }
+
+        if (! auth()->user()->can('approve meetings') && $meeting->created_by !== auth()->id()) {
+            session()->flash('error', __('meetings.error_delete_only_own'));
 
             return;
         }
 
         // Regular users cannot delete approved meetings
         if (! auth()->user()->can('approve meetings') && $meeting->status !== \App\Enums\MeetingStatus::DRAFT && $meeting->status !== \App\Enums\MeetingStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Anda tidak dapat menghapus meeting yang sudah disetujui!');
+            session()->flash('error', __('meetings.error_cannot_delete_approved'));
 
             return;
         }
 
         $meeting->delete();
 
-        session()->flash('success', 'Meeting berhasil dihapus!');
+        session()->flash('success', __('meetings.success_deleted'));
     }
 
     public function render()
@@ -155,6 +161,7 @@ class Index extends Component
             : 'components.layouts.app.frontend';
 
         return view('livewire.admin.meetings.index', [
+            'title' => __('sidebar.meeting'),
             'meetings' => $meetings,
             'rooms' => $rooms,
             'detailMeeting' => $detailMeeting,

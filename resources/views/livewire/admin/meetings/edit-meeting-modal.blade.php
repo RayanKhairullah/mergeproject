@@ -107,7 +107,7 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 <flux:modal name="edit-meeting-{{ $meetingId }}" class="w-full max-w-4xl">
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
-            <flux:heading size="lg">Edit Meeting</flux:heading>
+            <flux:heading size="lg">{{ __('meetings.edit') }}</flux:heading>
             <flux:modal.close>
                 <flux:button variant="ghost" size="sm" icon="x-mark" />
             </flux:modal.close>
@@ -117,18 +117,18 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
             <!-- Left Column -->
             <div class="space-y-4">
                 <flux:field>
-                    <flux:label>Title</flux:label>
-                    <flux:input wire:model="title" placeholder="Meeting title" />
+                    <flux:label>{{ __('meetings.fields.title') }}</flux:label>
+                    <flux:input wire:model="title" placeholder="{{ __('meetings.fields.title') }}" />
                     <flux:error name="title" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Room</flux:label>
+                    <flux:label>{{ __('meetings.fields.room') }}</flux:label>
                     <div class="flex gap-2">
-                        <flux:select wire:model.live="room_id" placeholder="Select a room..." class="flex-1">
+                        <flux:select wire:model.live="room_id" placeholder="{{ __('meetings.select_room') }}" class="flex-1">
                             @foreach($this->rooms as $room)
                                 <flux:select.option value="{{ $room->id }}">
-                                    {{ $room->name }} ({{ $room->capacity }} pax)
+                                    {{ $room->name }} ({{ $room->capacity }} {{ __('meetings.person') }})
                                 </flux:select.option>
                             @endforeach
                         </flux:select>
@@ -139,30 +139,30 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 
                 @if($showCreateRoom)
                     <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg space-y-3">
-                        <flux:heading size="sm">Add New Room</flux:heading>
+                        <flux:heading size="sm">{{ __('meetings.add_new_room') }}</flux:heading>
                         <flux:field>
-                            <flux:label>Room Name</flux:label>
-                            <flux:input wire:model="new_room_name" placeholder="Room name" />
+                            <flux:label>{{ __('meetings.room_name') }}</flux:label>
+                            <flux:input wire:model="new_room_name" placeholder="{{ __('meetings.room_name') }}" />
                             <flux:error name="new_room_name" />
                         </flux:field>
                         <flux:field>
-                            <flux:label>Capacity</flux:label>
+                            <flux:label>{{ __('meetings.room_capacity') }}</flux:label>
                             <flux:input type="number" wire:model="new_room_capacity" min="1" max="1000" />
                             <flux:error name="new_room_capacity" />
                         </flux:field>
                         <div class="flex gap-2">
                             <flux:button type="button" wire:click="createRoom" size="sm" variant="primary">
-                                Add Room
+                                {{ __('meetings.add_room') }}
                             </flux:button>
                             <flux:button type="button" wire:click="toggleCreateRoom" size="sm" variant="ghost">
-                                Cancel
+                                {{ __('global.cancel') }}
                             </flux:button>
                         </div>
                     </div>
                 @endif
 
                 <flux:field>
-                    <flux:label>Estimated Participants</flux:label>
+                    <flux:label>{{ __('meetings.fields.estimated_participants') }}</flux:label>
                     <flux:input type="number" wire:model="estimated_participants" min="1" />
                     <flux:error name="estimated_participants" />
                 </flux:field>
@@ -171,13 +171,13 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
             <!-- Right Column -->
             <div class="space-y-4">
                 <flux:field>
-                    <flux:label>Start Time</flux:label>
+                    <flux:label>{{ __('meetings.fields.started_at') }}</flux:label>
                     <flux:input type="datetime-local" wire:model="started_at" />
                     <flux:error name="started_at" />
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Estimated Duration (minutes)</flux:label>
+                    <flux:label>{{ __('meetings.fields.duration') }}</flux:label>
                     <flux:input type="number" wire:model="duration" min="15" max="480" />
                     <flux:error name="duration" />
                 </flux:field>
@@ -185,34 +185,34 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
                 <div class="space-y-4">
                     <div>
                         <flux:checkbox wire:model="show_on_monitor">
-                            Tampilkan di Monitor Publik
+                            {{ __('meetings.public_monitor') }}
                         </flux:checkbox>
-                        <p class="text-xs text-gray-500 mt-1 ml-6">Meeting akan ditampilkan di layar monitor untuk umum</p>
+                        <p class="text-xs text-gray-500 mt-1 ml-6">{{ __('meetings.public_monitor_desc') }}</p>
                     </div>
                     
                     <div>
                         <flux:checkbox wire:model="show_notes_on_monitor">
-                            Tampilkan Catatan di Monitor
+                            {{ __('meetings.notes_monitor') }}
                         </flux:checkbox>
-                        <p class="text-xs text-gray-500 mt-1 ml-6">Catatan internal akan ikut ditampilkan di monitor (jika meeting ditampilkan)</p>
+                        <p class="text-xs text-gray-500 mt-1 ml-6">{{ __('meetings.notes_monitor_desc') }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <flux:field>
-            <flux:label>Internal notes (not to be shown on monitor)</flux:label>
-            <flux:textarea wire:model="notes" placeholder="Internal notes (not to be shown on monitor)" rows="3" />
+            <flux:label>{{ __('meetings.internal_notes') }}</flux:label>
+            <flux:textarea wire:model="notes" placeholder="{{ __('meetings.internal_notes') }}" rows="3" />
             <flux:error name="notes" />
         </flux:field>
 
         <div class="flex gap-3 justify-end pt-4 border-t border-zinc-200 dark:border-zinc-700">
             <flux:modal.close>
-                <flux:button variant="ghost">Cancel</flux:button>
+                <flux:button variant="ghost">{{ __('global.cancel') }}</flux:button>
             </flux:modal.close>
             <flux:button type="submit" variant="primary" wire:loading.attr="disabled">
-                <span wire:loading.remove>Update</span>
-                <span wire:loading>Updating...</span>
+                <span wire:loading.remove>{{ __('global.update') }}</span>
+                <span wire:loading>{{ __('global.updating') }}</span>
             </flux:button>
         </div>
     </form>

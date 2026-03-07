@@ -72,7 +72,7 @@ class EditVehicle extends Component
 
         $this->vehicle->update($data);
 
-        $this->alert('success', 'Kendaraan berhasil diupdate!');
+        $this->alert('success', __('vehicles.success_updated'));
 
         $this->redirect(route('admin.vehicles.index'), true);
     }
@@ -83,7 +83,7 @@ class EditVehicle extends Component
             \Storage::disk('public')->delete($this->vehicle->image);
             $this->vehicle->update(['image' => null]);
             $this->existing_image = null;
-            $this->alert('success', 'Foto berhasil dihapus');
+            $this->alert('success', __('vehicles.success_photo_deleted'));
         }
     }
 

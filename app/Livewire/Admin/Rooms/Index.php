@@ -38,7 +38,7 @@ class Index extends Component
             'capacity' => $this->capacity,
         ]);
 
-        session()->flash('success', 'Ruang rapat berhasil ditambahkan!');
+        session()->flash('success', __('rooms.success_added'));
         $this->reset(['name', 'capacity']);
     }
 
@@ -63,7 +63,7 @@ class Index extends Component
             'capacity' => $this->capacity,
         ]);
 
-        session()->flash('success', 'Ruang rapat berhasil diperbarui!');
+        session()->flash('success', __('rooms.success_updated'));
         $this->reset(['editingId', 'name', 'capacity']);
     }
 
@@ -72,13 +72,13 @@ class Index extends Component
         $room = Room::findOrFail($id);
 
         if ($room->activeMeetings()->count() > 0) {
-            session()->flash('error', 'Tidak dapat menghapus ruang dengan meeting aktif!');
+            session()->flash('error', __('rooms.error_active_meetings'));
 
             return;
         }
 
         $room->delete();
-        session()->flash('success', 'Ruang rapat berhasil dihapus!');
+        session()->flash('success', __('rooms.success_deleted'));
     }
 
     public function cancelEdit(): void
@@ -95,6 +95,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.rooms.index', [
+            'title' => __('sidebar.meeting_rooms'),
             'rooms' => $rooms,
         ]);
     }

@@ -11,6 +11,8 @@ class Index extends Component
     #[Layout('components.layouts.admin')]
     public function render(): View
     {
-        return view('livewire.admin.index');
+        return view('livewire.admin.index', [
+            'title' => __('sidebar.dashboard'),
+        ]);
     }
 }

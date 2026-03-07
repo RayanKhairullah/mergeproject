@@ -72,7 +72,7 @@ class CreateMeeting extends Component
             'created_by' => auth()->id(),
         ]);
 
-        session()->flash('success', 'Meeting berhasil dibuat!');
+        session()->flash('success', __('meetings.success_created'));
         $this->redirect(route('admin.meetings.index'), navigate: true);
     }
 

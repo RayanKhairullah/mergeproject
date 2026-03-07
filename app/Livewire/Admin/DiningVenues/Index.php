@@ -34,7 +34,7 @@ class Index extends Component
             'name' => $this->name,
         ]);
 
-        session()->flash('success', 'Venue berhasil ditambahkan!');
+        session()->flash('success', __('dining_venues.success_added'));
         $this->reset(['name']);
     }
 
@@ -56,7 +56,7 @@ class Index extends Component
             'name' => $this->name,
         ]);
 
-        session()->flash('success', 'Venue berhasil diperbarui!');
+        session()->flash('success', __('dining_venues.success_updated'));
         $this->reset(['editingId', 'name']);
     }
 
@@ -65,13 +65,13 @@ class Index extends Component
         $venue = DiningVenue::findOrFail($id);
 
         if ($venue->activeBanquets()->count() > 0) {
-            session()->flash('error', 'Tidak dapat menghapus venue dengan banquet aktif!');
+            session()->flash('error', __('dining_venues.error_active_banquets'));
 
             return;
         }
 
         $venue->delete();
-        session()->flash('success', 'Venue berhasil dihapus!');
+        session()->flash('success', __('dining_venues.success_deleted'));
     }
 
     public function cancelEdit(): void
@@ -88,6 +88,7 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.dining-venues.index', [
+            'title' => __('sidebar.dining_venues'),
             'venues' => $venues,
         ]);
     }

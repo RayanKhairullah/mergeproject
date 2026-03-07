@@ -57,6 +57,7 @@ class Roles extends Component
     public function render(): View
     {
         return view('livewire.admin.roles', [
+            'title' => __('roles.title'),
             'roles' => Role::query()
                 ->select(['id', 'name'])
                 ->with('permissions:id,name')

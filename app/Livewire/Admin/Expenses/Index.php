@@ -54,7 +54,7 @@ class Index extends Component
 
         $expense->delete();
 
-        session()->flash('success', 'Laporan expense berhasil dihapus');
+        session()->flash('success', __('expenses.success_deleted'));
     }
 
     public function downloadExcel(): \Symfony\Component\HttpFoundation\BinaryFileResponse
@@ -67,7 +67,7 @@ class Index extends Component
                 'laporan-rupa-rupa-'.now()->format('Y-m-d').'.xlsx'
             );
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengunduh file: '.$e->getMessage());
+            session()->flash('error', __('expenses.error_download', ['message' => $e->getMessage()]));
 
             return redirect()->back();
         }
@@ -87,7 +87,7 @@ class Index extends Component
                 echo $pdf->output();
             }, 'laporan-rupa-rupa-'.now()->format('Y-m-d').'.pdf');
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengunduh PDF: '.$e->getMessage());
+            session()->flash('error', __('expenses.error_download', ['message' => $e->getMessage()]));
 
             return redirect()->back();
         }
@@ -140,6 +140,7 @@ class Index extends Component
         $vehicles = Vehicle::orderBy('license_plate')->get();
 
         return view('livewire.admin.expenses.index', [
+            'title' => __('sidebar.expenses'),
             'expenses' => $expenses,
             'vehicles' => $vehicles,
         ]);

@@ -61,6 +61,7 @@ class Users extends Component
     public function render(): View
     {
         return view('livewire.admin.users', [
+            'title' => __('sidebar.users'),
             'users' => User::query()
                 ->select(['id', 'name', 'email'])
                 ->with('roles:id,name')

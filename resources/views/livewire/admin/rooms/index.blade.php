@@ -1,10 +1,10 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <flux:heading size="xl">Kelola Ruang Rapat</flux:heading>
+        <flux:heading size="xl">{{ __('rooms.title') }}</flux:heading>
     </div>
 
     <div class="flex gap-4 items-end">
-        <flux:input wire:model.live.debounce.300ms="search" placeholder="Cari ruang rapat..." class="flex-1" />
+        <flux:input wire:model.live.debounce.300ms="search" placeholder="{{ __('rooms.search_placeholder') }}" class="flex-1" />
     </div>
 
     @if(session('success'))
@@ -21,31 +21,31 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <flux:heading size="lg">{{ $editingId ? 'Edit Ruang Rapat' : 'Tambah Ruang Rapat Baru' }}</flux:heading>
+            <flux:heading size="lg">{{ $editingId ? __('rooms.edit_title') : __('rooms.add_new') }}</flux:heading>
         </div>
         <div class="p-6">
             <form wire:submit="{{ $editingId ? 'update' : 'create' }}" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <flux:field>
-                        <flux:label>Nama Ruang Rapat</flux:label>
-                        <flux:input wire:model="name" placeholder="Masukkan nama ruang rapat" />
+                        <flux:label>{{ __('rooms.name') }}</flux:label>
+                        <flux:input wire:model="name" placeholder="{{ __('rooms.name_placeholder') }}" />
                         <flux:error name="name" />
                     </flux:field>
 
                     <flux:field>
-                        <flux:label>Kapasitas</flux:label>
-                        <flux:input type="number" wire:model="capacity" placeholder="Masukkan kapasitas" min="1" />
+                        <flux:label>{{ __('rooms.capacity') }}</flux:label>
+                        <flux:input type="number" wire:model="capacity" placeholder="{{ __('rooms.capacity_placeholder') }}" min="1" />
                         <flux:error name="capacity" />
                     </flux:field>
                 </div>
 
                 <div class="flex gap-3">
                     <flux:button type="submit" variant="primary">
-                        {{ $editingId ? 'Update Ruang Rapat' : 'Tambah Ruang Rapat' }}
+                        {{ $editingId ? __('global.save') : __('rooms.add_new') }}
                     </flux:button>
                     @if($editingId)
                         <flux:button type="button" variant="ghost" wire:click="cancelEdit">
-                            Batal
+                            {{ __('global.cancel') }}
                         </flux:button>
                     @endif
                 </div>
@@ -58,10 +58,10 @@
             <table class="w-full">
                 <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Ruang</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Kapasitas</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Meeting Aktif</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Aksi</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('rooms.name') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('rooms.capacity') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('rooms.active_meetings') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('rooms.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -71,24 +71,24 @@
                                 {{ $room->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                {{ $room->capacity }} orang
+                                {{ $room->capacity }} {{ __('rooms.capacity_unit') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $room->active_meetings_count }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                                 <flux:button size="sm" wire:click="edit({{ $room->id }})">
-                                    Edit
+                                    {{ __('global.edit') }}
                                 </flux:button>
-                                <flux:button size="sm" variant="danger" wire:click="delete({{ $room->id }})" wire:confirm="Yakin ingin menghapus ruang rapat ini?">
-                                    Hapus
+                                <flux:button size="sm" variant="danger" wire:click="delete({{ $room->id }})" wire:confirm="{{ __('rooms.delete_confirm') }}">
+                                    {{ __('global.delete') }}
                                 </flux:button>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                Tidak ada ruang rapat ditemukan
+                                {{ __('rooms.no_rooms_found') }}
                             </td>
                         </tr>
                     @endforelse

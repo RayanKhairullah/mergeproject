@@ -12,12 +12,12 @@
     </a>
 
     <flux:navlist variant="outline">
-        <flux:navlist.group heading="Platform" class="grid">
-            <flux:navlist.item icon="home" :href="route('admin.index')" :current="request()->routeIs('admin.index')">Dashboard</flux:navlist.item>
+        <flux:navlist.group heading="{{ __('sidebar.platform') }}" class="grid">
+            <flux:navlist.item icon="home" :href="route('admin.index')" :current="request()->routeIs('admin.index')">{{ __('sidebar.dashboard') }}</flux:navlist.item>
         </flux:navlist.group>
 
         @canany(['view users', 'view roles', 'view permissions'])
-            <flux:navlist.group heading="Users" class="grid">
+            <flux:navlist.group heading="{{ __('sidebar.users') }}" class="grid">
                 @can('view users')
                     <flux:navlist.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')">
                         {{ __('users.title') }}
@@ -37,48 +37,48 @@
         @endcanany
 
         {{-- Master Data Section --}}
-        <flux:navlist.group expandable heading="Master Data" icon="database" :expanded="request()->routeIs(['admin.vehicles.*', 'admin.rooms.*', 'admin.dining-venues.*', 'admin.categories.*'])" class="grid">
+        <flux:navlist.group expandable heading="{{ __('sidebar.master_data') }}" icon="database" :expanded="request()->routeIs(['admin.vehicles.*', 'admin.rooms.*', 'admin.dining-venues.*', 'admin.categories.*'])" class="grid">
             <flux:navlist.item icon="truck" :href="route('admin.vehicles.index')" :current="request()->routeIs('admin.vehicles.*')">
-                Kendaraan
+                {{ __('sidebar.vehicles') }}
             </flux:navlist.item>
             <flux:navlist.item icon="building-office" :href="route('admin.rooms.index')" :current="request()->routeIs('admin.rooms.*')">
-                Ruang Rapat
+                {{ __('sidebar.meeting_rooms') }}
             </flux:navlist.item>
             <flux:navlist.item icon="building-storefront" :href="route('admin.dining-venues.index')" :current="request()->routeIs('admin.dining-venues.*')">
-                Venue Makan
+                {{ __('sidebar.dining_venues') }}
             </flux:navlist.item>
             <flux:navlist.item icon="book-open" :href="route('admin.categories.index')" :current="request()->routeIs('admin.categories.*')">
-                Kategori Buku
+                {{ __('sidebar.book_categories') }}
             </flux:navlist.item>
         </flux:navlist.group>
 
         {{-- Digital Library Section --}}
-        <flux:navlist.group expandable heading="Digital Library" icon="lightbulb" :expanded="request()->routeIs('admin.books.*')" class="grid">
+        <flux:navlist.group expandable heading="{{ __('sidebar.digital_library') }}" icon="lightbulb" :expanded="request()->routeIs('admin.books.*')" class="grid">
             <flux:navlist.item icon="book-open" :href="route('admin.books.index')" :current="request()->routeIs('admin.books.*')">
-                Kelola Buku
+                {{ __('sidebar.manage_books') }}
             </flux:navlist.item>
         </flux:navlist.group>
 
         {{-- Vehicle Management Section --}}
-        <flux:navlist.group expandable heading="Laporan Kendaraan" icon="document-chart-bar" :expanded="request()->routeIs(['admin.loans.*', 'admin.inspections.*', 'admin.expenses.*'])" class="grid">
+        <flux:navlist.group expandable heading="{{ __('sidebar.vehicle_reports') }}" icon="document-chart-bar" :expanded="request()->routeIs(['admin.loans.*', 'admin.inspections.*', 'admin.expenses.*'])" class="grid">
             <flux:navlist.item icon="truck" :href="route('admin.loans.index')" :current="request()->routeIs('admin.loans.*')">
-                Peminjaman
+                {{ __('sidebar.loans') }}
             </flux:navlist.item>
             <flux:navlist.item icon="clipboard-document-check" :href="route('admin.inspections.index')" :current="request()->routeIs('admin.inspections.*')">
-                Kesiapan Kendaraan
+                {{ __('sidebar.vehicle_readiness') }}
             </flux:navlist.item>
             <flux:navlist.item icon="currency-dollar" :href="route('admin.expenses.index')" :current="request()->routeIs('admin.expenses.*')">
-                Rupa-rupa
+                {{ __('sidebar.expenses') }}
             </flux:navlist.item>
         </flux:navlist.group>
 
         {{-- Meeting & Banquet Management Section --}}
-        <flux:navlist.group expandable heading="Meeting & Banquet" icon="calendar" :expanded="request()->routeIs(['admin.meetings.*', 'admin.banquets.*'])" class="grid">
+        <flux:navlist.group expandable heading="{{ __('sidebar.meeting_banquet') }}" icon="calendar" :expanded="request()->routeIs(['admin.meetings.*', 'admin.banquets.*'])" class="grid">
             <flux:navlist.item icon="calendar" :href="route('admin.meetings.index')" :current="request()->routeIs('admin.meetings.*')">
-                Meeting
+                {{ __('sidebar.meeting') }}
             </flux:navlist.item>
             <flux:navlist.item icon="cake" :href="route('admin.banquets.index')" :current="request()->routeIs('admin.banquets.*')">
-                Banquet
+                {{ __('sidebar.banquet') }}
             </flux:navlist.item>
         </flux:navlist.group>
     </flux:navlist>

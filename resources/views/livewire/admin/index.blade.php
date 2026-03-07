@@ -12,13 +12,13 @@
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
                     </span>
-                    System Status: Online
+                    {{ __('dashboard.system_status') }}: {{ __('dashboard.online') }}
                 </div>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tighter text-white mb-4">
-                    {{ __('global.admin_dashboard') }}
+                    {{ __('dashboard.title') }}
                 </h1>
                 <p class="text-zinc-400 text-lg font-light max-w-xl">
-                    {{ __('global.system_management') }}. Kelola pengguna, hak akses, dan konfigurasi sistem utama dari sini.
+                    {{ __('dashboard.subtitle') }}
                 </p>
             </div>
             
@@ -27,8 +27,8 @@
                     <flux:icon.lock-closed class="w-6 h-6 text-teal-400" />
                 </div>
                 <div>
-                    <p class="text-[10px] uppercase font-black text-zinc-500 tracking-tighter">Current Session Scale</p>
-                    <p class="text-white font-bold text-lg">Secure & Encrypted</p>
+                    <p class="text-[10px] uppercase font-black text-zinc-500 tracking-tighter">{{ __('dashboard.session_scale') }}</p>
+                    <p class="text-white font-bold text-lg">{{ __('dashboard.secure_encrypted') }}</p>
                 </div>
             </div>
         </div>
@@ -46,9 +46,9 @@
                     <flux:icon.users class="w-6 h-6" />
                 </div>
                 <h3 class="text-zinc-500 text-sm font-bold uppercase tracking-widest mb-1">{{ __('users.title') }}</h3>
-                <p class="text-3xl font-black text-zinc-900 dark:text-white mb-6">Konfigurasi Pengguna</p>
+                <p class="text-3xl font-black text-zinc-900 dark:text-white mb-6">{{ __('dashboard.user_config') }}</p>
                 <flux:button href="{{ route('admin.users.index') }}" variant="ghost" icon-trailing="chevron-right" size="sm" class="text-teal-600 dark:text-teal-400 -ml-3">
-                    Buka Manajemen
+                    {{ __('dashboard.open_management') }}
                 </flux:button>
             </div>
         </div>
@@ -63,9 +63,9 @@
                     <flux:icon.shield-check class="w-6 h-6" />
                 </div>
                 <h3 class="text-zinc-500 text-sm font-bold uppercase tracking-widest mb-1">{{ __('roles.title') }}</h3>
-                <p class="text-3xl font-black text-zinc-900 dark:text-white mb-6">Hak Akses & Role</p>
+                <p class="text-3xl font-black text-zinc-900 dark:text-white mb-6">{{ __('dashboard.roles_permissions') }}</p>
                 <flux:button href="{{ route('admin.roles.index') }}" variant="ghost" icon-trailing="chevron-right" size="sm" class="text-blue-600 dark:text-blue-400 -ml-3">
-                    Atur Kebijakan
+                    {{ __('dashboard.adjust_policy') }}
                 </flux:button>
             </div>
         </div>
@@ -79,10 +79,10 @@
                 <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-6">
                     <flux:icon.circle-stack class="w-6 h-6" />
                 </div>
-                <h3 class="text-zinc-500 text-sm font-bold uppercase tracking-widest mb-1">Infrastruktur</h3>
-                <p class="text-3xl font-black text-zinc-900 dark:text-white mb-6">Log & Monitoring</p>
+                <h3 class="text-zinc-500 text-sm font-bold uppercase tracking-widest mb-1">{{ __('dashboard.infrastructure') }}</h3>
+                <p class="text-3xl font-black text-zinc-900 dark:text-white mb-6">{{ __('dashboard.logs_monitoring') }}</p>
                 <flux:button variant="ghost" icon-trailing="chevron-right" size="sm" class="text-purple-600 dark:text-purple-400 -ml-3">
-                    Lihat Status
+                    {{ __('dashboard.view_status') }}
                 </flux:button>
             </div>
         </div>
@@ -92,10 +92,10 @@
     <div class="bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 p-8 shadow-sm">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-2xl font-black text-zinc-900 dark:text-white">Aktivitas Sistem Terbaru</h2>
-                <p class="text-zinc-500 text-sm mt-1">Log autentikasi dan perubahan data dalam 24 jam terakhir.</p>
+                <h2 class="text-2xl font-black text-zinc-900 dark:text-white">{{ __('dashboard.recent_activity') }}</h2>
+                <p class="text-zinc-500 text-sm mt-1">{{ __('dashboard.activity_subtitle') }}</p>
             </div>
-            <flux:button variant="outline" size="sm" icon="arrow-path">Refresh</flux:button>
+            <flux:button variant="outline" size="sm" icon="arrow-path">{{ __('dashboard.refresh') }}</flux:button>
         </div>
 
         <div class="space-y-4">
@@ -104,11 +104,11 @@
                     <flux:icon.check-circle class="w-5 h-5" />
                 </div>
                 <div class="flex-1">
-                    <p class="text-sm font-bold text-zinc-900 dark:text-zinc-200">Database connection successful</p>
+                    <p class="text-sm font-bold text-zinc-900 dark:text-zinc-200">{{ __('dashboard.db_connection_success') }}</p>
                     <p class="text-xs text-zinc-500">10 seconds ago • System Node A</p>
                 </div>
                 <div class="text-right">
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase">Success</span>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase">{{ __('dashboard.success') }}</span>
                 </div>
             </div>
 
@@ -117,11 +117,11 @@
                     <flux:icon.user-plus class="w-5 h-5" />
                 </div>
                 <div class="flex-1">
-                    <p class="text-sm font-bold text-zinc-900 dark:text-zinc-200">New moderator registered</p>
+                    <p class="text-sm font-bold text-zinc-900 dark:text-zinc-200">{{ __('dashboard.new_moderator') }}</p>
                     <p class="text-xs text-zinc-500">2 hours ago • Authentication Module</p>
                 </div>
                 <div class="text-right">
-                    <span class="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase">Auth</span>
+                    <span class="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold uppercase">{{ __('dashboard.auth') }}</span>
                 </div>
             </div>
         </div>

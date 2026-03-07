@@ -2,14 +2,14 @@
     {{-- Header --}}
     <div class="mb-6">
         <flux:button href="{{ route('admin.vehicles.index') }}" variant="ghost" icon="arrow-left" class="mb-4">
-            Kembali
+            {{ __('vehicles.back_button') }}
         </flux:button>
         
         <h1 class="text-3xl font-bold tracking-tighter text-gray-950 dark:text-white mb-2">
-            Tambah Kendaraan Baru
+            {{ __('vehicles.add_new_title') }}
         </h1>
         <p class="text-base text-zinc-600 dark:text-zinc-400">
-            Tambahkan kendaraan operasional baru
+            {{ __('vehicles.add_new_subtitle') }}
         </p>
     </div>
 
@@ -21,35 +21,35 @@
                 {{-- License Plate --}}
                 <flux:input 
                     wire:model="license_plate" 
-                    label="Plat Nomor" 
-                    placeholder="Contoh: B 1234 XYZ"
+                    label="{{ __('vehicles.license_plate') }}" 
+                    placeholder="{{ __('vehicles.plate_sample') }}"
                 />
 
                 {{-- Current Mileage --}}
                 <flux:input 
                     wire:model="current_mileage" 
                     type="number" 
-                    label="Kilometer Saat Ini" 
-                    placeholder="Masukkan kilometer"
+                    label="{{ __('vehicles.current_mileage') }}" 
+                    placeholder="{{ __('vehicles.mileage_placeholder') }}"
                 />
 
                 {{-- Status --}}
-                <flux:select wire:model="status" label="Status">
-                    <flux:select.option value="available">Tersedia</flux:select.option>
-                    <flux:select.option value="in_use">Sedang Digunakan</flux:select.option>
-                    <flux:select.option value="maintenance">Maintenance</flux:select.option>
+                <flux:select wire:model="status" label="{{ __('vehicles.status') }}">
+                    <flux:select.option value="available">{{ __('vehicles.available') }}</flux:select.option>
+                    <flux:select.option value="in_use">{{ __('vehicles.in_use') }}</flux:select.option>
+                    <flux:select.option value="maintenance">{{ __('vehicles.maintenance') }}</flux:select.option>
                 </flux:select>
 
                 {{-- Last Service Date --}}
                 <flux:input 
                     wire:model="last_service_date" 
                     type="date" 
-                    label="Tanggal Service Terakhir (Opsional)"
+                    label="{{ __('vehicles.service_date_label') }}"
                 />
 
                 {{-- Image Upload --}}
                 <div x-data="{ photoPreview: null }">
-                    <flux:label>Foto Kendaraan (Opsional)</flux:label>
+                    <flux:label>{{ __('vehicles.photo_label') }}</flux:label>
                     <input 
                         type="file" 
                         wire:model="image" 
@@ -73,7 +73,7 @@
                     
                     <div wire:loading wire:target="image" class="mt-2 flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
                         <flux:icon.loader-circle class="animate-spin w-4 h-4"/>
-                        <span>Mengupload ke server...</span>
+                        <span>{{ __('vehicles.uploading') }}</span>
                     </div>
 
                     @error('image')
@@ -83,7 +83,7 @@
                     {{-- Instant Alpine Preview --}}
                     <template x-if="photoPreview">
                         <div class="mt-4">
-                            <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">Preview Foto:</p>
+                            <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">{{ __('vehicles.photo_preview') }}</p>
                             <img :src="photoPreview" class="rounded-xl max-w-xs shadow-lg border border-zinc-200 dark:border-zinc-700" alt="Preview">
                         </div>
                     </template>
@@ -96,7 +96,7 @@
                         variant="ghost"
                         class="flex-1"
                     >
-                        Batal
+                        {{ __('global.cancel') }}
                     </flux:button>
                     <flux:button 
                         type="submit" 
@@ -105,8 +105,8 @@
                         class="flex-1"
                         wire:loading.attr="disabled"
                     >
-                        <span wire:loading.remove>Simpan</span>
-                        <span wire:loading>Menyimpan...</span>
+                        <span wire:loading.remove>{{ __('vehicles.save_button') }}</span>
+                        <span wire:loading>{{ __('vehicles.saving_button') }}</span>
                     </flux:button>
                 </div>
             </x-form>

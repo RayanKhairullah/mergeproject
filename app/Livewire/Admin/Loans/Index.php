@@ -52,7 +52,7 @@ class Index extends Component
 
         $loan->delete();
 
-        session()->flash('success', 'Laporan peminjaman berhasil dihapus');
+        session()->flash('success', __('loans.success_deleted'));
     }
 
     public function downloadExcel(): \Symfony\Component\HttpFoundation\BinaryFileResponse
@@ -65,7 +65,7 @@ class Index extends Component
                 'laporan-peminjaman-'.now()->format('Y-m-d').'.xlsx'
             );
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengunduh file: '.$e->getMessage());
+            session()->flash('error', __('loans.error_download', ['message' => $e->getMessage()]));
 
             return redirect()->back();
         }
@@ -85,7 +85,7 @@ class Index extends Component
                 echo $pdf->output();
             }, 'laporan-peminjaman-'.now()->format('Y-m-d').'.pdf');
         } catch (\Exception $e) {
-            session()->flash('error', 'Gagal mengunduh PDF: '.$e->getMessage());
+            session()->flash('error', __('loans.error_download', ['message' => $e->getMessage()]));
 
             return redirect()->back();
         }
@@ -148,6 +148,7 @@ class Index extends Component
         $vehicles = Vehicle::orderBy('license_plate')->get();
 
         return view('livewire.admin.loans.index', [
+            'title' => __('sidebar.loans'),
             'loans' => $loans,
             'vehicles' => $vehicles,
         ]);

@@ -3,10 +3,10 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white">
-                Rupa-rupa (Biaya)
+                {{ __('expenses.title') }}
             </h1>
             <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-1">
-                Laporan kegiatan/biaya kendaraan operasional
+                {{ __('expenses.subtitle') }}
             </p>
         </div>
     </div>
@@ -15,23 +15,23 @@
         <div class="sm:col-span-2 lg:col-span-2">
             <flux:input 
                 wire:model.live.debounce.300ms="search" 
-                placeholder="Cari kendaraan..." 
+                placeholder="{{ __('expenses.search_placeholder') }}" 
                 icon="magnifying-glass"
             />
         </div>
-        <flux:select wire:model.live="vehicleFilter" placeholder="Semua Kendaraan">
-            <flux:select.option value="">Semua Kendaraan</flux:select.option>
+        <flux:select wire:model.live="vehicleFilter" placeholder="{{ __('expenses.all_vehicles') }}">
+            <flux:select.option value="">{{ __('expenses.all_vehicles') }}</flux:select.option>
             @foreach($vehicles as $vehicle)
                 <flux:select.option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }}</flux:select.option>
             @endforeach
         </flux:select>
-        <flux:select wire:model.live="typeFilter" placeholder="Semua Tipe">
-            <flux:select.option value="">Semua Tipe</flux:select.option>
-            <flux:select.option value="BBM">BBM</flux:select.option>
-            <flux:select.option value="E-Money">E-Money</flux:select.option>
-            <flux:select.option value="Parkir">Parkir</flux:select.option>
-            <flux:select.option value="Cuci Mobil">Cuci Mobil</flux:select.option>
-            <flux:select.option value="Lainnya">Lainnya</flux:select.option>
+        <flux:select wire:model.live="typeFilter" placeholder="{{ __('expenses.all_statuses') ?? __('expenses.all_types') }}">
+            <flux:select.option value="">{{ __('expenses.all_types') }}</flux:select.option>
+            <flux:select.option value="BBM">{{ __('expenses.type_bbm') }}</flux:select.option>
+            <flux:select.option value="E-Money">{{ __('expenses.type_emoney') }}</flux:select.option>
+            <flux:select.option value="Parkir">{{ __('expenses.type_parkir') }}</flux:select.option>
+            <flux:select.option value="Cuci Mobil">{{ __('expenses.type_cuci') }}</flux:select.option>
+            <flux:select.option value="Lainnya">{{ __('expenses.type_lainnya') }}</flux:select.option>
         </flux:select>
         <flux:input 
             wire:model.live="dateFilter" 
@@ -49,7 +49,7 @@
             </flux:button>
         </div>
         <flux:button href="{{ route('vehicles.expense') }}" variant="primary" icon="plus" class="w-full sm:w-auto">
-            Input Laporan Baru
+            {{ __('expenses.input_new') }}
         </flux:button>
     </div>
     <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
@@ -58,15 +58,15 @@
                 <thead class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
                         <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Kendaraan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Tipe</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Nominal</th>
-                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Sumber</th>
-                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Catatan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Foto</th>
-                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Pelapor</th>
-                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Dibuat</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-right">Aksi</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.vehicle') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.type') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.nominal') }}</th>
+                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.source') }}</th>
+                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.notes') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.photo') }}</th>
+                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.reporter') }}</th>
+                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('expenses.created_at') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-right">{{ __('expenses.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
@@ -101,7 +101,7 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3">
-                                @if($expense->documentation_photos && count($expense->documentation_photos) > 0)
+                                @if(is_array($expense->documentation_photos) && count($expense->documentation_photos) > 0)
                                     <div class="flex gap-1">
                                         @foreach(array_slice($expense->documentation_photos, 0, 1) as $photo)
                                             <a href="{{ Storage::url($photo) }}" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
@@ -121,17 +121,17 @@
                                 <div class="flex gap-2 justify-end">
                                     <flux:modal.trigger name="expense-detail-{{ $expense->id }}">
                                         <flux:button size="sm" variant="ghost" icon="eye">
-                                            <span class="hidden md:inline">Detail</span>
+                                            <span class="hidden md:inline">{{ __('expenses.detail') }}</span>
                                         </flux:button>
                                     </flux:modal.trigger>
                                     <flux:button 
                                         wire:click="delete({{ $expense->id }})" 
-                                        wire:confirm="Apakah Anda yakin ingin menghapus laporan ini?"
+                                        wire:confirm="{{ __('expenses.delete_confirm') }}"
                                         size="sm" 
                                         variant="danger" 
                                         icon="trash"
                                     >
-                                        <span class="hidden md:inline">Hapus</span>
+                                        <span class="hidden md:inline">{{ __('global.delete') }}</span>
                                     </flux:button>
                                 </div>
                             </td>
@@ -140,21 +140,21 @@
                         {{-- Modal Detail --}}
                         <flux:modal name="expense-detail-{{ $expense->id }}" class="w-full max-w-2xl space-y-6">
                             <div>
-                                <flux:heading size="lg">Detail Expense #{{ $expense->id }}</flux:heading>
-                                <flux:subheading>Informasi lengkap kegiatan/biaya kendaraan</flux:subheading>
+                                <flux:heading size="lg">{{ __('expenses.detail_title', ['id' => $expense->id]) }}</flux:heading>
+                                <flux:subheading>{{ __('expenses.detail_subtitle') }}</flux:subheading>
                             </div>
 
                             <div class="space-y-4">
                                 {{-- Vehicle Info --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Informasi Kendaraan</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('expenses.vehicle_info') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Plat Nomor:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.license_plate') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $expense->vehicle->license_plate }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Tipe Kegiatan:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.activity_type') }}:</span>
                                             <p class="font-medium">
                                                 <flux:badge 
                                                     :color="$expense->expense_type === 'BBM' ? 'blue' : ($expense->expense_type === 'Parkir' ? 'green' : 'zinc')" 
@@ -169,14 +169,14 @@
 
                                 {{-- Reporter Info --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Informasi Pelapor</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('expenses.reporter_info') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Nama:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.name') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $expense->reporter_name ?? $expense->user->name }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Tanggal Laporan:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.report_date') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $expense->created_at->format('d M Y, H:i') }}</p>
                                         </div>
                                     </div>
@@ -184,29 +184,29 @@
 
                                 {{-- Expense Details --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Detail Biaya</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('expenses.cost_details') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Nominal:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.nominal') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">Rp {{ number_format($expense->nominal, 0, ',', '.') }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Sumber Dana:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.funding_source') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ str_replace('_', ' ', $expense->funding_source) }}</p>
                                         </div>
                                         @if($expense->fuel_type)
                                             <div>
-                                                <span class="text-zinc-600 dark:text-zinc-400">Jenis BBM:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.fuel_type') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $expense->fuel_type }}</p>
                                             </div>
                                             <div>
-                                                <span class="text-zinc-600 dark:text-zinc-400">Jumlah Liter:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.liters') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $expense->fuel_liters }} L</p>
                                             </div>
                                         @endif
                                         @if($expense->notes)
                                             <div class="col-span-2">
-                                                <span class="text-zinc-600 dark:text-zinc-400">Catatan:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('expenses.notes') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $expense->notes }}</p>
                                             </div>
                                         @endif
@@ -214,9 +214,9 @@
                                 </div>
 
                                 {{-- Photos --}}
-                                @if($expense->documentation_photos && count($expense->documentation_photos) > 0)
+                                @if(is_array($expense->documentation_photos) && count($expense->documentation_photos) > 0)
                                     <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                        <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Dokumentasi Foto</h3>
+                                        <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('expenses.documentation_photos') }}</h3>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             @foreach($expense->documentation_photos as $key => $photo)
                                                 <div>
@@ -229,7 +229,7 @@
                                                                  class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105">
                                                         </div>
                                                         <div class="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            Klik untuk zoom
+                                                            {{ __('expenses.click_to_zoom') }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -241,14 +241,14 @@
 
                             <div class="flex gap-2 justify-end">
                                 <flux:modal.close>
-                                    <flux:button variant="ghost">Tutup</flux:button>
+                                    <flux:button variant="ghost">{{ __('expenses.close') }}</flux:button>
                                 </flux:modal.close>
                             </div>
                         </flux:modal>
                     @empty
                         <tr>
                             <td colspan="11" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">
-                                Tidak ada data expense
+                                {{ __('expenses.no_expenses_found') }}
                             </td>
                         </tr>
                     @endforelse

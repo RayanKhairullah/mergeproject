@@ -50,11 +50,30 @@
                 <flux:navbar.item variant="subtle" icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
                     {{ __('global.digital_library') }}
                 </flux:navbar.item>
-                <flux:navbar.item variant="subtle" icon="identification" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
-                    {{ __('global.peminjaman') }}
-                </flux:navbar.item>
-                <flux:navbar.item variant="subtle" icon="key" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
-                    {{ __('global.pengembalian') }}
+
+                {{-- Peminjaman Dropdown (Loan + Return) --}}
+                <flux:dropdown>
+                    <flux:navbar.item
+                        variant="subtle"
+                        icon="truck"
+                        icon-trailing="chevron-down"
+                        :current="request()->routeIs(['vehicles.loan', 'vehicles.return'])"
+                        class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap"
+                    >
+                        {{ __('global.peminjaman') }}
+                    </flux:navbar.item>
+                    <flux:menu>
+                        <flux:menu.item icon="identification" href="{{ route('vehicles.loan') }}">
+                            {{ __('global.peminjaman') }}
+                        </flux:menu.item>
+                        <flux:menu.item icon="key" href="{{ route('vehicles.return') }}">
+                            {{ __('global.pengembalian') }}
+                        </flux:menu.item>
+                    </flux:menu>
+                </flux:dropdown>
+
+                <flux:navbar.item variant="subtle" icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    {{ __('global.kesiapan_mobil') }}
                 </flux:navbar.item>
                 <flux:navbar.item variant="subtle" icon="banknotes" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
                     {{ __('global.rupa_rupa') }}
@@ -186,20 +205,20 @@
             <flux:navlist.item icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')">
                 {{ __('global.monitor_mobil') }}
             </flux:navlist.item>
+            <flux:navlist.item icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')">
+                {{ __('global.kesiapan_mobil') }}
+            </flux:navlist.item>
+            <flux:navlist.item icon="banknotes" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
+                {{ __('global.rupa_rupa') }}
+            </flux:navlist.item>
+        </flux:navlist.group>
+        <flux:navlist.group heading="{{ __('global.peminjaman') }}">
             <flux:navlist.item icon="identification" href="{{ route('vehicles.loan') }}" :current="request()->routeIs('vehicles.loan')">
                 {{ __('global.peminjaman') }}
             </flux:navlist.item>
             <flux:navlist.item icon="key" href="{{ route('vehicles.return') }}" :current="request()->routeIs('vehicles.return')">
                 {{ __('global.pengembalian') }}
             </flux:navlist.item>
-            <flux:navlist.item icon="banknotes" href="{{ route('vehicles.expense') }}" :current="request()->routeIs('vehicles.expense')">
-                {{ __('global.rupa_rupa') }}
-            </flux:navlist.item>
-            @can('access dashboard')
-                <flux:navlist.item icon="clipboard-document-check" href="{{ route('vehicles.inspection') }}" :current="request()->routeIs('vehicles.inspection')">
-                    {{ __('global.kesiapan_mobil') }}
-                </flux:navlist.item>
-            @endcan
         </flux:navlist.group>
         <flux:navlist.group heading="{{ __('meetings.title') }}">
             <flux:navlist.item icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')">

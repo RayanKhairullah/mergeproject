@@ -44,7 +44,7 @@ class EditBanquet extends Component
     {
         // Check if user can update
         if (! auth()->user()->can('update banquets')) {
-            session()->flash('error', 'Anda tidak memiliki izin untuk mengubah banquet!');
+            session()->flash('error', __('banquets.error_no_permission_update'));
             $this->redirect(route('admin.banquets.index'), navigate: true);
 
             return;
@@ -52,7 +52,7 @@ class EditBanquet extends Component
 
         // Regular users cannot edit approved banquets
         if (! auth()->user()->can('approve banquets') && $this->banquet->status !== \App\Enums\BanquetStatus::DRAFT && $this->banquet->status !== \App\Enums\BanquetStatus::PENDING_APPROVAL) {
-            session()->flash('error', 'Anda tidak dapat mengubah banquet yang sudah disetujui!');
+            session()->flash('error', __('banquets.error_cannot_update_approved'));
             $this->redirect(route('admin.banquets.index'), navigate: true);
 
             return;
@@ -82,7 +82,7 @@ class EditBanquet extends Component
             'cost' => $this->cost,
         ]);
 
-        session()->flash('success', 'Banquet berhasil diperbarui!');
+        session()->flash('success', __('banquets.success_updated'));
         $this->redirect(route('admin.banquets.index'), navigate: true);
     }
 

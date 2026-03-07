@@ -1,8 +1,8 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <flux:heading size="xl">Manage Books</flux:heading>
+        <flux:heading size="xl">{{ __('books.title') }}</flux:heading>
         <flux:button href="{{ route('admin.books.create') }}" variant="primary" icon="plus">
-            Add New Book
+            {{ __('books.add_new') }}
         </flux:button>
     </div>
 
@@ -11,12 +11,12 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <flux:input 
                 wire:model.live.debounce.300ms="search" 
-                placeholder="Search books..." 
+                placeholder="{{ __('books.search_placeholder') }}" 
                 icon="magnifying-glass"
             />
             
-            <flux:select wire:model.live="selectedCategory" placeholder="All Categories">
-                <flux:select.option value="">All Categories</flux:select.option>
+            <flux:select wire:model.live="selectedCategory" placeholder="{{ __('books.all_categories') }}">
+                <flux:select.option value="">{{ __('books.all_categories') }}</flux:select.option>
                 @foreach($categories as $category)
                     <flux:select.option value="{{ $category->id }}">
                         {{ $category->name }}
@@ -24,10 +24,10 @@
                 @endforeach
             </flux:select>
 
-            <flux:select wire:model.live="sortBy">
-                <flux:select.option value="recent">Recently Added</flux:select.option>
-                <flux:select.option value="popular">Most Popular</flux:select.option>
-                <flux:select.option value="title">Title A-Z</flux:select.option>
+            <flux:select wire:model.live="sortBy" placeholder="{{ __('books.sort_by') }}">
+                <flux:select.option value="recent">{{ __('books.recently_added') }}</flux:select.option>
+                <flux:select.option value="popular">{{ __('books.most_popular') }}</flux:select.option>
+                <flux:select.option value="title">{{ __('books.title_az') }}</flux:select.option>
             </flux:select>
         </div>
     </div>
@@ -45,12 +45,12 @@
             <table class="w-full">
                 <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Book</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Downloads</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rating</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Added</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('books.book_title') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('books.category') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('books.downloads') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('books.rating') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('global.added_at') }}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('books.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -72,7 +72,7 @@
                                             {{ $book->title }}
                                         </div>
                                         <div class="text-sm text-gray-500 dark:text-gray-400">
-                                            by {{ $book->author }}
+                                            {{ __('global.by') }} {{ $book->author }}
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@
                                 @if($book->category)
                                     <flux:badge variant="outline">{{ $book->category->name }}</flux:badge>
                                 @else
-                                    <span class="text-gray-400">No category</span>
+                                    <span class="text-gray-400">{{ __('books.no_category') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
@@ -95,7 +95,7 @@
                                         <span class="text-gray-400 ml-1">({{ $book->reviews->count() }})</span>
                                     </div>
                                 @else
-                                    <span class="text-gray-400">No reviews</span>
+                                    <span class="text-gray-400">{{ __('books.no_reviews') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -108,28 +108,28 @@
                                     variant="ghost"
                                     target="_blank"
                                 >
-                                    View
+                                    {{ __('global.view') }}
                                 </flux:button>
                                 <flux:button 
                                     href="{{ route('admin.books.edit', $book) }}" 
                                     size="sm"
                                 >
-                                    Edit
+                                    {{ __('global.edit') }}
                                 </flux:button>
                                 <flux:button 
                                     size="sm" 
                                     variant="danger" 
                                     wire:click="deleteBook({{ $book->id }})"
-                                    wire:confirm="Are you sure you want to delete this book? This action cannot be undone."
+                                    wire:confirm="{{ __('books.delete_confirm') }}"
                                 >
-                                    Delete
+                                    {{ __('global.delete') }}
                                 </flux:button>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                                No books found
+                                {{ __('books.no_books_found') }}
                             </td>
                         </tr>
                     @endforelse

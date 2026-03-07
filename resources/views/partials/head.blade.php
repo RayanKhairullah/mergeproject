@@ -1,13 +1,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>
-    @if(!empty($title))
-        {{ $title }} | {{ config('app.name') }}
-    @else
-        {{ config('app.name') }}
-    @endif
-</title>
+<title>{{ config('app.name', 'Pelindo Internship') }}{{ isset($title) ? ' | '.$title : '' }}</title>
+<link rel="icon" type="image/svg+xml" href="{{ asset('images/icon_web.svg') }}">
 
 @stack('meta')
 

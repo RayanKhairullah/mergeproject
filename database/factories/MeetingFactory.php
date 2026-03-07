@@ -39,4 +39,14 @@ class MeetingFactory extends Factory
             'approved_at' => now(),
         ]);
     }
+
+    public function today(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'started_at' => now()->startOfHour(),
+            'ended_at' => now()->startOfHour()->addHour(),
+            'duration' => 60,
+            'status' => MeetingStatus::PUBLISHED,
+        ]);
+    }
 }

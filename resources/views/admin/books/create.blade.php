@@ -1,9 +1,9 @@
 <x-layouts.admin>
     <div class="space-y-6">
         <div class="flex items-center justify-between">
-            <flux:heading size="xl">Add New Book</flux:heading>
+            <flux:heading size="xl">{{ __('books.add_new') }}</flux:heading>
             <flux:button href="{{ route('admin.books.index') }}" variant="ghost" icon="arrow-left">
-                Back to Books
+                {{ __('books.back_to_books') }}
             </flux:button>
         </div>
 
@@ -14,7 +14,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Title -->
                     <div>
-                        <flux:label for="title">Title *</flux:label>
+                        <flux:label for="title">{{ __('books.book_title') }} *</flux:label>
                         <flux:input 
                             id="title" 
                             name="title" 
@@ -27,7 +27,7 @@
 
                     <!-- Author -->
                     <div>
-                        <flux:label for="author">Author *</flux:label>
+                        <flux:label for="author">{{ __('books.author') }} *</flux:label>
                         <flux:input 
                             id="author" 
                             name="author" 
@@ -41,7 +41,7 @@
 
                 <!-- Description -->
                 <div>
-                    <flux:label for="description">Description</flux:label>
+                    <flux:label for="description">{{ __('books.description') }}</flux:label>
                     <flux:textarea 
                         id="description" 
                         name="description" 
@@ -53,9 +53,9 @@
 
                 <!-- Category -->
                 <div>
-                    <flux:label for="category_id">Category</flux:label>
+                    <flux:label for="category_id">{{ __('books.category') }}</flux:label>
                     <flux:select id="category_id" name="category_id" class="mt-1" value="{{ old('category_id') }}">
-                        <flux:select.option value="">Select a category</flux:select.option>
+                        <flux:select.option value="">{{ __('books.select_category') }}</flux:select.option>
                         @foreach($categories as $category)
                             <flux:select.option value="{{ $category->id }}">
                                 {{ $category->name }}
@@ -68,7 +68,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Cover Image -->
                     <div x-data="{ photoPreview: null }">
-                        <flux:label for="cover_image">Cover Image</flux:label>
+                        <flux:label for="cover_image">{{ __('books.cover_image') }}</flux:label>
                         <input 
                             type="file" 
                             id="cover_image" 
@@ -86,17 +86,17 @@
                         />
                         <template x-if="photoPreview">
                             <div class="mt-3">
-                                <p class="text-sm text-gray-500 mb-2">Preview Image:</p>
+                                <p class="text-sm text-gray-500 mb-2">{{ __('books.preview_image') }}:</p>
                                 <img :src="photoPreview" class="w-32 h-40 object-cover rounded-lg border shadow-sm">
                             </div>
                         </template>
-                        <p class="mt-1 text-sm text-gray-500">JPEG, PNG, or WebP. Max 2MB.</p>
+                        <p class="mt-1 text-sm text-gray-500">{{ __('books.image_requirements') }}</p>
                         <flux:error name="cover_image" />
                     </div>
 
                     <!-- Book File -->
                     <div>
-                        <flux:label for="book_file">Book File (PDF)</flux:label>
+                        <flux:label for="book_file">{{ __('books.book_file') }}</flux:label>
                         <input 
                             type="file" 
                             id="book_file" 
@@ -104,7 +104,7 @@
                             accept="application/pdf"
                             class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-mint-50 file:text-mint-700 hover:file:bg-mint-100"
                         />
-                        <p class="mt-1 text-sm text-gray-500">PDF only. Max 10MB.</p>
+                        <p class="mt-1 text-sm text-gray-500">{{ __('books.file_requirements') }}</p>
                         <flux:error name="book_file" />
                     </div>
                 </div>
@@ -112,10 +112,10 @@
                 <!-- Actions -->
                 <div class="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <flux:button href="{{ route('admin.books.index') }}" variant="ghost">
-                        Cancel
+                        {{ __('global.cancel') }}
                     </flux:button>
                     <flux:button type="submit" variant="primary">
-                        Create Book
+                        {{ __('books.add_new') }}
                     </flux:button>
                 </div>
             </form>

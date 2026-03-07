@@ -3,10 +3,10 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
             <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-zinc-950 dark:text-white">
-                Laporan Peminjaman
+                {{ __('loans.title') }}
             </h1>
             <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 mt-1">
-                Data dan riwayat peminjaman kendaraan operasional
+                {{ __('loans.subtitle') }}
             </p>
         </div>
     </div>
@@ -15,20 +15,20 @@
         <div class="sm:col-span-2 lg:col-span-2">
             <flux:input 
                 wire:model.live.debounce.300ms="search" 
-                placeholder="Cari kendaraan atau peminjam..." 
+                placeholder="{{ __('loans.search_placeholder') }}" 
                 icon="magnifying-glass"
             />
         </div>
-        <flux:select wire:model.live="vehicleFilter" placeholder="Semua Kendaraan">
-            <flux:select.option value="">Semua Kendaraan</flux:select.option>
+        <flux:select wire:model.live="vehicleFilter" placeholder="{{ __('loans.all_vehicles') }}">
+            <flux:select.option value="">{{ __('loans.all_vehicles') }}</flux:select.option>
             @foreach($vehicles as $vehicle)
                 <flux:select.option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }}</flux:select.option>
             @endforeach
         </flux:select>
-        <flux:select wire:model.live="statusFilter" placeholder="Semua Status">
-            <flux:select.option value="">Semua Status</flux:select.option>
-            <flux:select.option value="active">Sedang Dipinjam</flux:select.option>
-            <flux:select.option value="returned">Sudah Dikembalikan</flux:select.option>
+        <flux:select wire:model.live="statusFilter" placeholder="{{ __('loans.all_statuses') }}">
+            <flux:select.option value="">{{ __('loans.all_statuses') }}</flux:select.option>
+            <flux:select.option value="active">{{ __('loans.active') }}</flux:select.option>
+            <flux:select.option value="returned">{{ __('loans.returned') }}</flux:select.option>
         </flux:select>
         <flux:input 
             wire:model.live="dateFilter" 
@@ -46,7 +46,7 @@
             </flux:button>
         </div>
         <flux:button href="{{ route('vehicles.loan') }}" variant="primary" icon="plus" class="w-full sm:w-auto">
-            Input Laporan Baru
+            {{ __('loans.input_new') }}
         </flux:button>
     </div>
     <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
@@ -55,15 +55,15 @@
                 <thead class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
                         <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">Kendaraan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">Waktu</th>
-                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">KM</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">Status</th>
-                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Catatan</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Foto</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Peminjam</th>
-                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Dibuat</th>
-                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">Aksi</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">{{ __('loans.vehicle') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">{{ __('loans.time') }}</th>
+                        <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">{{ __('loans.mileage') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider text-nowrap">{{ __('loans.status') }}</th>
+                        <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('loans.purpose') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('loans.photo') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('loans.borrower') }}</th>
+                        <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('loans.created_at') }}</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">{{ __('loans.actions') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
@@ -79,21 +79,21 @@
                                 <div>{{ $loan->loan_date->format('d/m/Y H:i') }}</div>
                                 @if($loan->return_date)
                                     <div class="text-xs text-green-600 dark:text-green-400">
-                                        Kembali: {{ $loan->return_date->format('d/m/Y H:i') }}
+                                        {{ __('loans.returned_date_label') }}: {{ $loan->return_date->format('d/m/Y H:i') }}
                                     </div>
                                 @endif
                             </td>
                             <td class="hidden md:table-cell px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
-                                <div><span class="text-[10px] font-bold text-zinc-400 uppercase">Awal:</span> {{ number_format($loan->start_mileage) }}</div>
+                                <div><span class="text-[10px] font-bold text-zinc-400 uppercase">{{ __('loans.start_label') }}:</span> {{ number_format($loan->start_mileage) }}</div>
                                 @if($loan->end_mileage)
-                                    <div><span class="text-[10px] font-bold text-zinc-400 uppercase">Akhir:</span> {{ number_format($loan->end_mileage) }}</div>
+                                    <div><span class="text-[10px] font-bold text-zinc-400 uppercase">{{ __('loans.end_label') }}:</span> {{ number_format($loan->end_mileage) }}</div>
                                 @endif
                             </td>
                             <td class="px-4 py-3">
                                 @if($loan->return_date)
-                                    <flux:badge color="green" size="sm">Dikembalikan</flux:badge>
+                                    <flux:badge color="green" size="sm">{{ __('loans.returned_label') }}</flux:badge>
                                 @else
-                                    <flux:badge color="yellow" size="sm">Dipinjam</flux:badge>
+                                    <flux:badge color="yellow" size="sm">{{ __('loans.on_loan') }}</flux:badge>
                                 @endif
                             </td>
                             <td class="hidden lg:table-cell px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">
@@ -118,17 +118,17 @@
                                 <div class="flex gap-2 justify-end">
                                     <flux:modal.trigger name="loan-detail-{{ $loan->id }}">
                                         <flux:button size="sm" variant="ghost" icon="eye">
-                                            <span class="hidden md:inline">Detail</span>
+                                            <span class="hidden md:inline">{{ __('loans.detail') }}</span>
                                         </flux:button>
                                     </flux:modal.trigger>
                                     <flux:button 
                                         wire:click="delete({{ $loan->id }})" 
-                                        wire:confirm="Apakah Anda yakin ingin menghapus loan ini?"
+                                        wire:confirm="{{ __('loans.delete_confirm') }}"
                                         size="sm" 
                                         variant="danger" 
                                         icon="trash"
                                     >
-                                        <span class="hidden md:inline">Hapus</span>
+                                        <span class="hidden md:inline">{{ __('global.delete') }}</span>
                                     </flux:button>
                                 </div>
                             </td>
@@ -137,26 +137,26 @@
                         {{-- Modal Detail --}}
                         <flux:modal name="loan-detail-{{ $loan->id }}" class="w-full max-w-2xl space-y-6">
                             <div>
-                                <flux:heading size="lg">Detail Peminjaman #{{ $loan->id }}</flux:heading>
-                                <flux:subheading>Informasi lengkap peminjaman kendaraan</flux:subheading>
+                                <flux:heading size="lg">{{ __('loans.detail_title', ['id' => $loan->id]) }}</flux:heading>
+                                <flux:subheading>{{ __('loans.detail_subtitle') }}</flux:subheading>
                             </div>
 
                             <div class="space-y-4">
                                 {{-- Vehicle Info --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Informasi Kendaraan</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('loans.vehicle_info') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Plat Nomor:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.license_plate') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->vehicle->license_plate }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Status:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.status') }}:</span>
                                             <p class="font-medium">
                                                 @if($loan->return_date)
-                                                    <flux:badge color="green" size="sm">Dikembalikan</flux:badge>
+                                                    <flux:badge color="green" size="sm">{{ __('loans.returned_label') }}</flux:badge>
                                                 @else
-                                                    <flux:badge color="yellow" size="sm">Dipinjam</flux:badge>
+                                                    <flux:badge color="yellow" size="sm">{{ __('loans.on_loan') }}</flux:badge>
                                                 @endif
                                             </p>
                                         </div>
@@ -165,14 +165,14 @@
 
                                 {{-- Borrower Info --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Informasi Peminjam</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('loans.borrower_info') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Nama:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.name') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->user->name }}</p>
                                         </div>
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Email:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.email') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->user->email }}</p>
                                         </div>
                                     </div>
@@ -180,39 +180,39 @@
 
                                 {{-- Loan Details --}}
                                 <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Detail Peminjaman</h3>
+                                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('loans.loan_details') }}</h3>
                                     <div class="grid grid-cols-2 gap-3 text-sm">
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">Tanggal Pinjam:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.loan_date') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->loan_date->format('d M Y, H:i') }}</p>
                                         </div>
                                         @if($loan->return_date)
                                             <div>
-                                                <span class="text-zinc-600 dark:text-zinc-400">Tanggal Kembali:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.return_date') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->return_date->format('d M Y, H:i') }}</p>
                                             </div>
                                         @endif
                                         <div>
-                                            <span class="text-zinc-600 dark:text-zinc-400">KM Awal:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.start_mileage') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ number_format($loan->start_mileage) }} km</p>
                                         </div>
                                         @if($loan->end_mileage)
                                             <div>
-                                                <span class="text-zinc-600 dark:text-zinc-400">KM Akhir:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.end_mileage') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ number_format($loan->end_mileage) }} km</p>
                                             </div>
                                             <div class="col-span-2">
-                                                <span class="text-zinc-600 dark:text-zinc-400">Total Jarak:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.total_distance') }}:</span>
                                                 <p class="font-medium text-blue-600 dark:text-blue-400">{{ number_format($loan->end_mileage - $loan->start_mileage) }} km</p>
                                             </div>
                                         @endif
                                         <div class="col-span-2">
-                                            <span class="text-zinc-600 dark:text-zinc-400">Tujuan:</span>
+                                            <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.purpose') }}:</span>
                                             <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->purpose }}</p>
                                         </div>
                                         @if($loan->destination)
                                             <div class="col-span-2">
-                                                <span class="text-zinc-600 dark:text-zinc-400">Destinasi:</span>
+                                                <span class="text-zinc-600 dark:text-zinc-400">{{ __('loans.destination') }}:</span>
                                                 <p class="font-medium text-zinc-900 dark:text-white">{{ $loan->destination }}</p>
                                             </div>
                                         @endif
@@ -222,7 +222,7 @@
                                 {{-- Photos --}}
                                 @if($loan->speedometer_photo_url)
                                     <div class="bg-zinc-50 dark:bg-zinc-900 rounded-lg p-4">
-                                        <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">Foto Kilometer</h3>
+                                        <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-3">{{ __('loans.mileage_photo') }}</h3>
                                         <div class="relative group">
                                             <div class="w-full h-64 bg-zinc-100 dark:bg-zinc-800 rounded-lg overflow-hidden cursor-zoom-in" 
                                                  onclick="openImageModal('{{ Storage::url($loan->speedometer_photo_url) }}')">
@@ -231,7 +231,7 @@
                                                      class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105">
                                             </div>
                                             <div class="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                                                Klik untuk zoom
+                                                {{ __('loans.click_to_zoom') }}
                                             </div>
                                         </div>
                                     </div>
@@ -240,14 +240,14 @@
 
                             <div class="flex gap-2 justify-end">
                                 <flux:modal.close>
-                                    <flux:button variant="ghost">Tutup</flux:button>
+                                    <flux:button variant="ghost">{{ __('loans.close') }}</flux:button>
                                 </flux:modal.close>
                             </div>
                         </flux:modal>
                     @empty
                         <tr>
                             <td colspan="10" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">
-                                Tidak ada data peminjaman
+                                {{ __('loans.no_loans_found') }}
                             </td>
                         </tr>
                     @endforelse

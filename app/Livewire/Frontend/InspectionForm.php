@@ -215,6 +215,7 @@ class InspectionForm extends Component
         $vehicles = Vehicle::query()->orderBy('license_plate')->get();
 
         return view('livewire.frontend.inspection-form', [
+            'title' => __('global.kesiapan_mobil'),
             'vehicles' => $vehicles,
         ]);
     }

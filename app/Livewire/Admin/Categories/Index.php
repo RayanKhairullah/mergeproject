@@ -34,6 +34,7 @@ class Index extends Component
         $categories = $query->paginate(15);
 
         return view('livewire.admin.categories.index', [
+            'title' => __('sidebar.book_categories'),
             'categories' => $categories,
         ]);
     }
@@ -60,10 +61,10 @@ class Index extends Component
 
         if ($this->editingCategory) {
             $this->editingCategory->update(['name' => $this->name]);
-            session()->flash('success', 'Category updated successfully!');
+            session()->flash('success', __('categories.success_updated'));
         } else {
             Category::create(['name' => $this->name]);
-            session()->flash('success', 'Category created successfully!');
+            session()->flash('success', __('categories.success_created'));
         }
 
         $this->showCreateForm = false;
@@ -79,7 +80,7 @@ class Index extends Component
         }
 
         $category->delete();
-        session()->flash('success', 'Category deleted successfully!');
+        session()->flash('success', __('categories.success_deleted'));
     }
 
     public function cancelForm(): void
