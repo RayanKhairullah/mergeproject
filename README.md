@@ -98,3 +98,14 @@ return [
     // ...
 ];
 ```
+
+## Run project in Ngrok
+```bash
+npm run build
+```
+```bash
+php artisan serve --host=0.0.0.0 --port=8000
+```
+```bash
+ngrok http 8000
+```

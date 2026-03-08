@@ -55,7 +55,7 @@
         </div>
 
         {{-- STICKY CONTROL BAR --}}
-        <div class="sticky top-20 z-30 mb-8">
+        <div class="sticky top-20 z-10 mb-8">
             <div class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm p-4">
                 <div class="flex flex-col sm:flex-row gap-4">
                     <div class="flex-1">

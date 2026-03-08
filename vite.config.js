@@ -14,6 +14,7 @@ export default defineConfig(({command, mode}) => {
             tailwindcss(),
         ],
         server: {
+            host: true,
             cors: true,
             open: env.APP_URL,
         },

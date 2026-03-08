@@ -2,7 +2,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {{-- Control Bar --}}
         <div class="max-w-4xl mx-auto">
-            <div class="sticky top-20 z-30 mb-8 p-4 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col sm:flex-row gap-4">
+            <div class="sticky top-20 z-10 mb-8 p-4 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col sm:flex-row gap-4">
                 <div class="flex-1">
                     <flux:input 
                         wire:model.live.debounce.300ms="search" 
@@ -41,7 +41,7 @@
                         @endif
                         
                         {{-- Status Float --}}
-                        <div class="absolute top-4 left-4 z-20">
+                        <div class="absolute top-4 left-4">
                             @if($vehicle->status === 'available')
                                 <span class="px-3 py-1 bg-emerald-500/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-full">{{ __('vehicles.available') }}</span>
                             @elseif($vehicle->status === 'in_use')
