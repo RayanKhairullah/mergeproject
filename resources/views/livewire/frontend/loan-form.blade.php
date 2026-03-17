@@ -42,9 +42,13 @@
                         placeholder="{{ __('vehicles.select_vehicle_placeholder') }}"
                         :disabled="$vehicle !== null"
                     >
+                        @if(!$vehicle_id)
+                            <flux:select.option value="" disabled selected>{{ __('vehicles.select_vehicle_placeholder') }}</flux:select.option>
+                        @endif
                         @foreach($vehicles as $vehicleOption)
                             <flux:select.option 
                                 value="{{ $vehicleOption->id }}"
+                                :selected="$vehicle_id === $vehicleOption->id"
                                 :disabled="$vehicleOption->status !== 'available'"
                             >
                                 {{ $vehicleOption->license_plate }} — {{ number_format($vehicleOption->current_mileage) }} km

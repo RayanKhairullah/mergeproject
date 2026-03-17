@@ -14,9 +14,9 @@ export default defineConfig(({command, mode}) => {
             tailwindcss(),
         ],
         server: {
-            host: true,
+            host: 'localhost',
+            // host: true for external access
             cors: true,
-            open: env.APP_URL,
         },
     };
 

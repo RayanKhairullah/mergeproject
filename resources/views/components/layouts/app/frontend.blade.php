@@ -42,18 +42,32 @@
                     : 'text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors';
             @endphp
             <flux:navbar class="-mb-px flex-none space-x-0 xl:space-x-1">
-                <flux:navbar.item variant="subtle" icon="computer-desktop" href="{{ route('vehicles.monitor') }}" :current="request()->routeIs('vehicles.monitor')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
-                    {{ __('global.monitor_mobil') }}
-                </flux:navbar.item>
-                <flux:navbar.item variant="subtle" icon="tv" href="{{ route('meetings.monitor') }}" :current="request()->routeIs('meetings.monitor')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
-                    {{ __('global.monitor_rapat') }}
-                </flux:navbar.item>
+                <flux:dropdown trigger="hover">
+                    <flux:navbar.item
+                        variant="subtle"
+                        icon="presentation-chart-line"
+                        icon-trailing="chevron-down"
+                        :current="request()->routeIs(['vehicles.monitor', 'meetings.monitor'])"
+                        class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap"
+                    >
+                        {{ __('global.monitoring') }}
+                    </flux:navbar.item>
+                    <flux:menu>
+                        <flux:menu.item icon="computer-desktop" href="{{ route('vehicles.monitor') }}">
+                            {{ __('global.monitor_mobil') }}
+                        </flux:menu.item>
+                        <flux:menu.item icon="tv" href="{{ route('meetings.monitor') }}">
+                            {{ __('global.monitor_rapat') }}
+                        </flux:menu.item>
+                    </flux:menu>
+                </flux:dropdown>
+
                 <flux:navbar.item variant="subtle" icon="book-open" href="{{ route('books.index') }}" :current="request()->routeIs('books.*')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
                     {{ __('global.digital_library') }}
                 </flux:navbar.item>
 
                 {{-- Peminjaman Dropdown (Loan + Return) --}}
-                <flux:dropdown>
+                <flux:dropdown trigger="hover">
                     <flux:navbar.item
                         variant="subtle"
                         icon="truck"

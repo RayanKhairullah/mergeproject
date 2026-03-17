@@ -25,11 +25,42 @@ class PublicReturnForm extends Component
     #[Validate('nullable|image|max:2048')]
     public $speedometer_photo;
 
+    /** @var array<int, array{loanId: int, borrowerName: string, vehicleName: string, loanedAt: string}> */
     public array $activeLoans = [];
 
     public function mount(): void
     {
-        // Active loans will be loaded from browser cache via JavaScript
+        // Load active loans from database by default
+        $this->loadFromDatabase();
+    }
+
+    public function loadFromDatabase(): void
+    {
+        $loans = Loan::with(['vehicle', 'user'])
+            ->where('status', 'active')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $this->activeLoans = $loans->map(function (Loan $loan): array {
+            return [
+                'loanId' => $loan->id,
+                'borrowerName' => $loan->user->name ?? 'Guest',
+                'vehicleName' => $loan->vehicle->license_plate,
+                'loanedAt' => $loan->created_at->toIso8601String(),
+            ];
+        })->values()->toArray();
+    }
+
+    public function mergeFromLocalStorage(array $localLoans): void
+    {
+        // Merge localStorage loans with database loans
+        $existingIds = collect($this->activeLoans)->pluck('loanId')->toArray();
+
+        foreach ($localLoans as $loan) {
+            if (! in_array($loan['loanId'], $existingIds)) {
+                $this->activeLoans[] = $loan;
+            }
+        }
     }
 
     public function updatedEndMileage(): void

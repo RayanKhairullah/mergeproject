@@ -58,8 +58,16 @@
                         {{ __('vehicles.vehicle') }} <span class="text-red-500">*</span>
                     </label>
                     <flux:select wire:model.live="vehicle_id" placeholder="{{ __('vehicles.select_vehicle_placeholder') }}">
+                        @if(!$vehicle_id)
+                            <flux:select.option value="" disabled selected>{{ __('vehicles.select_vehicle_placeholder') }}</flux:select.option>
+                        @endif
                         @foreach($vehicles as $vehicle)
-                            <flux:select.option value="{{ $vehicle->id }}">{{ $vehicle->license_plate }}</flux:select.option>
+                            <flux:select.option 
+                                value="{{ $vehicle->id }}"
+                                :selected="$vehicle_id === $vehicle->id"
+                            >
+                                {{ $vehicle->license_plate }}
+                            </flux:select.option>
                         @endforeach
                     </flux:select>
                 </div>
@@ -162,7 +170,7 @@
                                 <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-all group">
                                     <flux:icon.arrow-up-tray class="w-7 h-7 text-zinc-300 group-hover:text-teal-400 mb-1.5 transition-colors" />
                                     <span class="text-sm text-zinc-400 group-hover:text-teal-500 font-medium">{{ __('vehicles.click_to_upload') }}</span>
-                                    <input type="file" wire:model="payment_proof" accept="image/*" class="hidden" />
+                                    <input type="file" wire:model="payment_proof" accept="image/*" capture="environment" class="hidden" />
                                 </label>
                             @else
                                 <div class="relative inline-block">
@@ -187,7 +195,7 @@
                                 <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-all group">
                                     <flux:icon.arrow-up-tray class="w-7 h-7 text-zinc-300 group-hover:text-teal-400 mb-1.5 transition-colors" />
                                     <span class="text-sm text-zinc-400 group-hover:text-teal-500 font-medium">{{ __('vehicles.click_to_upload') }}</span>
-                                    <input type="file" wire:model="vehicle_photo" accept="image/*" class="hidden" />
+                                    <input type="file" wire:model="vehicle_photo" accept="image/*" capture="environment" class="hidden" />
                                 </label>
                             @else
                                 <div class="relative inline-block">
@@ -205,7 +213,7 @@
                                 <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-all group">
                                     <flux:icon.arrow-up-tray class="w-7 h-7 text-zinc-300 group-hover:text-teal-400 mb-1.5 transition-colors" />
                                     <span class="text-sm text-zinc-400 group-hover:text-teal-500 font-medium">{{ __('vehicles.click_to_upload') }}</span>
-                                    <input type="file" wire:model="fuel_indicator" accept="image/*" class="hidden" />
+                                    <input type="file" wire:model="fuel_indicator" accept="image/*" capture="environment" class="hidden" />
                                 </label>
                             @else
                                 <div class="relative inline-block">
@@ -223,7 +231,7 @@
                                 <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/10 transition-all group">
                                     <flux:icon.arrow-up-tray class="w-7 h-7 text-zinc-300 group-hover:text-teal-400 mb-1.5 transition-colors" />
                                     <span class="text-sm text-zinc-400 group-hover:text-teal-500 font-medium">{{ __('vehicles.click_to_upload') }}</span>
-                                    <input type="file" wire:model="activity_photo" accept="image/*" class="hidden" />
+                                    <input type="file" wire:model="activity_photo" accept="image/*" capture="environment" class="hidden" />
                                 </label>
                             @else
                                 <div class="relative inline-block">

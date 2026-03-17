@@ -101,6 +101,7 @@ return [
     'no_books_description' => 'Try changing the search keywords or browse all available categories.',
     'read_and_download' => 'Discover, read, and download our collection of digital books and resources.',
     'back_to_library' => 'Back to Library',
+    'back' => 'Back',
     'downloads' => 'Downloads',
     'rating' => 'Rating',
     'reviews' => 'Reviews',
@@ -149,4 +150,5 @@ return [
     'profile_update' => 'Update Profile',
     'profile_update_desc' => 'Account information & security',
     'total' => 'Total',
+    'monitoring' => 'Monitoring',
 ];

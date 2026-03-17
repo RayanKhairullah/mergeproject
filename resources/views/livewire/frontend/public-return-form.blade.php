@@ -47,9 +47,15 @@
                                 </div>
                             </div>
                         @else
-                            <flux:select wire:model="loan_id" placeholder="{{ __('vehicles.select_borrower_placeholder') }}">
+                            <flux:select wire:model.live="loan_id" placeholder="{{ __('vehicles.select_borrower_placeholder') }}">
+                                @if(!$loan_id)
+                                    <flux:select.option value="" disabled selected>{{ __('vehicles.select_borrower_placeholder') }}</flux:select.option>
+                                @endif
                                 @foreach($activeLoans as $loan)
-                                    <flux:select.option value="{{ $loan['loanId'] }}">
+                                    <flux:select.option 
+                                        value="{{ $loan['loanId'] }}"
+                                        :selected="$loan_id === $loan['loanId']"
+                                    >
                                         {{ $loan['borrowerName'] }} — {{ $loan['vehicleName'] }}
                                         ({{ \Carbon\Carbon::parse($loan['loanedAt'])->format('d/m/Y H:i') }})
                                     </flux:select.option>
@@ -131,7 +137,7 @@
                             <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all group">
                                 <flux:icon.camera class="w-8 h-8 text-zinc-300 group-hover:text-blue-500 mb-1.5 transition-colors" />
                                 <span class="text-sm text-zinc-400 group-hover:text-blue-600 font-medium">{{ __('vehicles.click_to_upload_speedometer') }}</span>
-                                <input type="file" wire:model="speedometer_photo" accept="image/*" class="hidden" />
+                                <input type="file" wire:model="speedometer_photo" accept="image/*" capture="environment" class="hidden" />
                             </label>
                         @else
                             <div class="relative inline-block">
@@ -182,17 +188,12 @@
 
 @script
 <script>
+    // Merge localStorage loans with database loans on mount
     Alpine.effect(() => {
-        const activeLoans = JSON.parse(localStorage.getItem('activeLoans') || '[]');
-        $wire.set('activeLoans', activeLoans);
-    });
-
-    $wire.on('save-loan-to-cache', (event) => {
-        const loanData = event[0];
-        let loans = JSON.parse(localStorage.getItem('activeLoans') || '[]');
-        loans.push(loanData);
-        localStorage.setItem('activeLoans', JSON.stringify(loans));
-        $wire.set('activeLoans', loans);
+        const localLoans = JSON.parse(localStorage.getItem('activeLoans') || '[]');
+        if (localLoans.length > 0) {
+            $wire.mergeFromLocalStorage(localLoans);
+        }
     });
 
     $wire.on('remove-loan-from-cache', (event) => {
@@ -200,7 +201,8 @@
         let loans = JSON.parse(localStorage.getItem('activeLoans') || '[]');
         loans = loans.filter(loan => loan.loanId !== loanId);
         localStorage.setItem('activeLoans', JSON.stringify(loans));
-        $wire.set('activeLoans', loans);
+        // Refresh from database
+        $wire.loadFromDatabase();
     });
 </script>
 @endscript
