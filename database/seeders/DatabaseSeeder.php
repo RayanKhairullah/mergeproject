@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             BookSeeder::class,
             ReviewSeeder::class,
+            DivisionSeeder::class,
+            EmployeeSeeder::class,
         ]);
     }
 }

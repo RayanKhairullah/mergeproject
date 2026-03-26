@@ -48,10 +48,10 @@ class BookController extends Controller
         }
 
         $filePath = Storage::disk('private')->path($book->file_path);
-        
+
         return response()->file($filePath, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="' . basename($book->file_path) . '"'
+            'Content-Disposition' => 'inline; filename="'.basename($book->file_path).'"',
         ]);
     }
 

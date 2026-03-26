@@ -15,6 +15,7 @@
         "php": "^8.2|^8.3|^8.4|^8.5",
         "barryvdh/laravel-dompdf": "^3.1",
         "doctrine/dbal": "^4.4",
+        "intervention/image": "*",
         "jantinnerezo/livewire-alert": "^3.0.3",
         "laravel/framework": "^12.2",
         "laravel/pint": "^1.21.2",

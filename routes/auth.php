@@ -11,10 +11,6 @@ Route::middleware('guest')->group(function (): void {
     // Route::get('register', \App\Livewire\Auth\Register::class)
     //     ->name('register');
 
-
-
-
-
     Route::get('forgot-password', \App\Livewire\Auth\ForgotPassword::class)
         ->name('password.request');
 

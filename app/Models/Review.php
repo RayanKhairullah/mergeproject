@@ -38,7 +38,7 @@ class Review extends Model
 
     public function isEdited(): bool
     {
-        return !is_null($this->edited_at);
+        return ! is_null($this->edited_at);
     }
 
     public function user(): BelongsTo

@@ -26,7 +26,9 @@ class Index extends Component
     public string $statusFilter = '';
 
     public string $venueFilter = '';
+
     public string $guestTypeFilter = '';
+
     public string $dateFilter = '';
 
     public ?int $detailId = null;

@@ -115,5 +115,3 @@ test('mobile menu works for navbar layout', function () {
     $response->assertSee('mobile-menu-toggle');
     $response->assertSee('mobile-menu');
 });
-
-

@@ -56,6 +56,15 @@ class RoleSeeder extends Seeder
 
             // Category management
             'view categories', 'create categories', 'update categories', 'delete categories',
+
+            // Division management
+            'view divisions', 'create divisions', 'update divisions', 'delete divisions',
+
+            // Employee management
+            'view employees', 'create employees', 'update employees', 'delete employees',
+
+            // Org Section management
+            'view org-sections', 'create org-sections', 'update org-sections', 'delete org-sections',
         ];
         $adminRole->syncPermissions($adminPermissions);
 

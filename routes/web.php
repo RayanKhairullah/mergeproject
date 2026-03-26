@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Livewire\Home::class)->name('home');
 
+\Livewire\Volt\Volt::route('/organization', 'frontend.organization.index')->name('organization.index');
+
 Route::get('/dashboard', \App\Livewire\Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 // Public Vehicle Management Routes
@@ -90,6 +92,11 @@ Route::middleware(['auth'])->group(function (): void {
         Route::delete('/books/{book:slug}', [\App\Http\Controllers\Admin\BookController::class, 'destroy'])->name('books.destroy')->middleware('can:access dashboard');
 
         Route::get('/categories', \App\Livewire\Admin\Categories\Index::class)->name('categories.index')->middleware('can:access dashboard');
+
+        // Organization Structure
+        \Livewire\Volt\Volt::route('/divisions', 'admin.divisions.index')->name('divisions.index')->middleware('can:access dashboard');
+        \Livewire\Volt\Volt::route('/employees', 'admin.employees.index')->name('employees.index')->middleware('can:access dashboard');
+        \Livewire\Volt\Volt::route('/org-sections', 'admin.org-sections.index')->name('org-sections.index')->middleware('can:access dashboard');
     });
 });
 

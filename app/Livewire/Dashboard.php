@@ -13,8 +13,11 @@ use Livewire\Component;
 class Dashboard extends Component
 {
     public int $totalVehicles = 0;
+
     public int $activeLoans = 0;
+
     public int $upcomingMeetings = 0;
+
     public int $totalBooks = 0;
 
     public function mount(): void

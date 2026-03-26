@@ -66,6 +66,10 @@
                     {{ __('global.digital_library') }}
                 </flux:navbar.item>
 
+                <flux:navbar.item variant="subtle" icon="users" href="{{ route('organization.index') }}" :current="request()->routeIs('organization.*')" class="text-[10px] xl:text-xs px-2! {{ $navColor }} whitespace-nowrap">
+                    Org Structure
+                </flux:navbar.item>
+
                 {{-- Peminjaman Dropdown (Loan + Return) --}}
                 <flux:dropdown trigger="hover">
                     <flux:navbar.item

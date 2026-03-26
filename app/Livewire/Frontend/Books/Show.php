@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire\Frontend\Books;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\Book;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class Show extends Component
@@ -39,7 +39,7 @@ class Show extends Component
             $this->userReview = \App\Models\Review::where('anonymous_session_key', session()->getId())
                 ->where('book_id', $book->id)
                 ->first();
-            
+
             $this->anonymous_name = $this->userReview?->anonymous_name ?? 'Anonymous';
         }
 
@@ -52,7 +52,7 @@ class Show extends Component
     public function render()
     {
         $this->book->loadMissing(['category', 'reviews.user']);
-        
+
         return view('livewire.frontend.books.show');
     }
 
@@ -68,8 +68,9 @@ class Show extends Component
 
         if ($this->userReview) {
             // Check time limit
-            if (!$this->userReview->canBeEdited()) {
+            if (! $this->userReview->canBeEdited()) {
                 session()->flash('error', 'Batas waktu 10 menit untuk mengedit ulasan telah berakhir.');
+
                 return;
             }
 
@@ -105,8 +106,9 @@ class Show extends Component
     public function deleteReview(): void
     {
         if ($this->userReview) {
-            if (!$this->userReview->canBeEdited()) {
+            if (! $this->userReview->canBeEdited()) {
                 session()->flash('error', 'Batas waktu 10 menit untuk menghapus ulasan telah berakhir.');
+
                 return;
             }
 

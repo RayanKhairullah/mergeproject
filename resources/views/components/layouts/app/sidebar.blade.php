@@ -60,6 +60,15 @@
             </flux:navlist.item>
         </flux:navlist.group>
 
+        <flux:navlist.group expandable heading="Org Structure" icon="users" :expanded="request()->routeIs(['admin.divisions.*', 'admin.employees.*'])" class="grid">
+            <flux:navlist.item icon="building-office-2" :href="route('admin.divisions.index')" :current="request()->routeIs('admin.divisions.*')">
+                Divisions
+            </flux:navlist.item>
+            <flux:navlist.item icon="user-group" :href="route('admin.employees.index')" :current="request()->routeIs('admin.employees.*')">
+                Employees
+            </flux:navlist.item>
+        </flux:navlist.group>
+
         {{-- Vehicle Management Section --}}
         <flux:navlist.group expandable heading="{{ __('sidebar.vehicle_reports') }}" icon="document-chart-bar" :expanded="request()->routeIs(['admin.loans.*', 'admin.inspections.*', 'admin.expenses.*'])" class="grid">
             <flux:navlist.item icon="truck" :href="route('admin.loans.index')" :current="request()->routeIs('admin.loans.*')">
