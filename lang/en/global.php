@@ -151,4 +151,8 @@ return [
     'profile_update_desc' => 'Account information & security',
     'total' => 'Total',
     'monitoring' => 'Monitoring',
+    'save_as_draft' => 'Save Draft',
+    'notes' => 'Notes',
+    'export_excel' => 'Export Excel',
+    'export_pdf' => 'Export PDF',
 ];

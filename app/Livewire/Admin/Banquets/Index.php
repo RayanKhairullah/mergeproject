@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Livewire\Admin\Banquets;
 
 use App\Enums\BanquetStatus;
+use App\Exports\BanquetsExport;
 use App\Models\Banquet;
 use App\Models\DiningVenue;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Index extends Component
 {
@@ -172,6 +175,75 @@ class Index extends Component
         $banquet->delete();
 
         session()->flash('success', __('banquets.success_deleted'));
+    }
+
+    public function exportExcel()
+    {
+        $banquets = $this->getFilteredBanquets();
+
+        return Excel::download(
+            new BanquetsExport($banquets),
+            'laporan-banquet-'.now()->format('Y-m-d-His').'.xlsx'
+        );
+    }
+
+    public function exportPdf()
+    {
+        $banquets = $this->getFilteredBanquets();
+        $filters = $this->getFilterDescription();
+
+        $pdf = Pdf::loadView('exports.banquets-pdf', [
+            'banquets' => $banquets,
+            'filters' => $filters,
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'laporan-banquet-'.now()->format('Y-m-d-His').'.pdf');
+    }
+
+    private function getFilteredBanquets()
+    {
+        return Banquet::query()
+            ->with(['venue', 'creator', 'approver'])
+            ->when($this->search, fn ($q) => $q->where('title', 'like', "%{$this->search}%"))
+            ->when($this->statusFilter, fn ($q) => $q->where('status', $this->statusFilter))
+            ->when($this->venueFilter, fn ($q) => $q->where('venue_id', $this->venueFilter))
+            ->when($this->guestTypeFilter, fn ($q) => $q->where('guest_type', $this->guestTypeFilter))
+            ->when($this->dateFilter, fn ($q) => $q->whereDate('scheduled_at', $this->dateFilter))
+            ->orderBy('scheduled_at', 'desc')
+            ->get();
+    }
+
+    private function getFilterDescription(): string
+    {
+        $filters = [];
+
+        if ($this->search) {
+            $filters[] = 'Pencarian: '.$this->search;
+        }
+
+        if ($this->statusFilter) {
+            $status = BanquetStatus::from($this->statusFilter);
+            $filters[] = 'Status: '.$status->label();
+        }
+
+        if ($this->venueFilter) {
+            $venue = DiningVenue::find($this->venueFilter);
+            $filters[] = 'Tempat: '.($venue ? $venue->name : '-');
+        }
+
+        if ($this->guestTypeFilter) {
+            $filters[] = 'Tipe Tamu: '.$this->guestTypeFilter;
+        }
+
+        if ($this->dateFilter) {
+            $filters[] = 'Tanggal: '.\Carbon\Carbon::parse($this->dateFilter)->format('d/m/Y');
+        }
+
+        return $filters ? implode(', ', $filters) : 'Semua data';
     }
 
     public function render()

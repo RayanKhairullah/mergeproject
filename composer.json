@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "mortenebak/tallstarter",
+    "name": "rayan4k/tallstarter",
     "type": "project",
     "description": "An oppinionated Laravel Starter Kit based on the Official Laravel Livewire Starter Kit",
     "keywords": [
@@ -10,7 +10,7 @@
         "tall stack",
         "livewire"
     ],
-    "license": "MIT",
+    "license": "MIT", 
     "require": {
         "php": "^8.2|^8.3|^8.4|^8.5",
         "barryvdh/laravel-dompdf": "^3.1",

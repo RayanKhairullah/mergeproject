@@ -50,7 +50,7 @@ return [
     'add_new_room' => 'Tambah Ruangan Baru',
     'room_name' => 'Nama Ruangan',
     'add_room' => 'Tambah Ruangan',
-    'internal_notes' => 'Catatan internal (tidak ditampilkan di monitor)',
+    'internal_notes' => 'Catatan internal',
     'publish' => 'Terbitkan',
     'creating' => 'Membuat...',
     'updating' => 'Mengupdate...',

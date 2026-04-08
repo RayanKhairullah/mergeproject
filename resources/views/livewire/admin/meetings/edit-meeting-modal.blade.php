@@ -82,7 +82,7 @@ $update = function () {
     }
 
     $startedAt = \Carbon\Carbon::parse($this->started_at);
-    $endedAt = $startedAt->copy()->addMinutes($this->duration);
+    $endedAt = $startedAt->copy()->addMinutes((int) $this->duration);
 
     $meeting = \App\Models\Meeting::findOrFail($this->meetingId);
     $meeting->update([
@@ -93,8 +93,8 @@ $update = function () {
         'room_id' => $this->room_id,
         'started_at' => $startedAt,
         'ended_at' => $endedAt,
-        'duration' => $this->duration,
-        'estimated_participants' => $this->estimated_participants,
+        'duration' => (int) $this->duration,
+        'estimated_participants' => (int) $this->estimated_participants,
     ]);
 
     $this->dispatch('meeting-updated');
@@ -109,9 +109,6 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('meetings.edit') }}</flux:heading>
-            <flux:modal.close>
-                <flux:button variant="ghost" size="sm" icon="x-mark" />
-            </flux:modal.close>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -203,7 +200,7 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 
         <flux:field>
             <flux:label>{{ __('meetings.internal_notes') }}</flux:label>
-            <flux:textarea wire:model="notes" placeholder="{{ __('meetings.internal_notes') }}" rows="3" />
+            <x-rich-text wire:model="notes" placeholder="{{ __('meetings.internal_notes') }}" />
             <flux:error name="notes" />
         </flux:field>
 

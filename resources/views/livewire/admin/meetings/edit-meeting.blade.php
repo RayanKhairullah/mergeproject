@@ -47,7 +47,7 @@
 
                 <flux:field>
                     <flux:label>{{ __('meetings.fields.notes') }}</flux:label>
-                    <flux:textarea wire:model="notes" rows="4" placeholder="{{ __('meetings.notes_placeholder') ?? 'Tambahkan catatan, agenda, atau detail meeting...' }}" />
+                    <x-rich-text wire:model="notes" placeholder="{{ __('meetings.notes_placeholder') ?? 'Tambahkan catatan, agenda, atau detail meeting...' }}" />
                     <flux:error name="notes" />
                 </flux:field>
 

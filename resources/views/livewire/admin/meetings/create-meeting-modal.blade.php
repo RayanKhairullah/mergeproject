@@ -46,7 +46,7 @@ $createRoom = function () {
     $this->dispatch('room-created');
 };
 
-$create = function () {
+$create = function (bool $isDraft = false) {
     $this->authorize('create meetings');
     $this->validate([
         'title' => 'required|string|max:255',
@@ -70,7 +70,21 @@ $create = function () {
     }
 
     $startedAt = \Carbon\Carbon::parse($this->started_at);
-    $endedAt = $startedAt->copy()->addMinutes($this->duration);
+    $endedAt = $startedAt->copy()->addMinutes((int) $this->duration);
+
+    $status = \App\Enums\MeetingStatus::DRAFT;
+    $approvedBy = null;
+    $approvedAt = null;
+
+    if ($isDraft === false) {
+        if (auth()->user()->can('approve meetings')) {
+            $status = \App\Enums\MeetingStatus::PUBLISHED;
+            $approvedBy = auth()->id();
+            $approvedAt = now();
+        } else {
+            $status = \App\Enums\MeetingStatus::PENDING_APPROVAL;
+        }
+    }
 
     \App\Models\Meeting::create([
         'title' => $this->title,
@@ -80,9 +94,11 @@ $create = function () {
         'room_id' => $this->room_id,
         'started_at' => $startedAt,
         'ended_at' => $endedAt,
-        'duration' => $this->duration,
-        'estimated_participants' => $this->estimated_participants,
-        'status' => \App\Enums\MeetingStatus::DRAFT,
+        'duration' => (int) $this->duration,
+        'estimated_participants' => (int) $this->estimated_participants,
+        'status' => $status,
+        'approved_by' => $approvedBy,
+        'approved_at' => $approvedAt,
         'created_by' => auth()->id(),
     ]);
 
@@ -105,7 +121,7 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 ?>
 
 <flux:modal name="create-meeting" class="w-full max-w-4xl" x-on:meeting-created.window="$flux.modal('create-meeting').close()">
-    <form wire:submit="create" class="space-y-6">
+    <form wire:submit="create(false)" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('meetings.create') }}</flux:heading>
         </div>
@@ -199,7 +215,7 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
 
         <flux:field>
             <flux:label>{{ __('meetings.internal_notes') }}</flux:label>
-            <flux:textarea wire:model="notes" placeholder="{{ __('meetings.internal_notes') }}" rows="3" />
+            <x-rich-text wire:model="notes" placeholder="{{ __('meetings.internal_notes') }}" />
             <flux:error name="notes" />
         </flux:field>
 
@@ -207,9 +223,12 @@ $toggleCreateRoom = fn() => $this->showCreateRoom = !$this->showCreateRoom;
             <flux:modal.close>
                 <flux:button variant="ghost">{{ __('global.cancel') }}</flux:button>
             </flux:modal.close>
+            <flux:button type="button" wire:click="create(true)" variant="outline" wire:loading.attr="disabled">
+                {{ __('global.save_as_draft') ?? 'Save Draft' }}
+            </flux:button>
             <flux:button type="submit" variant="primary" wire:loading.attr="disabled">
-                <span wire:loading.remove>{{ __('meetings.publish') }}</span>
-                <span wire:loading>{{ __('meetings.creating') }}</span>
+                <span wire:loading.remove>{{ __('meetings.publish') ?? 'Save & Publish' }}</span>
+                <span wire:loading>{{ __('meetings.creating') ?? 'Processing...' }}</span>
             </flux:button>
         </div>
     </form>

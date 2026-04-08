@@ -50,7 +50,7 @@ return [
     'add_new_room' => 'Add New Room',
     'room_name' => 'Room Name',
     'add_room' => 'Add Room',
-    'internal_notes' => 'Internal notes (not to be shown on monitor)',
+    'internal_notes' => 'Internal notes',
     'publish' => 'Publish',
     'creating' => 'Creating...',
     'updating' => 'Updating...',

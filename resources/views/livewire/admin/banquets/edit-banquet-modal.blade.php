@@ -121,9 +121,6 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
     <form wire:submit="update" class="space-y-6">
         <div class="flex items-center justify-between">
             <flux:heading size="lg">{{ __('banquets.edit') }}</flux:heading>
-            <flux:modal.close>
-                <flux:button variant="ghost" size="sm" icon="x-mark" />
-            </flux:modal.close>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -228,7 +225,7 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 
         <flux:field>
             <flux:label>{{ __('banquets.fields.description') }}</flux:label>
-            <flux:textarea wire:model="description" placeholder="{{ __('banquets.fields.description') }}" rows="3" />
+            <x-rich-text wire:model="description" placeholder="{{ __('banquets.fields.description') }}" />
             <flux:error name="description" />
         </flux:field>
 

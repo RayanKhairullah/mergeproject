@@ -150,4 +150,8 @@ return [
     'profile_update_desc' => 'Informasi akun & keamanan',
     'total' => 'Total',
     'monitoring' => 'Monitoring',
+    'save_as_draft' => 'Simpan Draft',
+    'notes' => 'Catatan',
+    'export_excel' => 'Export Excel',
+    'export_pdf' => 'Export PDF',
 ];

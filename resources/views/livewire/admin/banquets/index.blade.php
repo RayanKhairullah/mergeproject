@@ -56,6 +56,17 @@
         <flux:input type="date" wire:model.live="dateFilter" />
     </div>
 
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+        <flux:button wire:click="exportExcel" variant="outline" icon="arrow-down-tray" size="sm">
+            <span class="hidden sm:inline">{{ __('global.export_excel') ?? 'Export Excel' }}</span>
+            <span class="sm:hidden">Excel</span>
+        </flux:button>
+        <flux:button wire:click="exportPdf" variant="outline" icon="document-text" size="sm">
+            <span class="hidden sm:inline">{{ __('global.export_pdf') ?? 'Export PDF' }}</span>
+            <span class="sm:hidden">PDF</span>
+        </flux:button>
+    </div>
+
     @if(session('success'))
         <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
             <p class="text-sm text-green-800 dark:text-green-200">{{ session('success') }}</p>
@@ -80,6 +91,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('global.date') }}</th>
                         <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('banquets.fields.estimated_guests') }}</th>
                         <th class="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('banquets.cost') }}</th>
+                        <th class="hidden xl:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('global.notes') ?? 'Catatan' }}</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('banquets.fields.status') }}</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">{{ __('global.actions') }}</th>
                     </tr>
@@ -100,13 +112,16 @@
                                 {{ $banquet->venue->name }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                {{ $banquet->scheduled_at?->format('d M Y H:i') }}
+                                {{ $banquet->scheduled_at?->translatedFormat('l, d M Y - H:i') }}
                             </td>
                             <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $banquet->estimated_guests }}
                             </td>
                             <td class="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 {{ $banquet->cost ? 'Rp ' . number_format($banquet->cost, 0, ',', '.') : '-' }}
+                            </td>
+                            <td class="hidden xl:table-cell px-6 py-4 text-sm text-gray-900 dark:text-gray-100 max-w-[200px] truncate" title="{{ strip_tags(str_replace(['<br>', '</p>', '</li>'], ' ', $banquet->description)) }}">
+                                {{ empty(strip_tags($banquet->description)) ? '-' : str(strip_tags(str_replace(['<br>', '</p>', '</li>'], ' ', $banquet->description)))->limit(40) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <flux:badge variant="{{ $banquet->status->color() }}">
@@ -127,7 +142,7 @@
                                         @if(in_array($banquet->status->value, ['DRAFT', 'PENDING_APPROVAL']) && (auth()->user()->can('approve banquets') || $banquet->created_by === auth()->id()))
                                             <flux:modal.trigger name="edit-banquet-{{ $banquet->id }}">
                                                 <flux:button size="sm" variant="ghost" icon="pencil-square">
-                                                    <span class="hidden md:inline">{{ __('global.edit') }}</span>
+                                                    <span class="hidden md:inline">{{ __('global.view') }}</span>
                                                 </flux:button>
                                             </flux:modal.trigger>
                                         @endif
@@ -191,7 +206,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('global.date') }}</p>
-                        <p class="font-medium">{{ $detailBanquet->scheduled_at?->format('d M Y H:i') }}</p>
+                        <p class="font-medium">{{ $detailBanquet->scheduled_at?->translatedFormat('l, d M Y - H:i') }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('banquets.fields.status') }}</p>
@@ -220,7 +235,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-600 dark:text-gray-400">{{ __('banquets.fields.approved_at') }}</p>
-                            <p class="font-medium">{{ $detailBanquet->approved_at?->format('d M Y H:i') }}</p>
+                            <p class="font-medium">{{ $detailBanquet->approved_at?->translatedFormat('l, d M Y - H:i') }}</p>
                         </div>
                     </div>
                 @endif

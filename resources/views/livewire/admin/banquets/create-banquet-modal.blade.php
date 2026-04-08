@@ -223,7 +223,7 @@ $toggleCreateVenue = fn() => $this->showCreateVenue = !$this->showCreateVenue;
 
         <flux:field>
             <flux:label>{{ __('banquets.fields.description') }}</flux:label>
-            <flux:textarea wire:model="description" placeholder="{{ __('banquets.fields.description') }}" rows="3" />
+            <x-rich-text wire:model="description" placeholder="{{ __('banquets.fields.description') }}" />
             <flux:error name="description" />
         </flux:field>
 

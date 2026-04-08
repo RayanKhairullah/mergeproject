@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Livewire\Admin\Meetings;
 
 use App\Enums\MeetingStatus;
+use App\Exports\MeetingsExport;
 use App\Models\Meeting;
 use App\Models\Room;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Index extends Component
 {
@@ -165,6 +168,70 @@ class Index extends Component
         $meeting->delete();
 
         session()->flash('success', __('meetings.success_deleted'));
+    }
+
+    public function exportExcel()
+    {
+        $meetings = $this->getFilteredMeetings();
+
+        return Excel::download(
+            new MeetingsExport($meetings),
+            'laporan-meeting-'.now()->format('Y-m-d-His').'.xlsx'
+        );
+    }
+
+    public function exportPdf()
+    {
+        $meetings = $this->getFilteredMeetings();
+        $filters = $this->getFilterDescription();
+
+        $pdf = Pdf::loadView('exports.meetings-pdf', [
+            'meetings' => $meetings,
+            'filters' => $filters,
+        ]);
+
+        $pdf->setPaper('a4', 'landscape');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'laporan-meeting-'.now()->format('Y-m-d-His').'.pdf');
+    }
+
+    private function getFilteredMeetings()
+    {
+        return Meeting::query()
+            ->with(['room', 'creator', 'approver'])
+            ->when($this->search, fn ($q) => $q->where('title', 'like', "%{$this->search}%"))
+            ->when($this->statusFilter, fn ($q) => $q->where('status', $this->statusFilter))
+            ->when($this->roomFilter, fn ($q) => $q->where('room_id', $this->roomFilter))
+            ->when($this->dateFilter, fn ($q) => $q->whereDate('started_at', $this->dateFilter))
+            ->orderBy('started_at', 'desc')
+            ->get();
+    }
+
+    private function getFilterDescription(): string
+    {
+        $filters = [];
+
+        if ($this->search) {
+            $filters[] = 'Pencarian: '.$this->search;
+        }
+
+        if ($this->statusFilter) {
+            $status = MeetingStatus::from($this->statusFilter);
+            $filters[] = 'Status: '.$status->label();
+        }
+
+        if ($this->roomFilter) {
+            $room = Room::find($this->roomFilter);
+            $filters[] = 'Ruangan: '.($room ? $room->name : '-');
+        }
+
+        if ($this->dateFilter) {
+            $filters[] = 'Tanggal: '.\Carbon\Carbon::parse($this->dateFilter)->format('d/m/Y');
+        }
+
+        return $filters ? implode(', ', $filters) : 'Semua data';
     }
 
     public function render()

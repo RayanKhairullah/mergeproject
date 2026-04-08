@@ -1,4 +1,4 @@
-<div class="min-h-screen font-roboto overflow-y-auto animate-in fade-in duration-700" 
+<div class="min-h-screen bg-white dark:bg-zinc-800 font-roboto overflow-y-auto animate-in fade-in duration-700" 
      x-data="{ 
         fullscreen: false,
         currentTime: '',
@@ -32,7 +32,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl sm:text-2xl md:text-3xl font-black tracking-tight text-zinc-900 dark:text-white uppercase">
-                        {{ explode(' ', __('global.monitor_rapat'))[0] }} <span class="text-zinc-400 font-light">{{ explode(' ', __('global.monitor_rapat'))[1] ?? '' }}</span>
+                        {{ explode(' ', __('global.monitor_rapat'))[0] }} <span class="text-zinc-500 dark:text-zinc-400 font-light">{{ explode(' ', __('global.monitor_rapat'))[1] ?? '' }}</span>
                     </h1>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 {{-- Digital Clock --}}
                 <div class="text-center sm:text-right">
                     <div class="text-3xl sm:text-4xl md:text-5xl font-mono font-black tracking-tighter text-zinc-900 dark:text-white" x-text="currentTime"></div>
-                    <div class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold text-zinc-400">{{ now()->format('l, d F Y') }}</div>
+                    <div class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-bold text-zinc-400">{{ now()->translatedFormat('l, d F Y') }}</div>
                 </div>
 
                 {{-- Filters & Controls --}}
@@ -86,8 +86,8 @@
                                             <flux:icon.building-office class="w-6 h-6 sm:w-8 sm:h-8 text-zinc-400" />
                                         </div>
                                         <div>
-                                            <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-zinc-400 font-black mb-1">{{ __('global.conference_room') }}</p>
-                                            <p class="text-lg sm:text-2xl font-bold text-zinc-800 dark:text-zinc-200 leading-tight">{{ $currentMeeting->room->name }}</p>
+                                            <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-black mb-1">{{ __('global.conference_room') }}</p>
+                                            <p class="text-lg sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{{ $currentMeeting->room->name }}</p>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-4 sm:gap-6">
@@ -95,16 +95,18 @@
                                             <flux:icon.users class="w-6 h-6 sm:w-8 sm:h-8 text-zinc-400" />
                                         </div>
                                         <div>
-                                            <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-zinc-400 font-black mb-1">{{ __('global.organizer') }}</p>
-                                            <p class="text-lg sm:text-2xl font-bold text-zinc-800 dark:text-zinc-200 leading-tight">{{ $currentMeeting->creator->name }}</p>
+                                            <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-black mb-1">{{ __('global.organizer') }}</p>
+                                            <p class="text-lg sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{{ $currentMeeting->creator->name }}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl sm:rounded-[2rem] p-6 sm:p-8 border border-zinc-100 dark:border-zinc-800 flex flex-col justify-center text-center">
                                     <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-zinc-400 font-black mb-3 sm:mb-4">{{ __('global.time_window') }}</p>
-                                    <div class="text-3xl sm:text-5xl font-mono font-black text-zinc-900 dark:text-white mb-1 sm:mb-2">
-                                        {{ $currentMeeting->started_at->format('H:i') }} <span class="text-zinc-300 dark:text-zinc-600 font-light mx-1 sm:mx-2">/</span> {{ $currentMeeting->ended_at->format('H:i') }}
+                                    <div class="flex flex-row items-center justify-center gap-2 sm:gap-3 text-3xl lg:text-4xl xl:text-5xl font-mono font-black text-zinc-900 dark:text-white mb-2 whitespace-nowrap">
+                                        <span>{{ $currentMeeting->started_at->format('H:i') }}</span>
+                                        <span class="text-zinc-300 dark:text-zinc-600 font-light">/</span>
+                                        <span>{{ $currentMeeting->ended_at->format('H:i') }}</span>
                                     </div>
                                     <p class="text-xs sm:text-sm font-bold text-zinc-500">{{ __('global.minutes_total', ['minutes' => $currentMeeting->duration]) }}</p>
                                 </div>
@@ -114,7 +116,7 @@
                                 <div class="p-6 sm:p-8 bg-zinc-50 dark:bg-zinc-950/50 rounded-2xl sm:rounded-3xl border border-zinc-100 dark:border-zinc-800">
                                     <p class="text-[9px] sm:text-[10px] uppercase tracking-widest text-zinc-400 font-black mb-3 sm:mb-4">{{ __('global.meeting_memo') }}</p>
                                     <div class="text-base sm:text-xl font-medium text-zinc-600 dark:text-zinc-300 leading-relaxed italic">
-                                        "{!! nl2br(e($currentMeeting->notes)) !!}"
+                                        "{!! nl2br(e(strip_tags(str_replace(['<br>', '<br/>', '</p>', '</li>'], " \n", $currentMeeting->notes)))) !!}"
                                     </div>
                                 </div>
                             @endif
@@ -122,35 +124,38 @@
                     </div>
                 @else
                     <div class="h-full min-h-[400px] sm:min-h-[500px] border-4 border-dashed border-zinc-200 dark:border-zinc-800 rounded-[2rem] sm:rounded-[3rem] flex flex-col items-center justify-center text-center p-8 sm:p-12">
-                        <div class="mb-6 sm:mb-8 p-6 sm:p-10 bg-zinc-50 dark:bg-zinc-900 rounded-full">
-                            <flux:icon.calendar class="w-12 h-12 sm:w-20 sm:h-20 text-zinc-200 dark:text-zinc-700" />
+                        <div class="mb-6 sm:mb-8 p-6 sm:p-10 bg-zinc-50 dark:bg-zinc-800/50 rounded-full">
+                            <flux:icon.calendar class="w-12 h-12 sm:w-20 sm:h-20 text-zinc-300 dark:text-zinc-700" />
                         </div>
-                        <h3 class="text-xl sm:text-3xl font-black text-zinc-400 dark:text-zinc-700 mb-2 uppercase tracking-tighter">{{ __('global.room_available') }}</h3>
-                        <p class="text-xs sm:text-zinc-400 font-medium">{{ __('global.no_active_meetings', ['context' => $roomFilter ? 'this room' : 'any conference space']) }}</p>
+                        <h3 class="text-xl sm:text-3xl font-black text-zinc-400 dark:text-zinc-600 mb-2 uppercase tracking-tighter">{{ __('global.room_available') }}</h3>
+                        <p class="text-xs sm:text-sm text-zinc-400 dark:text-zinc-500 font-medium">{{ __('global.no_active_meetings', ['context' => $roomFilter ? 'this room' : 'any conference space']) }}</p>
                     </div>
                 @endif
             </div>
 
             {{-- UPCOMING SECTION (Right/Sidebar) --}}
             <div class="xl:col-span-4 space-y-6 md:space-y-8">
-                <div class="bg-zinc-900 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-2xl h-full flex flex-col border border-zinc-800 text-white">
+                <div class="bg-zinc-50 dark:bg-zinc-900 rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-xl dark:shadow-2xl h-full flex flex-col border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white">
                     <div class="flex items-center justify-between mb-6 sm:mb-8">
-                        <h4 class="text-base sm:text-lg font-black uppercase tracking-widest text-white">{{ __('global.schedule') }}</h4>
-                        <span class="px-3 py-1 bg-zinc-800 rounded-full text-[9px] sm:text-[10px] font-bold text-zinc-400">{{ __('global.next_24h') }}</span>
+                        <h4 class="text-base sm:text-lg font-black uppercase tracking-widest text-zinc-900 dark:text-white">{{ __('global.schedule') }}</h4>
+                        <span class="px-3 py-1 bg-zinc-200 dark:bg-zinc-800 rounded-full text-[9px] sm:text-[10px] font-bold text-zinc-500 dark:text-zinc-400">{{ __('global.next_24h') }}</span>
                     </div>
 
                     <div class="space-y-3 sm:space-y-4 flex-1 overflow-y-auto">
                         @forelse($upcomingMeetings as $meeting)
-                            <div wire:key="upcoming-{{ $meeting->id }}" class="group p-4 sm:p-6 bg-zinc-800/30 rounded-2xl sm:rounded-3xl border border-zinc-800 hover:border-zinc-600 transition-all duration-300">
+                            <div wire:key="upcoming-{{ $meeting->id }}" class="group p-4 sm:p-6 bg-white dark:bg-zinc-800/30 rounded-2xl sm:rounded-3xl border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600 transition-all duration-300 shadow-sm dark:shadow-none">
                                 <div class="flex justify-between items-start mb-3 sm:mb-4">
-                                    <div class="text-xl sm:text-2xl font-mono font-black text-white group-hover:text-emerald-400 transition-colors">
+                                    <div class="text-xl sm:text-2xl font-mono font-black text-zinc-900 dark:text-white group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
                                         {{ $meeting->started_at->format('H:i') }}
                                     </div>
                                     <span class="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{{ $meeting->duration }} MIN</span>
                                 </div>
-                                <h5 class="text-sm sm:text-lg font-bold text-zinc-100 mb-2 sm:mb-3 truncate">{{ $meeting->title }}</h5>
+                                <h5 class="text-sm sm:text-lg font-bold text-zinc-800 dark:text-zinc-100 mb-2 sm:mb-1 truncate">{{ $meeting->title }}</h5>
+                                <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-2 sm:mb-3 truncate" title="{{ strip_tags(str_replace(['<br>', '</p>', '</li>'], ' ', $meeting->notes)) }}">
+                                    {{ empty(strip_tags($meeting->notes)) ? '-' : str(strip_tags(str_replace(['<br>', '</p>', '</li>'], ' ', $meeting->notes)))->limit(40) }}
+                                </div>
                                 <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-                                    <div class="px-2 py-0.5 bg-zinc-800 rounded-lg text-[9px] sm:text-[10px] font-black text-zinc-400 border border-zinc-700">
+                                    <div class="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-[9px] sm:text-[10px] font-black text-zinc-500 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
                                         {{ $meeting->room->name }}
                                     </div>
                                     <div class="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase truncate">{{ $meeting->creator->name }}</div>
