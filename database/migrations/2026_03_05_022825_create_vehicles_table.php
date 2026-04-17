@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             $table->string('license_plate', 15)->unique();
+            $table->string('image')->nullable();
             $table->integer('current_mileage')->default(0);
             $table->enum('status', ['available', 'in_use', 'maintenance'])->default('available');
             $table->date('last_service_date')->nullable();

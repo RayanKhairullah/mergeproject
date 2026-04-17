@@ -8,15 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('dining_venues', function (Blueprint $table) {
-            $table->dropColumn('capacity');
+        Schema::create('dining_venues', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 100);
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::table('dining_venues', function (Blueprint $table) {
-            $table->integer('capacity')->default(0);
-        });
+        Schema::dropIfExists('dining_venues');
     }
 };

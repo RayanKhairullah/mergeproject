@@ -22,6 +22,10 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('position')->nullable();
             $table->integer('order')->default(0);
+            $table->boolean('show_in_tree')->default(true);
+            $table->boolean('show_in_table')->default(true);
+            $table->foreignId('org_section_id')->nullable()->constrained('org_sections')->nullOnDelete();
+            $table->json('custom_fields')->nullable();
             $table->timestamps();
         });
     }

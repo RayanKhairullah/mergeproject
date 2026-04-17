@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('vehicle_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('reporter_name');
             $table->enum('expense_type', ['BBM', 'E-Money', 'Parkir', 'Cuci Mobil', 'Lainnya']);
             $table->enum('funding_source', ['UANG_MUKA', 'UANG_PRIBADI', 'KOPERASI_KONSUMEN_SUKA_BAHARI']);
             $table->enum('fuel_type', ['PERTALITE', 'PERTAMAX', 'PERTADEX', 'PERTAMAX TURBO', 'Lainnya'])->nullable();

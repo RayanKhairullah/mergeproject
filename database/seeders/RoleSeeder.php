@@ -110,12 +110,6 @@ class RoleSeeder extends Seeder
         // Create Sample Users
         // ========================================
         $this->createUserWithRole('superadmin@example.com', 'Super Admin', 'super-admin');
-        $this->createUserWithRole('admin@example.com', 'Admin User', 'admin');
-        $this->createUserWithRole('sdm@example.com', 'Manager SDM', 'sdm');
-        $this->createUserWithRole('user@example.com', 'Regular User', 'user');
-        $this->createUserWithRole('hsse@example.com', 'Staff HSSE', 'user');
-        $this->createUserWithRole('operasi@example.com', 'Staff Operasi', 'user');
-        $this->createUserWithRole('komersial@example.com', 'Staff Komersial', 'user');
     }
 
     private function createUserWithRole(string $email, string $name, string $roleName): void

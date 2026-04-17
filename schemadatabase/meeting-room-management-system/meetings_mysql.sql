@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS meetings (
     estimated_participants INT NULL DEFAULT 0 COMMENT 'Estimated number of meeting participants',
     status ENUM('DRAFT', 'PENDING_APPROVAL', 'PUBLISHED', 'COMPLETED', 'REJECTED') NOT NULL DEFAULT 'DRAFT' 
         COMMENT 'DRAFT=not visible, PENDING_APPROVAL=waiting for SDM approval, PUBLISHED=visible on monitor, COMPLETED=finished, REJECTED=rejected by SDM',
+    show_on_monitor BOOLEAN NOT NULL DEFAULT TRUE,
     
     -- Approval fields (UUIDs converted to VARCHAR(36) for MySQL)
     approved_by VARCHAR(36) NULL COMMENT 'User (SDM) who approved the meeting',

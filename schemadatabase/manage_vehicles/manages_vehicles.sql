@@ -10,6 +10,7 @@ CREATE TABLE employees (
 CREATE TABLE vehicles (
     id SERIAL PRIMARY KEY,
     license_plate VARCHAR(15) UNIQUE NOT NULL,
+    image VARCHAR(255),
     current_mileage INT NOT NULL DEFAULT 0,
     status ENUM('available', 'in_use', 'maintenance') DEFAULT 'available',
     last_service_date DATE,
@@ -55,6 +56,7 @@ CREATE TABLE vehicle_expenses (
     id SERIAL PRIMARY KEY,
     vehicle_id INT REFERENCES vehicles(id),
     employee_id INT REFERENCES employees(id),
+    reporter_name VARCHAR(255) NOT NULL,
     
     -- Tipe Kegiatan
     expense_type ENUM('BBM', 'E-Money', 'Parkir', 'Cuci Mobil', 'Lainnya') NOT NULL,

@@ -553,4 +553,17 @@ it('has emails', function (string $email) {
 | overflow-ellipsis | text-ellipsis |
 | decoration-slice | box-decoration-slice |
 | decoration-clone | box-decoration-clone |
+
+=== clean-code rules ===
+
+## Clean Code & Best Practices
+
+- Single Responsibility Principle (SRP): Keep classes and methods focused on a single task. Extract complex logic into dedicated Action or Service classes.
+- DRY & KISS: Do not repeat yourself. Keep it simple, stupid. Abstract repetitive logic into traits, services, or Blade components.
+- Readable Context: Use expressive variable and method names (e.g., `$overdueLoans` instead of `$data`).
+- Early Returns: Flatten code complexity by checking for invalid states early and returning immediately (`if (!$condition) return;`). Avoid deep arbitrary nesting.
+- Defensive Programming: Validate all input parameters, especially from user actions (using Form Requests, or inline Livewire validation) before any data layer modification.
+- Error Handling: Use standard global exception handling, returning clear states to the user rather than raw traces.
+- Query Performance: Aggressively identify and resolve N+1 database queries. Use `$query->with('relation')` when lists of models will be iterated.
+- Eloquent Scopes: Utilize local scopes in Models for complex or commonly used queries instead of rewriting them everywhere.
 </laravel-boost-guidelines>

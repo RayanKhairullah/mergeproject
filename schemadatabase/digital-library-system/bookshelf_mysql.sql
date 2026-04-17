@@ -20,9 +20,12 @@ CREATE TABLE books (
 CREATE TABLE reviews (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     book_id INT UNSIGNED NOT NULL,
-    user_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NULL,
+    anonymous_name VARCHAR(255),
+    anonymous_session_key VARCHAR(255),
     rating TINYINT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
+    edited_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_review_book FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
     CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
