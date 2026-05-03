@@ -123,29 +123,6 @@
             @endif
         </div>
     </div>
-    {{--            <flux:navbar class="mr-1.5 space-x-0.5 py-0!">--}}
-    {{--                <flux:tooltip content="Search" position="bottom">--}}
-    {{--                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" label="Search" />--}}
-    {{--                </flux:tooltip>--}}
-    {{--                <flux:tooltip content="Repository" position="bottom">--}}
-    {{--                    <flux:navbar.item--}}
-    {{--                        class="h-10 max-lg:hidden [&>div>svg]:size-5"--}}
-    {{--                        icon="folder-git-2"--}}
-    {{--                        href="https://github.com/laravel/livewire-starter-kit"--}}
-    {{--                        target="_blank"--}}
-    {{--                        label="Repository"--}}
-    {{--                    />--}}
-    {{--                </flux:tooltip>--}}
-    {{--                <flux:tooltip content="Documentation" position="bottom">--}}
-    {{--                    <flux:navbar.item--}}
-    {{--                        class="h-10 max-lg:hidden [&>div>svg]:size-5"--}}
-    {{--                        icon="book-open-text"--}}
-    {{--                        href="https://laravel.com/docs/starter-kits"--}}
-    {{--                        target="_blank"--}}
-    {{--                        label="Documentation"--}}
-    {{--                    />--}}
-    {{--                </flux:tooltip>--}}
-    {{--            </flux:navbar>--}}
 
     @auth
 
@@ -167,11 +144,6 @@
                                         {{ auth()->user()?->initials() ?? '?' }}
                                     </span>
                                 </span>
-
-                            {{--                                <div class="grid flex-1 text-left text-sm leading-tight">--}}
-                            {{--                                    <span class="truncate font-semibold">{{ auth()->user()->name }}</span>--}}
-                            {{--                                    <span class="truncate text-xs">{{ auth()->user()->email }}</span>--}}
-                            {{--                                </div>--}}
                         </div>
                     </div>
                 </flux:menu.radio.group>
@@ -179,7 +151,7 @@
                 @can('access dashboard')
                     <flux:menu.separator/>
                     <flux:menu.radio.group>
-                        <flux:menu.item href="{{ route('admin.index') }}" icon="shield">
+                        <flux:menu.item href="{{ route('admin.index') }}" icon="shield-check">
                             {{ __('global.admin_dashboard') }}
                         </flux:menu.item>
                     </flux:menu.radio.group>
@@ -187,21 +159,26 @@
 
                 <flux:menu.separator/>
 
-                <!-- @if (config('teams.enabled'))
-                    <flux:menu.radio.group>
-                        <flux:menu.item href="{{ route('teams.index') }}" icon="users">
-                            {{ __('teams.title') }}
-                        </flux:menu.item>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator/>
-                @endif -->
-
                 <flux:menu.radio.group>
                     <flux:menu.item href="/settings/profile" icon="cog">
                         {{ __('settings.title') }}
                     </flux:menu.item>
                 </flux:menu.radio.group>
+
+                @role('intern')
+                    <flux:menu.separator/>
+                    <flux:menu.radio.group heading="Internship">
+                        <flux:menu.item href="{{ route('intern.dashboard') }}" icon="home">Dashboard</flux:menu.item>
+                        <flux:menu.item href="{{ route('intern.tasks') }}" icon="clipboard-document-list">My Tasks</flux:menu.item>
+                    </flux:menu.radio.group>
+                @endrole
+
+                @role('mentor')
+                    <flux:menu.separator/>
+                    <flux:menu.radio.group heading="Mentoring">
+                        <flux:menu.item href="{{ route('mentor.dashboard') }}" icon="user-group">Mentor Dashboard</flux:menu.item>
+                    </flux:menu.radio.group>
+                @endrole
 
                 <flux:menu.separator/>
 
@@ -249,6 +226,19 @@
                 {{ __('global.digital_library') }}
             </flux:navlist.item>
         </flux:navlist.group>
+
+        @role('intern')
+            <flux:navlist.group heading="Internship">
+                <flux:navlist.item icon="home" href="{{ route('intern.dashboard') }}" :current="request()->routeIs('intern.dashboard')">Dashboard</flux:navlist.item>
+                <flux:navlist.item icon="clipboard-document-list" href="{{ route('intern.tasks') }}" :current="request()->routeIs('intern.tasks')">My Tasks</flux:navlist.item>
+            </flux:navlist.group>
+        @endrole
+
+        @role('mentor')
+            <flux:navlist.group heading="Mentoring">
+                <flux:navlist.item icon="user-group" href="{{ route('mentor.dashboard') }}" :current="request()->routeIs('mentor.dashboard')">Mentor Dashboard</flux:navlist.item>
+            </flux:navlist.group>
+        @endrole
     </flux:navlist>
 
     <flux:spacer/>

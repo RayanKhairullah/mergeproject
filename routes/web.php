@@ -97,6 +97,21 @@ Route::middleware(['auth'])->group(function (): void {
         \Livewire\Volt\Volt::route('/divisions', 'admin.divisions.index')->name('divisions.index')->middleware('can:access dashboard');
         \Livewire\Volt\Volt::route('/employees', 'admin.employees.index')->name('employees.index')->middleware('can:access dashboard');
         \Livewire\Volt\Volt::route('/org-sections', 'admin.org-sections.index')->name('org-sections.index')->middleware('can:access dashboard');
+
+        // Intern Management (Admin aspect)
+        Route::get('/internships', \App\Livewire\Admin\Internships\Index::class)->name('internships.index')->middleware('role:hr-admin|super-admin');
+    });
+
+    // Mentor
+    Route::prefix('mentor')->as('mentor.')->middleware('role:mentor|super-admin|hr-admin')->group(function (): void {
+        Route::get('/dashboard', \App\Livewire\Mentor\Dashboard::class)->name('dashboard');
+    });
+
+    // Intern
+    Route::prefix('intern')->as('intern.')->middleware('role:intern|super-admin')->group(function (): void {
+        Route::get('/dashboard', \App\Livewire\Intern\Dashboard::class)->name('dashboard');
+        Route::get('/tasks', \App\Livewire\Intern\Tasks::class)->name('tasks');
+        Route::get('/certificate/download/{internship}', [\App\Http\Controllers\InternshipCertificateController::class, 'download'])->name('certificate.download');
     });
 });
 

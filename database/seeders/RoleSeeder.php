@@ -105,11 +105,31 @@ class RoleSeeder extends Seeder
             'view dining_venues', 'create dining_venues', 'update dining_venues', 'delete dining_venues',
         ];
         $userRole->syncPermissions($userPermissions);
+        // ========================================
+        // 5. INTERN - Intern Management (Intern side)
+        // ========================================
+        $internRole = Role::query()->updateOrCreate(['name' => 'intern']);
+        // Base intern permissions can be bound here
+
+        // ========================================
+        // 6. MENTOR - Intern Management (Mentor side)
+        // ========================================
+        $mentorRole = Role::query()->updateOrCreate(['name' => 'mentor']);
+        // Mentor approval and viewing permissions can be bound here
+
+        // ========================================
+        // 7. HR ADMIN - Intern Management (Admin side)
+        // ========================================
+        $hrAdminRole = Role::query()->updateOrCreate(['name' => 'hr-admin']);
+        // HR Admin permissions can be bound here
 
         // ========================================
         // Create Sample Users
         // ========================================
         $this->createUserWithRole('superadmin@example.com', 'Super Admin', 'super-admin');
+        $this->createUserWithRole('hradmin@example.com', 'HR Admin', 'hr-admin');
+        $this->createUserWithRole('mentor@example.com', 'Mentor', 'mentor');
+        $this->createUserWithRole('intern@example.com', 'Intern User', 'intern');
     }
 
     private function createUserWithRole(string $email, string $name, string $roleName): void

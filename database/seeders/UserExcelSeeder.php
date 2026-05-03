@@ -19,6 +19,7 @@ class UserExcelSeeder extends Seeder
 
         if (! file_exists($filePath)) {
             $this->command->warn("Excel file not found at: {$filePath}");
+
             return;
         }
 
@@ -26,36 +27,37 @@ class UserExcelSeeder extends Seeder
         $reader->setReadDataOnly(true);
         $spreadsheet = $reader->load($filePath);
         $worksheet = $spreadsheet->getActiveSheet();
-        
+
         $isFirstRow = true;
-        
+
         foreach ($worksheet->getRowIterator() as $row) {
             // Skip header row
             if ($isFirstRow) {
                 $isFirstRow = false;
+
                 continue;
             }
 
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
-            
+
             $data = [];
             foreach ($cellIterator as $cell) {
                 $data[] = $cell->getValue();
             }
-            
+
             // Kolom Excell: [0] => No, [1] => Nama Peminjam
             $name = trim($data[1] ?? '');
-            
+
             if (! empty($name) && $name !== 'Nama Peminjam') {
                 // Generate a clean email from the name
-                $baseEmail = Str::slug($name, '.') . '@pelindo.co.id';
+                $baseEmail = Str::slug($name, '.').'@pelindo.co.id';
                 $email = $baseEmail;
-                
+
                 // Add numeric counter if duplicate exists to avoid unique constraint errors
                 $counter = 1;
                 while (User::where('email', $email)->exists()) {
-                    $email = Str::slug($name, '.') . $counter . '@pelindo.co.id';
+                    $email = Str::slug($name, '.').$counter.'@pelindo.co.id';
                     $counter++;
                 }
 
@@ -72,7 +74,7 @@ class UserExcelSeeder extends Seeder
                 }
             }
         }
-        
+
         $this->command->info('Successfully seeded real employees from the Excel file!');
     }
 }

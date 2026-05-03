@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Division;
 use App\Models\Employee;
-use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class EmployeeSeeder extends Seeder
 {
@@ -37,7 +37,7 @@ class EmployeeSeeder extends Seeder
                 ['header' => 'Nomor Pegawai', 'field' => 'nip'],
                 ['header' => 'Jabatan', 'field' => 'position'],
                 ['header' => 'Grade / Golongan', 'field' => 'grade'],
-            ]
+            ],
         ]);
 
         $secNonOrganik = \App\Models\OrgSection::firstOrCreate(['name' => 'Pegawai Non Organik'], [
@@ -48,7 +48,7 @@ class EmployeeSeeder extends Seeder
                 ['header' => 'Posisi', 'field' => 'position'],
                 ['header' => 'Instansi Asal', 'field' => 'instansi'],
                 ['header' => 'Tanggal Akhir Kontrak', 'field' => 'contract_end'],
-            ]
+            ],
         ]);
 
         Employee::query()->delete();
@@ -97,9 +97,9 @@ class EmployeeSeeder extends Seeder
                 'org_section_id' => $secDireksi->id,
                 'division_id' => $divOps->id,
                 'name' => $name,
-                'nip' => '200' . ($index + 1),
+                'nip' => '200'.($index + 1),
                 'gender' => $index == 1 ? 'female' : 'male',
-                'position' => 'VP Operasional ' . ($index + 1),
+                'position' => 'VP Operasional '.($index + 1),
                 'order' => $index + 1,
             ]);
         }
@@ -112,9 +112,9 @@ class EmployeeSeeder extends Seeder
                 'org_section_id' => $secDireksi->id,
                 'division_id' => $divKeuangan->id,
                 'name' => $name,
-                'nip' => '300' . ($index + 1),
+                'nip' => '300'.($index + 1),
                 'gender' => $index == 1 ? 'female' : 'male',
-                'position' => 'VP Keuangan ' . ($index + 1),
+                'position' => 'VP Keuangan '.($index + 1),
                 'order' => $index + 1,
             ]);
         }
@@ -123,11 +123,11 @@ class EmployeeSeeder extends Seeder
 
         // --- 2. PEGAWAI ORGANIK (10 Employees) ---
         $jabatanOrganik = [
-            'Manager Akuntansi', 'IT Specialist', 'Senior HR Staff', 'Senior Auditor', 
-            'Legal Officer', 'Operational Supervisor', 'Corporate Secretary Staff', 
-            'Finance Analyst', 'System Administrator', 'Recruitment Specialist'
+            'Manager Akuntansi', 'IT Specialist', 'Senior HR Staff', 'Senior Auditor',
+            'Legal Officer', 'Operational Supervisor', 'Corporate Secretary Staff',
+            'Finance Analyst', 'System Administrator', 'Recruitment Specialist',
         ];
-        
+
         for ($i = 1; $i <= 10; $i++) {
             $gender = $faker->randomElement(['male', 'female']);
             Employee::create([
@@ -135,7 +135,7 @@ class EmployeeSeeder extends Seeder
                 'org_section_id' => $secOrganik->id,
                 'division_id' => $faker->randomElement([$divIT->id, $divKeuangan->id, $divSDM->id, $divOps->id]),
                 'name' => $faker->name($gender),
-                'nip' => '500' . str_pad((string)$i, 2, '0', STR_PAD_LEFT),
+                'nip' => '500'.str_pad((string) $i, 2, '0', STR_PAD_LEFT),
                 'gender' => $gender,
                 'position' => $jabatanOrganik[$i - 1],
                 'order' => $i,
@@ -147,9 +147,9 @@ class EmployeeSeeder extends Seeder
 
         // --- 3. PEGAWAI NON ORGANIK (10 Employees) ---
         $jabatanNonOrganik = [
-            'Security Officer', 'Cleaning Staff', 'Outsource Developer', 'Driver', 
-            'Receptionist', 'Data Entry', 'Call Center Agent', 'Technician', 
-            'Office Boy', 'Warehouse Staff'
+            'Security Officer', 'Cleaning Staff', 'Outsource Developer', 'Driver',
+            'Receptionist', 'Data Entry', 'Call Center Agent', 'Technician',
+            'Office Boy', 'Warehouse Staff',
         ];
         $instansiList = ['PT Karya Sejahtera', 'PT Outsourcing Mandiri', 'CV Solusi Cepat'];
 
