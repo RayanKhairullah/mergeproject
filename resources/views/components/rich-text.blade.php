@@ -3,6 +3,8 @@
 ])
 
 @assets
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <style>
     /* Styling agar cocok dengan Dark/Light theme Tailwind & Flux UI */
     .ql-toolbar.ql-snow {
@@ -46,52 +48,46 @@
 <div
     class="w-full"
     x-data="{
-        value: @entangle($attributes->wire('model')),
+        value: $wire.entangle('{{ $attributes->wire('model')->value() }}'),
         init() {
-            let checkQuill = setInterval(() => {
-                if (typeof Quill !== 'undefined') {
-                    clearInterval(checkQuill);
-                    this.setupQuill();
+            setTimeout(() => {
+                let quill = new Quill(this.$refs.editor, {
+                    theme: 'snow',
+                    placeholder: '{{ $placeholder }}',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['clean']
+                        ]
+                    }
+                });
+
+                // Set initial value
+                if (this.value) {
+                    quill.root.innerHTML = this.value;
                 }
+
+                quill.on('text-change', () => {
+                    let html = quill.root.innerHTML;
+                    if (html === '<p><br></p>') {
+                        html = '';
+                    }
+                    this.value = html;
+                });
+
+                // Watch for changes from Livewire (e.g., when editing existing data)
+                this.$watch('value', (newValue) => {
+                    if (newValue !== quill.root.innerHTML && newValue !== undefined) {
+                        quill.root.innerHTML = newValue || '';
+                    }
+                });
             }, 100);
-        },
-        setupQuill() {
-            if (this.$refs.editor.querySelector('.ql-editor')) return;
-
-            let quill = new Quill(this.$refs.editor, {
-                theme: 'snow',
-                placeholder: '{{ $placeholder }}',
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        ['clean']
-                    ]
-                }
-            });
-
-            if (this.value) {
-                quill.root.innerHTML = this.value;
-            }
-
-            quill.on('text-change', () => {
-                let html = quill.root.innerHTML;
-                if (html === '<p><br></p>') {
-                    html = '';
-                }
-                this.value = html;
-            });
-
-            this.$watch('value', (newValue) => {
-                if (newValue !== quill.root.innerHTML && typeof newValue !== 'undefined') {
-                    quill.root.innerHTML = newValue || '';
-                }
-            });
         }
     }"
 >
     <!-- Container untuk Quill -->
-    <div wire:ignore class="bg-white dark:bg-zinc-900 rounded-lg min-h-[150px] border border-zinc-200 dark:border-zinc-700">
+    <div wire:ignore>
         <div x-ref="editor"></div>
     </div>
 </div>

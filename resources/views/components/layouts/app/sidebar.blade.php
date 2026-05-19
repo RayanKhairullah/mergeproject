@@ -25,7 +25,7 @@
                     </flux:navlist.item>
                 @endcan
                 @can('view roles')
-                    <flux:navlist.item icon="user-group" :href="route('admin.roles.index')" :current="request()->routeIs('admin.roles.*')">
+                    <flux:navlist.item icon="shield-user" :href="route('admin.roles.index')" :current="request()->routeIs('admin.roles.*')">
                         {{ __('roles.title') }}
                     </flux:navlist.item>
                 @endcan
@@ -60,15 +60,12 @@
             </flux:navlist.item>
         </flux:navlist.group>
 
-        <flux:navlist.group expandable heading="Org Structure" icon="users" :expanded="request()->routeIs(['admin.divisions.*', 'admin.employees.*', 'admin.internships.*'])" class="grid">
+        <flux:navlist.group expandable heading="Org Structure" icon="users" :expanded="request()->routeIs(['admin.divisions.*', 'admin.employees.*'])" class="grid">
             <flux:navlist.item icon="building-office-2" :href="route('admin.divisions.index')" :current="request()->routeIs('admin.divisions.*')">
                 Divisions
             </flux:navlist.item>
             <flux:navlist.item icon="user-group" :href="route('admin.employees.index')" :current="request()->routeIs('admin.employees.*')">
                 Employees
-            </flux:navlist.item>
-            <flux:navlist.item icon="academic-cap" :href="route('admin.internships.index')" :current="request()->routeIs('admin.internships.*')">
-                Internships
             </flux:navlist.item>
         </flux:navlist.group>
 
@@ -111,7 +108,7 @@
             <flux:profile
                 :name="auth()->user()->name"
                 :initials="auth()->user()->initials()"
-                icon-trailing="chevron-up-down"
+                icon-trailing="chevrons-up-down"
             />
 
             <flux:menu class="w-[220px]">

@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class,
             DivisionSeeder::class,
             EmployeeSeeder::class,
-            InternSeeder::class,
         ]);
     }
 }

@@ -65,14 +65,4 @@ class User extends Authenticatable // implements MustVerifyEmail
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
     }
-
-    public function internships()
-    {
-        return $this->hasMany(Internship::class, 'user_id');
-    }
-
-    public function mentoredInternships()
-    {
-        return $this->hasMany(Internship::class, 'mentor_id');
-    }
 }
